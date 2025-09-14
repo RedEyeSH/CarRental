@@ -1,0 +1,256 @@
+.home {
+    margin: 20px;
+}
+
+.home-container {
+    width: 100%;
+    display: flex;
+    /* justify-content: center; */
+    gap: 40px;
+}
+
+
+/* Home sidebar starts here */
+.home-sidebar {
+    min-width: 250px;
+    height: fit-content;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 12px 8px;
+}
+
+.home-sidebar-keyword {
+    display: flex;
+    gap: 10px;
+    margin: 12px 6px;
+}
+
+.home-sidebar-keyword p {
+    font-size: 12px;
+    font-weight: bold;
+    background-color: #cacaca;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.home-sidebar-options {
+
+}
+
+.home-sidebar-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 3px;
+    margin-bottom: 12px;
+}
+
+.home-sidebar-info {
+
+}
+
+#home-sidebar-label {
+    font-weight: bold;
+}
+
+#home-sidebar-description {
+    color: #777;
+    font-size: 14px;
+}
+
+.home-sidebar-price input {
+    width: 100%;
+}
+
+.home-sidebar-price-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+}
+
+.home-sidebar-price-range {
+    font-size: 12px;
+    margin: 6px 0;
+}
+
+.home-sidebar-price-values {
+    display: flex;
+    justify-content: space-between;
+    color: #777;
+}
+
+.home-sidebar-size {
+    display: block;
+}
+
+.home-sidebar-size h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.home-sidebar-label {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 10px;
+}
+
+
+/* Home sidebar ends here */
+
+/* Home Main starts here */
+.home-main {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.home-navbar {
+    display: flex;
+    justify-content: space-between;
+}
+
+.home-navbar-search {
+    display: flex;
+    gap: 5px;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 20px;
+    border: 1px solid black;
+    padding: 8px 16px;
+    width: 300px;
+    margin-right: 10px;
+    height: fit-content;
+}
+
+.home-navbar-search svg {
+    cursor: pointer;
+}
+
+#home-search {
+    width: 100%;
+    border: none;
+    outline: none;
+    flex: 1;
+}
+
+.home-navbar-options {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    /* width: 100%; */
+    /* justify-content: right; */
+}
+
+.home-navbar-option {
+    color: #777;
+    height: fit-content;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border: 1px solid #777;
+}
+
+.home-navbar-options div.active {
+    color: white;
+    background-color: black;
+}
+
+.home-list {
+    display: grid;
+    flex-wrap: wrap;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+    /* width: 100%; */
+    gap: 25px;
+}
+
+.home-card {
+    padding: 15px;
+    border: 1px solid black;
+    /* min-width: 300px; */
+    /* max-width: 300px; */
+    cursor: pointer;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    /* gap: 20px; */
+    transition: 0.25s;
+}
+
+.home-card:hover {
+    transform: translateY(-5px);
+}
+
+.home-card-image {
+    /* height: 320px; */
+    aspect-ratio: 3 / 4;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.home-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.home-card-content {
+    padding: 5px;
+}
+
+.home-card-content h2 {
+    font-size: 16px;
+}
+
+.home-card-content-location {
+    display: flex;
+    gap: 5px;
+}
+/* Home Main ends here */
+
+/* Responsive web design */
+@media only screen and (max-width: 1024px) {
+    .home-container {
+        gap: 25px;
+    }
+
+    .home-main {
+        gap: 15px;
+    }
+
+    .home-navbar {
+        flex-direction: column;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .home-navbar-search {
+        width: auto;
+        margin-right: 0;
+    }
+
+    .home-navbar-options {
+        justify-content: center;
+    }
+
+    .home-sidebar {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .home-navbar-options {
+        gap: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Styles for mobile devices */
+}
