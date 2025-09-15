@@ -2,6 +2,11 @@ import { useState } from "react";
 import "./Home.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faCaretDown, faCaretUp, faStar, faMagnifyingGlass, faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import React from 'react';
+import { useState } from 'react';
+import './Home.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck, faCaretDown, faCaretUp, faStar, faMagnifyingGlass, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 
 const Home = () => {
     const [toggle, setToggle] = useState("New"); 
