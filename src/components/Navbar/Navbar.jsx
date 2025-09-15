@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import './Navbar.css';
 import Login from '../Auth/Login.jsx';
+import Register from '../Auth/Register.jsx';
 
 const Navbar = () => {
     const [authModal, setAuthModal] = useState(null);
@@ -29,13 +30,24 @@ const Navbar = () => {
                             <button onClick={() => setAuthModal("login")}>Sign in</button>
                         </div>
                         <div className="navbar-register">
-                            <button>Register</button>
+                            <button onClick={() => setAuthModal("register")}>Register</button>
                         </div>
                     </div>
                 </div>
             </div>
-            {authModal === "login" && <Login onClose={() => setAuthModal(null)} />}
-            {authModal === "register" && <Register onClose={() => setAuthModal(null)} />}
+            {authModal === "login" && (
+                <Login 
+                    onClose={() => setAuthModal(null)} 
+                    onSwitch={() => setAuthModal("register")}
+                />
+            )}
+
+            {authModal === "register" && (
+                <Register 
+                    onClose={() => setAuthModal(null)} 
+                    onSwitch={() => setAuthModal("login")}
+                />
+            )}
         </>
     );
 }

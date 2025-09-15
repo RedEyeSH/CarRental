@@ -1,0 +1,54 @@
+.admin {
+    /* margin: 20px 0; */
+}
+
+.admin-container {
+    display: flex;
+}
+
+.admin-sidebar {
+    /* width: 20%; */
+    padding: 10px 20px;
+    border: 1px solid black;
+}
+
+.admin-sidebar h1 {
+    margin: 20px 0;
+    font-size: 24px;
+    text-align: center;
+}
+
+.admin-sidebar-item {
+    text-decoration: none;
+    color: black;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.admin-sidebar-item:hover {
+    transform: translateY(-4px);
+}
+
+.admin-icon-wrapper {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-sidebar-item svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Admin main starts here */
+.admin-main {
+
+}
+/* Admin main ends here */
+

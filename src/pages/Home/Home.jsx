@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import './Home.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faCaretDown, faCaretUp, faStar, faMagnifyingGlass, faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { useState } from "react";
+import "./Home.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faCaretDown, faCaretUp, faStar, faMagnifyingGlass, faLocationDot } from "@fortawesome/free-solid-svg-icons";
 
 const Home = () => {
     const [toggle, setToggle] = useState("New"); 
@@ -59,16 +59,16 @@ const Home = () => {
                     <div className="home-sidebar-size">
                         <h3>Size</h3>
                         <div className="home-sidebar-label">
-                            <input type="checkbox" id="label1" name="label1" />
+                            <input type="checkbox" id="label1" />
                             <p>Label</p>
                         </div>
                         {/* Copies starts here */}
                         <div className="home-sidebar-label">
-                            <input type="checkbox" id="label1" name="label1" />
+                            <input type="checkbox" id="label2" />
                             <p>Label</p>
                         </div>
                         <div className="home-sidebar-label">
-                            <input type="checkbox" id="label1" name="label1" />
+                            <input type="checkbox" id="label3" />
                             <p>Label</p>
                         </div>
                         {/* Copies ends here */}
