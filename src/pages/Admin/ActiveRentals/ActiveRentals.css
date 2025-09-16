@@ -1,14 +1,14 @@
-.stock {
+.rental {
     /* margin: 20px; */
 }
 
-.stock-container {
+.rental-container {
     height: 100vh;
     display: flex;
     width: 100%;
 }
 
-.stock-sidebar {
+.rental-sidebar {
     padding: 20px;
     width: 100%;
     max-width: 250px;
@@ -16,12 +16,12 @@
     border-right: 1px solid #ccc;
 }
 
-.stock-sidebar h1 {
+.rental-sidebar h1 {
     font-size: 24px;
     margin-bottom: 20px;
 }
 
-.stock-sidebar-item {
+.rental-sidebar-item {
     display: flex;
     align-items: center;
     gap: 5px;
@@ -30,17 +30,17 @@
     transition: 0.25s;
 }
 
-.stock-sidebar-item:hover {
+.rental-sidebar-item:hover {
     transform: translateY(-2px);
 }
 
-.stock-sidebar-item svg {
+.rental-sidebar-item svg {
     color: #D9D9D9;
     width: 24px;
     height: 24px;
 }
 
-.stock-icon-wrapper {
+.rental-icon-wrapper {
     width: 36px;
     height: 36px;
     display: flex;
@@ -49,7 +49,7 @@
 }
 
 /* Stock main starts here */
-.stock-main {
+.rental-main {
     padding: 20px;
     width: 100%;
     display: flex;
@@ -57,12 +57,12 @@
     gap: 25px;
 }
 
-.stock-navbar {
+.rental-navbar {
     display: flex;
     justify-content: space-between;
 }
 
-.stock-navbar-search {
+.rental-navbar-search {
     display: flex;
     gap: 5px;
     justify-content: space-between;
@@ -75,25 +75,25 @@
     height: fit-content;
 }
 
-.stock-navbar-search svg {
+.rental-navbar-search svg {
     cursor: pointer;
 }
 
-#stock-search {
+#rental-search {
     width: 100%;
     border: none;
     outline: none;
     flex: 1;
 }
 
-.stock-navbar-options {
+.rental-navbar-options {
     display: flex;
     gap: 10px;
     align-items: center;
     flex-wrap: wrap;
 }
 
-.stock-navbar-option {
+.rental-navbar-option {
     color: #777;
     height: fit-content;
     padding: 5px 10px;
@@ -106,22 +106,22 @@
     border: 1px solid #777;
 }
 
-.stock-navbar-options div.active {
+.rental-navbar-options div.active {
     color: white;
     background-color: black;
 }
 
-.stock-table {
+.rental-table {
     width: 100%;
 }
 
-.stock-table th, .stock-table td {
+.rental-table th, .rental-table td {
     text-align: left;
-    padding: 10px;
+    padding: 10px;  
     border-bottom: 1px solid #ddd;
 }
 
-.stock-table svg {
+.rental-table svg {
     cursor: pointer;
 }
 

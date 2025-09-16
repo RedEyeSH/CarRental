@@ -24,7 +24,7 @@ const Login = ({ onClose, onSwitch }) => {
                         <button className="login-submit" type="submit">Sign in</button>
                     </form>
                     <div className="login-option">
-                        <p>Don"t have a account? <span onClick={onSwitch}>Click here!</span></p>
+                        <p>Don't have an account? <span onClick={onSwitch}>Click here!</span></p>
                     </div>
                     <div className="login-terms">
                         <p>By clicking continue, you agree to our <span>Terms of service</span> and <span>Privacy Policy</span></p>

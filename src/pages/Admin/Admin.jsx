@@ -1,7 +1,7 @@
 import "./Admin.css";
 import { Outlet, Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faTruckFast } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faTruckFast, faCalendar } from '@fortawesome/free-solid-svg-icons';
 
 const Admin = () => {
     return (
@@ -9,7 +9,7 @@ const Admin = () => {
             <div className="admin-container">
                 <div className="admin-sidebar">
                     <h1>Admin Page</h1>
-                    <Link className="admin-sidebar-item">
+                    <Link to="/admin/rental" className="admin-sidebar-item">
                         <div className="admin-icon-wrapper">
                             <FontAwesomeIcon icon={faBars} />
                         </div>
@@ -23,7 +23,13 @@ const Admin = () => {
                     </Link>
                 </div>
                 <div className="admin-main">
-                    {/* Dashboard */}
+                    <div className="admin-navbar"></div>
+                    <div className="admin-list">
+                        <div className="admin-">
+                            <div className=""></div>
+                        </div>
+                        <div className=""></div>
+                    </div>
                 </div>
             </div>
         </section>
