@@ -5,6 +5,7 @@ import Register from '../Auth/Register.jsx';
 
 const Navbar = () => {
     const [authModal, setAuthModal] = useState(null);
+    const [loggedIn, setLoggedIn] = useState(false);
 
     return (
         <>
@@ -26,12 +27,20 @@ const Navbar = () => {
                         </div>
                     </div>
                     <div className="navbar-buttons">
-                        <div className="navbar-login">
-                            <button onClick={() => setAuthModal("login")}>Sign in</button>
-                        </div>
-                        <div className="navbar-register">
-                            <button onClick={() => setAuthModal("register")}>Register</button>
-                        </div>
+                        {loggedIn ? (
+                            <div className="navbar-profile">
+                                <button onClick={() => alert('Go to Profile')}>Profile</button>
+                            </div>
+                        ) : (
+                            <>
+                                <div className="navbar-login">
+                                    <button onClick={() => setAuthModal("login")}>Sign in</button>
+                                </div>
+                                <div className="navbar-register">
+                                    <button onClick={() => setAuthModal("register")}>Register</button>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import "./Stock.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle, faEllipsis, faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
@@ -27,7 +27,7 @@ const Stock = () => {
                 <div className="stock-sidebar">
                     <h1>Current Stock</h1>
                     {locations.map((location) => (
-                        <div className="stock-sidebar-item">
+                        <div key={location} className="stock-sidebar-item">
                             <div className="stock-icon-wrapper">
                                 <FontAwesomeIcon icon={faCircle} />
                             </div>

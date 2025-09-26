@@ -1,3 +1,4 @@
+import React from "react";
 import "./Register.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -32,13 +33,16 @@ const Register = ({ onClose, onSwitch }) => {
                             <input type="text" id="address" placeholder="Address" required />
                         </div>
                         <div className="register-password">
-                            <input type="password" id="register-password" placeholder="password" required />
+                            <input type="password" id="register-password" placeholder="Password" required />
                         </div>
                         <div className="register-confirm-password">
                             <input type="password" id="register-confirm-password" placeholder="Confirm password" required />
                         </div>
                         <button className="register-submit" type="submit">Sign up with email</button>
                     </form>
+                    <div className="login-option">
+                        <p>Don't have an account? <span onClick={onSwitch}>Click here!</span></p>
+                    </div>
                     <div className="register-terms">
                         <p>By clicking continue, you agree to our <span>Terms of service</span> and <span>Privacy Policy</span></p>
                     </div>

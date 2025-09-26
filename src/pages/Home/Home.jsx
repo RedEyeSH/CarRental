@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import "./Home.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faCaretDown, faCaretUp, faStar, faMagnifyingGlass, faLocationDot } from "@fortawesome/free-solid-svg-icons";
@@ -153,7 +153,7 @@ const Home = () => {
                         {cars.map((car) => (
                             <div key={car.name} className="home-card">
                                 <div className="home-card-image">
-                                    <img src={car.image} alt={car.imageName} />
+                                    <img src={car.image} alt={car.imageName} draggable={false} />
                                 </div>
                                 <div className="home-card-content">
                                     <h2>{car.name}</h2>
