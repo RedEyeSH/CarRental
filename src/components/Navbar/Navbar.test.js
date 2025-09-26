@@ -34,7 +34,7 @@ describe('Navbar Component', () => {
         fireEvent.click(signInButton);
         expect(screen.getByText('Login Modal')).toBeInTheDocument();
 
-        const closeButton = screen.getByRole('button', { name: '' }); // Select the button
+        const closeButton = screen.getByRole('button', { name: '' });
         fireEvent.click(closeButton);
 
         await waitFor(() => {
