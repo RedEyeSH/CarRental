@@ -1,5 +1,5 @@
 .admin {
-    /* margin: 20px 0; */
+    /* margin: 20px 20px; */
 }
 
 .admin-container {
@@ -20,6 +20,7 @@
 }
 
 .admin-sidebar-item {
+    white-space: nowrap;
     text-decoration: none;
     color: black;
     display: flex;
@@ -48,8 +49,50 @@
 }
 
 /* Admin main starts here */
-.admin-main {
+.admin-navbar {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    gap: 15px;
+}
 
+.admin-navbar-links {
+    display: flex;
+    gap: 15px;
+}
+
+.admin-navbar-link svg {
+    font-size: 1.2rem;
+}
+
+.admin-main {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin: 0 25px;
+}
+
+.admin-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.admin-cards {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 25px;
+}
+
+.admin-linechart {
+    border: 1px solid black;
+    /* width: 40%; */
+    height: 400px;
+    padding: 10px;
 }
 /* Admin main ends here */
 

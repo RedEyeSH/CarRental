@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import "./Home.css";
+import { cars } from "../../data/mockData.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faCaretDown, faCaretUp, faStar, faMagnifyingGlass, faLocationDot } from "@fortawesome/free-solid-svg-icons";
 
 const Home = () => {
     const [toggle, setToggle] = useState("New"); 
+    const [search, setSearch] = useState("");
 
     const options = [
         { label: "New", icon: faCheck },
@@ -13,59 +15,9 @@ const Home = () => {
         { label: "Rating", icon: faStar }
     ];
 
-    // Only real data - counts the length of the (car list) then...
-    // Displays on the website depending on the length of the car items that is stored in the database
-    // Mock data 
-    const cars = [
-        {
-            image: "https://plus.unsplash.com/premium_photo-1737623479045-a6a27357ffa9?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDd8fHxlbnwwfHx8fHw%3D",
-            imageName: "car1",
-            name: "Toyota",
-            price: 31.99
-        },
-        {
-            image: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2FyfGVufDB8fDB8fHww",
-            imageName: "car2",
-            name: "BMW",
-            price: 42.99
-        },
-        {
-            image: "https://images.unsplash.com/photo-1504215680853-026ed2a45def?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OTd8fGNhcnxlbnwwfHwwfHx8MA%3D%3D",
-            imageName: "car3",  
-            name: "Nissan",
-            price: 29.99
-        },
-        {
-            image: "https://images.unsplash.com/photo-1623006772851-a8bf2c47d304?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTl8fGNhcnxlbnwwfHwwfHx8MA%3D%3D",
-            imageName: "car4",
-            name: "Mercedes",
-            price: 35.99
-        },
-        {
-            image: "https://images.unsplash.com/photo-1532974297617-c0f05fe48bff?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjR8fGNhcnxlbnwwfDF8MHx8fDA%3D",
-            imageName: "car5",
-            name: "Hyundai",
-            price: 49.99
-        },
-        {
-            image: "https://images.unsplash.com/photo-1612593968469-d44a2e6ab5d2?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NzB8fGNhcnxlbnwwfDF8MHx8fDA%3D",
-            imageName: "car6",
-            name: "Kia",
-            price: 24.99
-        },
-        {
-            image: "https://images.unsplash.com/photo-1601827280216-d850636510e0?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NzZ8fGNhcnxlbnwwfDF8MHx8fDA%3D",
-            imageName: "car7",
-            name: "Ford",
-            price: 59.99
-        },
-        {
-            image: "https://images.unsplash.com/photo-1581208509730-ea918b007133?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8ODd8fGNhcnxlbnwwfDF8MHx8fDA%3D",
-            imageName: "car8",
-            name: "Volkswagen",
-            price: 39.99
-        },
-    ];
+    const filteredCars = cars.filter(car =>
+        car.name.toLowerCase().includes(search.toLowerCase())
+    );
 
     return (
         <section className="home">
@@ -89,7 +41,7 @@ const Home = () => {
                         <div className="home-sidebar-item">
                             <input type="checkbox" id="option2" name="option2" value={"A"} />
                             <div className="home-sidebar-info">
-                                <label id="home-sidebar-label" htmlFor="option1">Label</label>
+                                <label id="home-sidebar-label" htmlFor="option2">Label</label>
                                 <p id="home-sidebar-description">Description</p>
                             </div>
                         </div>
@@ -133,7 +85,13 @@ const Home = () => {
                 <div className="home-main">
                     <div className="home-navbar">
                         <div className="home-navbar-search">
-                            <input type="text" id="home-search" placeholder="Search" />
+                            <input 
+                                type="text" 
+                                id="home-search" 
+                                placeholder="Search" 
+                                value={search}
+                                onChange={e => setSearch(e.target.value)}
+                            />
                             <FontAwesomeIcon icon={faMagnifyingGlass} />
                         </div>
                         <div className="home-navbar-options">
@@ -150,8 +108,8 @@ const Home = () => {
                         </div>
                     </div>
                     <div className="home-list">
-                        {cars.map((car) => (
-                            <div key={car.name} className="home-card">
+                        {filteredCars.map((car) => (
+                            <div key={car.id} className="home-card">
                                 <div className="home-card-image">
                                     <img src={car.image} alt={car.imageName} draggable={false} />
                                 </div>
@@ -161,72 +119,6 @@ const Home = () => {
                                 </div>
                             </div>
                         ))}
-                        {/* Copies starts here */}
-                        {/* <div className="home-card">
-                            <div className="home-card-image">
-                                <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2FyfGVufDB8fDB8fHww" alt="product-1" />
-                            </div>
-                            <div className="home-card-content">
-                                <h2>Car name</h2>
-                                <p>$100/day</p>
-                            </div>
-                        </div>
-                        <div className="home-card">
-                            <div className="home-card-image">
-                                <img src="https://images.unsplash.com/photo-1623006772851-a8bf2c47d304?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTl8fGNhcnxlbnwwfHwwfHx8MA%3D%3D" alt="product-1" />
-                            </div>
-                            <div className="home-card-content">
-                                <h2>Car name</h2>
-                                <p>$100/day</p>
-                            </div>
-                        </div>
-                        <div className="home-card">
-                            <div className="home-card-image">
-                                <img src="https://images.unsplash.com/photo-1504215680853-026ed2a45def?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OTd8fGNhcnxlbnwwfHwwfHx8MA%3D%3D" alt="product-1" />
-                            </div>
-                            <div className="home-card-content">
-                                <h2>Car name</h2>
-                                <p>$100/day</p>
-                            </div>
-                        </div>
-                        <div className="home-card">
-                            <div className="home-card-image">
-                                <img src="https://images.unsplash.com/photo-1532974297617-c0f05fe48bff?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjR8fGNhcnxlbnwwfDF8MHx8fDA%3D" alt="product-1" />
-                            </div>
-                            <div className="home-card-content">
-                                <h2>Car name</h2>
-                                <p>$100/day</p>
-                            </div>
-                        </div>
-                        <div className="home-card">
-                            <div className="home-card-image">
-                                <img src="https://images.unsplash.com/photo-1612593968469-d44a2e6ab5d2?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NzB8fGNhcnxlbnwwfDF8MHx8fDA%3D" alt="product-1" />
-                            </div>
-                            <div className="home-card-content">
-                                <h2>Car name</h2>
-                                <p>$100/day</p>
-                            </div>
-                        </div>
-                        <div className="home-card">
-                            <div className="home-card-image">
-                                <img src="https://images.unsplash.com/photo-1601827280216-d850636510e0?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NzZ8fGNhcnxlbnwwfDF8MHx8fDA%3D" alt="product-1" />
-                            </div>
-                            <div className="home-card-content">
-                                <h2>Car name</h2>
-                                <p>$100/day</p>
-
-                            </div>
-                        </div>
-                        <div className="home-card">
-                            <div className="home-card-image">
-                                <img src="https://images.unsplash.com/photo-1581208509730-ea918b007133?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8ODd8fGNhcnxlbnwwfDF8MHx8fDA%3D" alt="product-1" />
-                            </div>
-                            <div className="home-card-content">
-                                <h2>Car name</h2>
-                                <p>$100/day</p>
-                            </div>
-                        </div> */}
-                        {/* Copies ends here */}
                     </div>
                 </div>
             </div>

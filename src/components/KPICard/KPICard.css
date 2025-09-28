@@ -1,0 +1,12 @@
+.kpi-card {
+    padding: 30px;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.kpi-card-icon svg {
+    font-size: 1.5rem;
+}
