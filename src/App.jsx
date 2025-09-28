@@ -17,7 +17,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<MainLayout><Home/></MainLayout>}/>
-          {/* <Route path="/admin" element={<Admin />} /> */}
+          {/* <Route path="/admin" element={<Admin />} />asdasddad */}
           <Route path="/admin" element={<AdminLayout><Admin /></AdminLayout>} />
           <Route path="/admin/stock" element={<AdminLayout><Stock /></AdminLayout>} />
           <Route path="/admin/rental" element={<AdminLayout><ActiveRentals /></AdminLayout>} />
