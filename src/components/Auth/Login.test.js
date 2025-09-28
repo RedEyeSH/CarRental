@@ -12,7 +12,7 @@ describe('Login Component', () => {
     test('renders the Login component with correct elements', () => {
         render(<Login onClose={mockOnClose} />);
 
-        const headerElement = screen.getByRole('heading', { name: 'Sign in' });
+        const headerElement = screen.getByRole('heading', { name: 'App Name' });
         expect(headerElement).toBeInTheDocument();
 
         const emailInput = screen.getByPlaceholderText('email@domain.com');
@@ -42,5 +42,4 @@ describe('Login Component', () => {
 
         expect(mockOnClose).toHaveBeenCalledTimes(1);
     });
-
 });
