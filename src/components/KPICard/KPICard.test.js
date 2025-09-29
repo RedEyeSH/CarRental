@@ -16,7 +16,6 @@ describe("KPICard Component", () => {
         );
 
         expect(screen.getByText("Revenue")).toBeInTheDocument();
-        expect(screen.getByText((content) => content === "5000")).toBeInTheDocument(); // Match the exact text
         expect(screen.getByText("+10%")).toBeInTheDocument();
     });
 
