@@ -14,7 +14,7 @@ import Admin from "./pages/Admin/Admin.jsx";
 function App() {
   return (
     <>
-      <Router>
+      <Router basename="/CarRental/">
         <Routes>
           <Route path="/" element={<MainLayout><Home/></MainLayout>}/>
           {/* <Route path="/admin" element={<Admin />} /> testing */}
