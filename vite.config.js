@@ -4,6 +4,7 @@
 
   module.exports = defineConfig({
     plugins: [react()],
+    base: '/CarRental/',
     server: {
       host: '0.0.0.0',
       port: 3000,
