@@ -1,30 +1,77 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Admin.css";
-import { Outlet, Link } from "react-router-dom";
+// import { Outlet, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faTruckFast, faGear, faCircleUser } from "@fortawesome/free-solid-svg-icons";
-import KPICard from "../../components/KPICard/KPICard.jsx";
-import LineChart from "../../components/LineChart/LineChart.jsx";
-import { kpiData, LineChartData } from "../../data/mockData.js";
+import { faBars, faTruckFast, faGear, faCircleUser, faHome, faSquarePollVertical } from "@fortawesome/free-solid-svg-icons";
+// import KPICard from "../../components/KPICard/KPICard.jsx";
+// import LineChart from "../../components/LineChart/LineChart.jsx";
+// import { kpiData, LineChartData } from "../../data/mockData.js";
+import Stock from "./Stock/Stock.jsx";
+import Rental from "./ActiveRentals/ActiveRentals.jsx";
+import Dashboard from "./Dashboard/Dashboard.jsx";
 
 const Admin = () => {
+    const [activeSection, setActiveSection] = useState("dashboard");
+    
     return (
         <section className="admin">
             <div className="admin-container">
                 <div className="admin-sidebar">
-                    <h1>Admin Page</h1>
-                    <Link to="/admin/rental" className="admin-sidebar-item">
-                        <div className="admin-icon-wrapper">
-                            <FontAwesomeIcon icon={faBars} />
+                    <div className="admin-sidebar-header">
+                        <p>Admin Page</p>
+                        <FontAwesomeIcon icon={faBars} />
+                    </div>
+                    <div className="admin-sidebar-profile">
+                        <FontAwesomeIcon icon={faCircleUser} />
+                        <div className="admin-sidebar-profile-name">
+                            <h2>Username</h2>
+                            <p>Admin</p>
                         </div>
-                        <p>Active rentals</p>
-                    </Link>
-                    <Link to="/admin/stock" className="admin-sidebar-item">
-                        <div className="admin-icon-wrapper">
-                            <FontAwesomeIcon icon={faTruckFast} />
+                    </div>
+                    <div className="admin-sidebar-items">
+                        <button 
+                            className={`admin-sidebar-data ${activeSection === "dashboard" ? "active" : ""}`}
+                            onClick={() => setActiveSection("dashboard")}
+                        >
+                            <div className="admin-icon-wrapper">
+                                <FontAwesomeIcon icon={faSquarePollVertical} />
+                            </div>
+                            <span>Dashboard</span>
+                        </button>
+                        <div className="admin-sidebar-datas">
+                            <p>Data</p>
+                            {/* <Link to="/admin/rental" className="admin-sidebar-data">
+                                <div className="admin-icon-wrapper">
+                                    <FontAwesomeIcon icon={faBars} />
+                                </div>
+                                <span>Active rentals</span>
+                            </Link>
+                            <Link to="/admin/stock" className="admin-sidebar-data">
+                                <div className="admin-icon-wrapper">
+                                    <FontAwesomeIcon icon={faTruckFast} />
+                                </div>
+                                <span>Current Stock</span>
+                            </Link> */}
+                            <button 
+                                className={`admin-sidebar-data ${activeSection === "rental" ? "active" : ""}`}
+                                onClick={() => setActiveSection("rental")}
+                            >
+                                <div className="admin-icon-wrapper">
+                                    <FontAwesomeIcon icon={faBars} />
+                                </div>
+                                <span>Active rentals</span>
+                            </button>
+                            <button 
+                                className={`admin-sidebar-data ${activeSection === "stock" ? "active" : ""}`}
+                                onClick={() => setActiveSection("stock")}
+                            >
+                                <div className="admin-icon-wrapper">
+                                    <FontAwesomeIcon icon={faTruckFast} />
+                                </div>
+                                <span>Current Stock</span>
+                            </button>
                         </div>
-                        <p>Current Stock</p>
-                    </Link>
+                    </div>
                 </div>
                 <div className="admin-main">
                     <div className="admin-navbar">
@@ -37,7 +84,8 @@ const Admin = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="admin-dashboard">
+                    {/* Maybe switch content on clicking sidebar item, primarily it's on dashboard*/}
+                    {/* <div className="admin-dashboard">
                         <div className="admin-dashboard-header">
                             <h2>DASHBOARD</h2>
                             <p>Welcome to your dashboard</p>
@@ -53,7 +101,17 @@ const Admin = () => {
                             <LineChart data={LineChartData} />
                         </div>
                         <div className="admin-transaction"></div>
-                    </div>
+                    </div> */}
+
+                    {activeSection === "dashboard" && (
+                        <Dashboard />
+                    )}
+                    {activeSection === "rental" && (
+                        <Rental />
+                    )}
+                    {activeSection === "stock" && (
+                        <Stock />
+                    )}
                 </div>
             </div>
         </section>

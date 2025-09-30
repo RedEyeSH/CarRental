@@ -1,5 +1,7 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+// import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
+
 import Home from "./pages/Home/Home.jsx";
 
 import MainLayout from "./layouts/MainLayout.jsx";
@@ -14,13 +16,13 @@ import Admin from "./pages/Admin/Admin.jsx";
 function App() {
   return (
     <>
-      <Router basename="/CarRental/">
+      <Router>
         <Routes>
           <Route path="/" element={<MainLayout><Home/></MainLayout>}/>
           {/* <Route path="/admin" element={<Admin />} /> testing */}
           <Route path="/admin" element={<AdminLayout><Admin /></AdminLayout>} />
-          <Route path="/admin/stock" element={<AdminLayout><Stock /></AdminLayout>} />
-          <Route path="/admin/rental" element={<AdminLayout><ActiveRentals /></AdminLayout>} />
+          {/* <Route path="/admin/stock" element={<AdminLayout><Stock /></AdminLayout>} /> */}
+          {/* <Route path="/admin/rental" element={<AdminLayout><ActiveRentals /></AdminLayout>} /> */}
         </Routes>
       </Router>
     </>

@@ -1,11 +1,14 @@
 .rental {
     /* margin: 20px; */
+    /* height: 100vh; */
+
 }
 
 .rental-container {
-    height: 100vh;
+    /* height: 100vh; */
     display: flex;
     width: 100%;
+    gap: 20px;
 }
 
 .rental-sidebar {
@@ -13,7 +16,7 @@
     width: 100%;
     max-width: 250px;
     height: 100%;
-    border-right: 1px solid #ccc;
+    background-color: #161B22;
 }
 
 .rental-sidebar h1 {
@@ -55,6 +58,7 @@
     display: flex;
     flex-direction: column;
     gap: 25px;
+    background-color: #161B22;
 }
 
 .rental-navbar {
@@ -68,7 +72,7 @@
     justify-content: space-between;
     align-items: center;
     border-radius: 20px;
-    border: 1px solid black;
+    border: 1px solid white;
     padding: 8px 16px;
     width: 300px;
     margin-right: 10px;
@@ -84,6 +88,8 @@
     border: none;
     outline: none;
     flex: 1;
+    background: none;
+    color: white;
 }
 
 .rental-navbar-options {

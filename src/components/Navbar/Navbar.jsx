@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import './Navbar.css';
-import Login from '../Auth/Login.jsx';
-import Register from '../Auth/Register.jsx';
+import "./Navbar.css";
+import Login from "../Auth/Login.jsx";
+import Register from "../Auth/Register.jsx";
+import viteLogo from '../../assets/vite.svg';
 
 const Navbar = () => {
     const [authModal, setAuthModal] = useState(null);
@@ -11,7 +12,7 @@ const Navbar = () => {
         <>
             <div className="navbar">
                 <div className="navbar-logo">
-                    <img src="/vite.svg" alt="logo" />
+                    <img src={viteLogo} alt="logo" />
                     <p>Logo name</p>
                 </div>
                 <div className="navbar-right">
@@ -29,7 +30,7 @@ const Navbar = () => {
                     <div className="navbar-buttons">
                         {loggedIn ? (
                             <div className="navbar-profile">
-                                <button onClick={() => alert('Go to Profile')}>Profile</button>
+                                <button onClick={() => alert("Go to Profile")}>Profile</button>
                             </div>
                         ) : (
                             <>

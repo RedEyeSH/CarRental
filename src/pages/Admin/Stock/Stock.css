@@ -3,9 +3,10 @@
 }
 
 .stock-container {
-    height: 100vh;
+    /* height: 100vh; */
     display: flex;
     width: 100%;
+    gap: 20px;
 }
 
 .stock-sidebar {
@@ -13,7 +14,7 @@
     width: 100%;
     max-width: 250px;
     height: 100%;
-    border-right: 1px solid #ccc;
+    background-color: #161B22;
 }
 
 .stock-sidebar h1 {
@@ -54,6 +55,7 @@
     width: 100%;
     display: flex;
     flex-direction: column;
+    background-color: #161B22;
     gap: 25px;
 }
 
@@ -68,7 +70,7 @@
     justify-content: space-between;
     align-items: center;
     border-radius: 20px;
-    border: 1px solid black;
+    border: 1px solid white;
     padding: 8px 16px;
     width: 300px;
     margin-right: 10px;
@@ -84,6 +86,8 @@
     border: none;
     outline: none;
     flex: 1;
+    background: none;
+    color: white;
 }
 
 .stock-navbar-options {
