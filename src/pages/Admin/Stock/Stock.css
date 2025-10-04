@@ -97,6 +97,23 @@
     flex-wrap: wrap;
 }
 
+.stock-navbar-options button {
+    font-weight: bold;
+    padding: 10px 15px;
+    background-color: #161B22;
+    transition: 0.25s;
+}
+
+.stock-navbar-options button:hover {
+    color: white;
+    background-color: #222d3d;
+}
+
+.stock-navbar-options button.active {
+    color: white;
+    background-color: #293c55;
+}
+
 .stock-navbar-option {
     color: #777;
     height: fit-content;
@@ -108,11 +125,6 @@
     justify-content: center;
     gap: 5px;
     border: 1px solid #777;
-}
-
-.stock-navbar-options div.active {
-    color: white;
-    background-color: black;
 }
 
 .stock-table {
@@ -128,5 +140,75 @@
 .stock-table svg {
     cursor: pointer;
 }
+
+.ellipsis-dropdown {
+    position: absolute;
+    top: 20px;
+    right: 0;
+    background-color: #161B22;
+    border: 1px solid #333;
+    border-radius: 4px;
+    overflow: hidden;
+    z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.ellipsis-dropdown p {
+    margin: 0;
+    padding: 8px 12px;
+    cursor: pointer;
+    color: #fff;
+    white-space: nowrap;
+    transition: 0.25s;
+}
+
+.ellipsis-dropdown p:hover {
+    background-color: #212f43;
+}
+
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 5000;
+    pointer-events: none;
+}
+
+.notification {
+    background-color: #181f29;
+    color: #4BB543;
+    font-weight: bold;
+    padding: 12px 20px;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    position: absolute;
+    right: 0;
+    width: 250px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    pointer-events: all;
+}
+
+.notification.slide-in {
+    transform: translateX(100%);
+    opacity: 0;
+    animation: slideIn 0.3s forwards;
+}
+
+.notification.slide-out {
+    transform: translateX(0);
+    opacity: 1;
+    animation: slideOut 0.3s forwards;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+}
+
 
 /* Stock main ends here */

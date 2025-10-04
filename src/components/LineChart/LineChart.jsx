@@ -29,11 +29,17 @@ const LineChart = ({ data }) => (
             ]}
             theme={{
                 axis: {
-                legend: { text: { fill: "white" } },
-                ticks: { text: { fill: "white" } }
+                    legend: { text: { fill: "white" } },
+                    ticks: { text: { fill: "white" } }
                 },
                 legends: {
-                text: { fill: "#4fd1c5" }
+                    text: { fill: "#4fd1c5" }
+                },
+                tooltip: {
+                    container: {
+                        color: "black",
+                        fontSize: "12px"
+                    }
                 }
             }}
         />
