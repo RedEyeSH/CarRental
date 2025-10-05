@@ -3,61 +3,70 @@ import { faBook, faBoxOpen, faMoneyBill, faCarSide } from "@fortawesome/free-sol
 export const cars = [
     {
         id: 1,
-        image: "https://plus.unsplash.com/premium_photo-1737623479045-a6a27357ffa9?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDd8fHxlbnwwfHx8fHw%3D",
+        image: "https://plus.unsplash.com/premium_photo-1737623479045-a6a27357ffa9?w=600&auto=format&fit=crop&q=60",
         imageName: "car1",
         name: "Toyota",
-        price: 31.99
+        price: 31.99,
+        creationDate: "2025-09-25"
     },
     {
         id: 2,
-        image: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2FyfGVufDB8fDB8fHww",
+        image: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=600&auto=format&fit=crop&q=60",
         imageName: "car2",
         name: "BMW",
-        price: 42.99
+        price: 42.99,
+        creationDate: "2025-09-26"
     },
     {
         id: 3,
-        image: "https://images.unsplash.com/photo-1504215680853-026ed2a45def?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OTd8fGNhcnxlbnwwfHwwfHx8MA%3D%3D",
-        imageName: "car3",  
+        image: "https://images.unsplash.com/photo-1504215680853-026ed2a45def?w=600&auto=format&fit=crop&q=60",
+        imageName: "car3",
         name: "Nissan",
-        price: 29.99
+        price: 29.99,
+        creationDate: "2025-09-22"
     },
     {
         id: 4,
-        image: "https://images.unsplash.com/photo-1623006772851-a8bf2c47d304?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTl8fGNhcnxlbnwwfHwwfHx8MA%3D%3D",
+        image: "https://images.unsplash.com/photo-1623006772851-a8bf2c47d304?w=600&auto=format&fit=crop&q=60",
         imageName: "car4",
         name: "BMW",
-        price: 35.99
+        price: 35.99,
+        creationDate: "2025-09-28"
     },
     {
         id: 5,
-        image: "https://images.unsplash.com/photo-1532974297617-c0f05fe48bff?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjR8fGNhcnxlbnwwfDF8MHx8fDA%3D",
+        image: "https://images.unsplash.com/photo-1532974297617-c0f05fe48bff?w=600&auto=format&fit=crop&q=60",
         imageName: "car5",
         name: "Hyundai",
-        price: 49.99
+        price: 49.99,
+        creationDate: "2025-09-20"
     },
     {
         id: 6,
-        image: "https://images.unsplash.com/photo-1612593968469-d44a2e6ab5d2?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NzB8fGNhcnxlbnwwfDF8MHx8fDA%3D",
+        image: "https://images.unsplash.com/photo-1612593968469-d44a2e6ab5d2?w=600&auto=format&fit=crop&q=60",
         imageName: "car6",
         name: "Kia",
-        price: 24.99
+        price: 24.99,
+        creationDate: "2025-09-27"
     },
     {
         id: 7,
-        image: "https://images.unsplash.com/photo-1601827280216-d850636510e0?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NzZ8fGNhcnxlbnwwfDF8MHx8fDA%3D",
+        image: "https://images.unsplash.com/photo-1601827280216-d850636510e0?w=600&auto=format&fit=crop&q=60",
         imageName: "car7",
         name: "Ford",
-        price: 59.99
+        price: 59.99,
+        creationDate: "2025-09-21"
     },
     {
         id: 8,
-        image: "https://images.unsplash.com/photo-1581208509730-ea918b007133?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8ODd8fGNhcnxlbnwwfDF8MHx8fDA%3D",
+        image: "https://images.unsplash.com/photo-1581208509730-ea918b007133?w=600&auto=format&fit=crop&q=60",
         imageName: "car8",
         name: "Volkswagen",
-        price: 39.99
+        price: 39.99,
+        creationDate: "2025-09-29"
     },
 ];
+
 
 export const kpiData = [
     {
@@ -90,6 +99,34 @@ export const kpiData = [
     },
 ];
 
+// api/mockApi.js
+export let booking = [
+    { id: 1, user: "John Doe", car: "Toyota Corolla", start_date: "2025-10-15", end_date: "2025-10-20", total_price: 150.0, payment_status: "PENDING", created_at: new Date().toISOString() },
+    { id: 2, user: "Jane Smith", car: "BMW 320i", start_date: "2025-10-18", end_date: "2025-10-21", total_price: 200.0, payment_status: "PAID", created_at: new Date().toISOString() }
+];
+
+let nextId = booking.length + 1;
+
+export const bookingApi = {
+    getAll: () => Promise.resolve([...booking]),
+    getById: (id) => Promise.resolve(booking.find(b => b.id === id)),
+    create: (b) => {
+        const newBooking = { id: nextId++, ...b, created_at: new Date().toISOString() };
+        booking.push(newBooking);
+        return Promise.resolve(newBooking);
+    },
+    update: (id, updated) => {
+        booking = booking.map(b => b.id === id ? { ...b, ...updated } : b);
+        return Promise.resolve(booking.find(b => b.id === id));
+    },
+    delete: (id) => {
+        booking = booking.filter(b => b.id !== id);
+        return Promise.resolve();
+    }
+};
+
+
+// LineChart.jsx
 export const LineChartData = [
     {
         "id": "japan",

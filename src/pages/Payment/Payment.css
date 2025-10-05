@@ -1,0 +1,73 @@
+.payment {
+    padding: 2rem;
+}
+
+.payment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.add-btn:hover {
+    background-color: #0056b3;
+}
+
+.payment-form {
+    margin: 1rem 0;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.payment-form input,
+.payment-form select {
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.payment-form button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+
+.payment-form button:hover {
+    background-color: #1f7a34;
+}
+
+.payment-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.payment-table th,
+.payment-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.delete-icon {
+    color: red;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.delete-icon:hover {
+    color: darkred;
+}

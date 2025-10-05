@@ -4,7 +4,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.6);
+    background-color: rgba(0, 0, 0, 0.6);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -12,13 +12,14 @@
 }
 
 .login {
+    color: white;
     max-width: 500px;
     width: 100%;
     /* height: 80%; */
-    padding: 40px 20px;
-    background-color: white;
+    padding: 30px 20px;
+    background-color: #161B22;
     z-index: +100;
-    border: 1px solid black;
+    border: 1px solid #323c4c;
     text-align: center;
     border-radius: 6px;
 }
@@ -65,30 +66,53 @@
 }
 
 .login-form input {
+    background: none;
     width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+    padding: 14px 10px;
+    border-radius: 4px;
+    border: 1px solid #333;
     font-size: 14px;
+    outline: none;
+    transition: 0.25s;
+}
+
+.login-form input:focus {
+    border-color: #fff;
+    outline: none
+}
+
+.login-form input:-webkit-autofill,
+.login-form input:-webkit-autofill:hover,
+.login-form input:-webkit-autofill:focus,
+.login-form input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #161B22 inset !important;
+    -webkit-text-fill-color: #fff !important;
+    transition: background-color 5000s ease-in-out 0s;
+    border: 1px solid #333;
 }
 
 .login-submit {
     width: 100%;
     cursor: pointer;
-    background-color: #0D0D0D;
+    background-color: #1f6feb;
     color: white;
     font-weight: 800;
     border: none;
     padding: 12px;
     border-radius: 6px;
     margin: 10px 0;
+    transition: 0.25s;
+}
+
+.login-submit:hover {
+    background-color: #2f6ac3;
 }
 
 .login-option span {
     cursor: pointer;
     font-weight: bold;
     text-decoration: underline;
+    color: white;
 }
 
 .login-terms {
@@ -100,7 +124,7 @@
 }
 
 .login-terms span {
-    color: black;
+    color: white;
     /* text-decoration: underline; */
 }
 

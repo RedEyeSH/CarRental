@@ -74,7 +74,7 @@ const EditCarModal = ({ carData, onClose, onUpdate }) => {
             <div className="overlay" onClick={onClose}>
                 <div className="modal" onClick={(e) => e.stopPropagation()}>
                     <h2>Edit Car</h2>
-                    <form className="car-form" onSubmit={handleSubmit}>
+                    <form className="modal-form" onSubmit={handleSubmit}>
                         <div className="form-group">
                             <input
                                 type="text"
@@ -84,7 +84,7 @@ const EditCarModal = ({ carData, onClose, onUpdate }) => {
                                 required
                                 placeholder=" "
                             />
-                            <label>Brand</label>
+                            <label htmlFor="brand">Brand</label>
                         </div>
 
                         <div className="form-group">
@@ -96,7 +96,7 @@ const EditCarModal = ({ carData, onClose, onUpdate }) => {
                                 required
                                 placeholder=" "
                             />
-                            <label>Model</label>
+                            <label htmlFor="model">Model</label>
                         </div>
 
                         <div className="form-group">
@@ -108,7 +108,7 @@ const EditCarModal = ({ carData, onClose, onUpdate }) => {
                                 required
                                 placeholder=" "
                             />
-                            <label>Year</label>
+                            <label htmlFor="year">Year</label>
                         </div>
 
                         <div className="form-group">
@@ -121,7 +121,7 @@ const EditCarModal = ({ carData, onClose, onUpdate }) => {
                                 <option value="Truck">Truck</option>
                                 <option value="Coupe">Coupe</option>
                             </select>
-                            <label>Type</label>
+                            <label htmlFor="type">Type</label>
                         </div>
 
                         <div className="form-group">
@@ -133,7 +133,7 @@ const EditCarModal = ({ carData, onClose, onUpdate }) => {
                                 required
                                 placeholder=" "
                             />
-                            <label>License Plate</label>
+                            <label htmlFor="license_plate">License Plate</label>
                         </div>
 
                         <div className="form-group">
@@ -146,7 +146,7 @@ const EditCarModal = ({ carData, onClose, onUpdate }) => {
                                 <option value="RETIRED">RETIRED</option>
                                 <option value="CLEANING">CLEANING</option>
                             </select>
-                            <label>Status</label>
+                            <label htmlFor="status">Status</label>
                         </div>
 
                         <div className="form-group">
@@ -158,7 +158,7 @@ const EditCarModal = ({ carData, onClose, onUpdate }) => {
                                 required
                                 placeholder=" "
                             />
-                            <label>Price per Day</label>
+                            <label htmlFor="price_per_day">Price per Day</label>
                         </div>
 
                         <div className="form-group">
@@ -168,7 +168,7 @@ const EditCarModal = ({ carData, onClose, onUpdate }) => {
                                 accept="image/*"
                                 onChange={handleChange}
                             />
-                            <label>Upload Image</label>
+                            <label htmlFor="image">Upload Image</label>
                         </div>
 
                         {preview && (

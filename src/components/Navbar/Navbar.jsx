@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "./Navbar.css";
 import Login from "../Auth/Login.jsx";
 import Register from "../Auth/Register.jsx";
@@ -11,21 +12,15 @@ const Navbar = () => {
     return (
         <>
             <div className="navbar">
-                <div className="navbar-logo">
+                <Link to="/" className="navbar-logo">
                     <img src={viteLogo} alt="logo" />
                     <p>Logo name</p>
-                </div>
+                </Link>
                 <div className="navbar-right">
                     <div className="navbar-links">
-                        <div className="navbar-link">
-                            <p>Products</p>
-                        </div>
-                        <div className="navbar-link">
-                            <p>Pricing</p>
-                        </div>
-                        <div className="navbar-link">
-                            <p>Contact</p>
-                        </div>
+                        <div className="navbar-link"><p>Products</p></div>
+                        <div className="navbar-link"><p>Pricing</p></div>
+                        <div className="navbar-link"><p>Contact</p></div>
                     </div>
                     <div className="navbar-buttons">
                         {loggedIn ? (
@@ -45,6 +40,7 @@ const Navbar = () => {
                     </div>
                 </div>
             </div>
+
             {authModal === "login" && (
                 <Login 
                     onClose={() => setAuthModal(null)} 

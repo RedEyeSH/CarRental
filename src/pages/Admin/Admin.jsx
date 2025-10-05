@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import "./Admin.css";
 // import { Outlet, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faTruckFast, faGear, faCircleUser, faHome, faSquarePollVertical } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faTruckFast, faGear, faCircleUser, faHome, faSquarePollVertical, faBook } from "@fortawesome/free-solid-svg-icons";
 // import KPICard from "../../components/KPICard/KPICard.jsx";
 // import LineChart from "../../components/LineChart/LineChart.jsx";
 // import { kpiData, LineChartData } from "../../data/mockData.js";
+import Dashboard from "./Dashboard/Dashboard.jsx";
 import Stock from "./Stock/Stock.jsx";
 import Rental from "./ActiveRentals/ActiveRentals.jsx";
-import Dashboard from "./Dashboard/Dashboard.jsx";
+import Booking from "../Booking/Booking.jsx";
+import { Link } from "react-router-dom";
 
 const Admin = () => {
     const [activeSection, setActiveSection] = useState("dashboard");
@@ -29,6 +31,15 @@ const Admin = () => {
                         </div>
                     </div>
                     <div className="admin-sidebar-items">
+                        <Link 
+                            to="/"
+                            className="admin-sidebar-data"
+                        >
+                            <div className="admin-icon-wrapper">
+                                <FontAwesomeIcon icon={faHome} />
+                            </div>
+                            <span>Home</span>
+                        </Link>
                         <button 
                             className={`admin-sidebar-data ${activeSection === "dashboard" ? "active" : ""}`}
                             onClick={() => setActiveSection("dashboard")}
@@ -69,6 +80,15 @@ const Admin = () => {
                                     <FontAwesomeIcon icon={faTruckFast} />
                                 </div>
                                 <span>Current Stock</span>
+                            </button>
+                            <button 
+                                className={`admin-sidebar-data ${activeSection === "booking" ? "active" : ""}`}
+                                onClick={() => setActiveSection("booking")}
+                            >
+                                <div className="admin-icon-wrapper">
+                                    <FontAwesomeIcon icon={faBook} />
+                                </div>
+                                <span>Booking</span>
                             </button>
                         </div>
                     </div>
@@ -111,6 +131,9 @@ const Admin = () => {
                     )}
                     {activeSection === "stock" && (
                         <Stock />
+                    )}
+                    {activeSection === "booking" && (
+                        <Booking />
                     )}
                 </div>
             </div>

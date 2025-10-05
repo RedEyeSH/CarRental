@@ -58,7 +58,7 @@
 .admin-sidebar-items {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 5px;
 }
 
 .admin-sidebar-items p {
@@ -71,19 +71,21 @@
 }
 
 .admin-sidebar-items button {
+    padding: 0;
     background: none;
     border: none;
 }
 
 .admin-sidebar-data {
-    text-decoration: none;
-    color: white;
-    width: 100%;
     display: flex;
     align-items: center;
-    /* gap: 10px; */
-    /* margin: 10px 0; */
+    gap: 8px;
+    /* padding: 8px 0; */
+    margin-bottom: 5px;
+    width: 100%;
     cursor: pointer;
+    text-decoration: none;
+    color: white;
     transition: 0.25s;
 }
 

@@ -68,86 +68,101 @@ const Register = ({ onClose, onSwitch }) => {
                     <p className="register-title">Create an account</p>
                     <p className="register-subtitle">Enter your email to sign up for this app</p>
                     <form className="register-form" onSubmit={handleSubmit}>
-                        <div className="register-email">
+                        <div className="form-group">
                             <input
                                 type="email"
-                                placeholder="email@domain.com"
+                                id="email"
+                                placeholder=" "
                                 value={email}
                                 onChange={e => setEmail(e.target.value)}
                                 required
                             />
+                            <label htmlFor="email">Email address</label>
                             {errors.email && <span className="error">{errors.email}</span>}
                         </div>
+
                         <div className="register-name">
-                            <div className="register-firstname">
+                            <div className="form-group">
                                 <input
                                     type="text"
                                     id="firstname"
-                                    placeholder="First name"
+                                    placeholder=" "
                                     value={firstname}
                                     onChange={e => setFirstname(e.target.value)}
                                     required
                                 />
+                                <label htmlFor="firstname">First name</label>
                                 {errors.firstname && <span className="error">{errors.firstname}</span>}
                             </div>
-                            <div className="register-lastname">
+                            <div className="form-group">
                                 <input
                                     type="text"
                                     id="lastname"
-                                    placeholder="Last name"
+                                    placeholder=" "
                                     value={lastname}
                                     onChange={e => setLastname(e.target.value)}
                                     required
                                 />
+                                <label htmlFor="lastname">Last name</label>
                                 {errors.lastname && <span className="error">{errors.lastname}</span>}
                             </div>
                         </div>
-                        <div className="register-phone">
+
+                        <div className="form-group">
                             <input
                                 type="text"
                                 id="phonenumber"
-                                placeholder="Phone number"
+                                placeholder=" "
                                 value={phonenumber}
                                 onChange={e => setPhonenumber(e.target.value)}
                                 required
                             />
+                            <label htmlFor="phonenumber">Phone number</label>
                             {errors.phonenumber && <span className="error">{errors.phonenumber}</span>}
                         </div>
-                        <div className="register-address">
+
+                        <div className="form-group">
                             <input
                                 type="text"
                                 id="address"
-                                placeholder="Address"
+                                placeholder=" "
                                 value={address}
                                 onChange={e => setAddress(e.target.value)}
                                 required
                             />
+                            <label htmlFor="address">Address</label>
                             {errors.address && <span className="error">{errors.address}</span>}
                         </div>
-                        <div className="register-password">
+
+                        <div className="form-group">
                             <input
                                 type="password"
                                 id="register-password"
-                                placeholder="Password"
+                                placeholder=" "
                                 value={password}
                                 onChange={e => setPassword(e.target.value)}
                                 required
                             />
+                            <label htmlFor="register-password">Password</label>
                             {errors.password && <span className="error">{errors.password}</span>}
                         </div>
-                        <div className="register-confirm-password">
+
+                        <div className="form-group">
                             <input
                                 type="password"
                                 id="register-confirm-password"
-                                placeholder="Confirm password"
+                                placeholder=" "
                                 value={confirmPassword}
                                 onChange={e => setConfirmPassword(e.target.value)}
                                 required
                             />
+                            <label htmlFor="register-confirm-password">Confirm password</label>
                             {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
                         </div>
+
                         <button className="register-submit" type="submit">Sign up with email</button>
                     </form>
+
                     <div className="login-option">
                         <p>Already have an account? <span onClick={onSwitch}>Click here!</span></p>
                     </div>

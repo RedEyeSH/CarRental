@@ -45,26 +45,28 @@ const Login = ({ onClose, onSwitch }) => {
                     <p className="login-title">Already have an account?</p>
                     <p className="login-subtitle">Enter your email and password to sign in.</p>
                     <form className="login-form" onSubmit={handleSubmit}>
-                        <div className="login-email">
+                        <div className="form-group">
                             <input 
                                 type="email" 
                                 id="login-email" 
-                                placeholder="email@domain.com" 
+                                placeholder=" " 
                                 value={email}
                                 onChange={e => setEmail(e.target.value)}
                                 required 
                             />
+                            <label htmlFor="email">Email address</label>
                             {errors.email && <span className="error">{errors.email}</span>}
                         </div>
-                        <div className="login-password">
+                        <div className="form-group">
                             <input 
                                 type="password" 
                                 id="login-password" 
-                                placeholder="password"
+                                placeholder=" "
                                 value={password}
                                 onChange={e => setPassword(e.target.value)}
                                 required 
                             />
+                            <label htmlFor="password">Password</label>
                             {errors.password && <span className="error">{errors.password}</span>}
                         </div>
                         <button className="login-submit" type="submit">Sign in</button>

@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import "./Home.css";
 import { cars } from "../../data/mockData.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faCaretDown, faCaretUp, faStar, faMagnifyingGlass, faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faCaretDown, faCaretUp, faStar, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-    const [toggle, setToggle] = useState("New"); 
+    const [toggle, setToggle] = useState("New");
     const [search, setSearch] = useState("");
 
     const options = [
@@ -18,6 +19,20 @@ const Home = () => {
     const filteredCars = cars.filter(car =>
         car.name.toLowerCase().includes(search.toLowerCase())
     );
+
+    const sortedCars = [...filteredCars].sort((a, b) => {
+        if (toggle === "Price ascending") {
+            return a.price - b.price;
+        } else if (toggle === "Price descending") {
+            return b.price - a.price;
+        } else if (toggle === "New") {
+            return new Date(b.creationDate) - new Date(a.creationDate);
+        }
+        return 0;
+    });
+
+    const navigate = useNavigate();
+
 
     return (
         <section className="home">
@@ -37,7 +52,6 @@ const Home = () => {
                                 <p id="home-sidebar-description">Description</p>
                             </div>
                         </div>
-                        {/* extra item */}
                         <div className="home-sidebar-item">
                             <input type="checkbox" id="option2" name="option2" value={"A"} />
                             <div className="home-sidebar-info">
@@ -45,7 +59,6 @@ const Home = () => {
                                 <p id="home-sidebar-description">Description</p>
                             </div>
                         </div>
-                        {/* extra item*/}
                     </div>
                     <hr />
                     <div className="home-sidebar-price">
@@ -68,7 +81,6 @@ const Home = () => {
                             <input type="checkbox" id="label1" />
                             <p>Label</p>
                         </div>
-                        {/* Copies starts here */}
                         <div className="home-sidebar-label">
                             <input type="checkbox" id="label2" />
                             <p>Label</p>
@@ -77,25 +89,23 @@ const Home = () => {
                             <input type="checkbox" id="label3" />
                             <p>Label</p>
                         </div>
-                        {/* Copies ends here */}
                     </div>
                 </div>
 
-                {/* Right side */}
                 <div className="home-main">
                     <div className="home-navbar">
                         <div className="home-navbar-search">
-                            <input 
-                                type="text" 
-                                id="home-search" 
-                                placeholder="Search" 
+                            <input
+                                type="text"
+                                id="home-search"
+                                placeholder="Search"
                                 value={search}
                                 onChange={e => setSearch(e.target.value)}
                             />
                             <FontAwesomeIcon icon={faMagnifyingGlass} />
                         </div>
                         <div className="home-navbar-options">
-                            {options.map((option) => (
+                            {options.map(option => (
                                 <div
                                     key={option.label}
                                     className={`home-navbar-option ${toggle === option.label ? "active" : ""}`}
@@ -107,15 +117,22 @@ const Home = () => {
                             ))}
                         </div>
                     </div>
+
                     <div className="home-list">
-                        {filteredCars.map((car) => (
-                            <div key={car.id} className="home-card">
+                        {sortedCars.map(car => (
+                            <div
+                                key={car.id}
+                                className="home-card"
+                                onClick={() => navigate(`/booking/${car.id}`)}
+                                style={{ cursor: "pointer" }}
+                            >
                                 <div className="home-card-image">
                                     <img src={car.image} alt={car.imageName} draggable={false} />
                                 </div>
                                 <div className="home-card-content">
                                     <h2>{car.name}</h2>
                                     <p>${car.price}/day</p>
+                                    <p>Added: {new Date(car.creationDate).toLocaleDateString()}</p>
                                 </div>
                             </div>
                         ))}
@@ -124,6 +141,6 @@ const Home = () => {
             </div>
         </section>
     );
-}
+};
 
 export default Home;
