@@ -73,7 +73,7 @@
       "\\.(css|less|scss|sass)$": "identity-obj-proxy"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!d3-.*|@nivo/.*|internmap)"
+      "node_modules/(?!d3-.*|@nivo/.*|internmap|delaunator|robust-predicates)"
     ]
   },
   "browserslist": [
