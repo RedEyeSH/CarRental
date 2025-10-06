@@ -16,6 +16,7 @@ describe("KPICard Component", () => {
         );
 
         expect(screen.getByText("Revenue")).toBeInTheDocument();
+
         expect(screen.getByText("+10%")).toBeInTheDocument();
     });
 
