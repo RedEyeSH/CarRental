@@ -9,19 +9,22 @@ describe('Login Component', () => {
         mockOnClose.mockClear();
     });
 
-    test('renders the Login component with correct elements', () => {
-        render(<Login onClose={mockOnClose} />);
+    test("renders the Login component with correct elements", () => {
+        const mockOnClose = jest.fn();
+        const mockOnSwitch = jest.fn();
 
-        const headerElement = screen.getByRole('heading', { name: 'App Name' });
-        expect(headerElement).toBeInTheDocument();
+        render(<Login onClose={mockOnClose} onSwitch={mockOnSwitch} />);
 
-        const emailInput = screen.getByPlaceholderText('email@domain.com');
+        const titleElement = screen.getByRole("heading", { name: /app name/i });
+        expect(titleElement).toBeInTheDocument();
+
+        const emailInput = screen.getByLabelText(/email address/i);
         expect(emailInput).toBeInTheDocument();
 
-        const passwordInput = screen.getByPlaceholderText('password');
+        const passwordInput = screen.getByLabelText(/password/i);
         expect(passwordInput).toBeInTheDocument();
 
-        const submitButton = screen.getByRole('button', { name: 'Sign in' });
+        const submitButton = screen.getByRole("button", { name: /sign in/i });
         expect(submitButton).toBeInTheDocument();
     });
 
