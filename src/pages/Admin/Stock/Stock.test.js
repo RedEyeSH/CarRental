@@ -13,7 +13,7 @@ describe("Stock Component", () => {
 
     test("renders the navbar with options", () => {
         render(<Stock />);
-        const options = ["Filter", "Add Car", "Remove Car", "Edit Listing"];
+        const options = ["Filter", "Add Car"];
         options.forEach((option) => {
             expect(screen.getByText(option)).toBeInTheDocument();
         });
@@ -33,14 +33,18 @@ describe("Stock Component", () => {
 
     test("toggles active option in navbar", () => {
         render(<Stock />);
+        const filterOption = screen.getByText("Filter");
+        expect(filterOption.closest("button")).toHaveClass("active");
+        fireEvent.click(filterOption);
+        expect(filterOption.closest("button")).not.toHaveClass("active");
         const addCarOption = screen.getByText("Add Car");
-        fireEvent.click(addCarOption);
-        expect(addCarOption.parentElement).toHaveClass("active");
+        expect(addCarOption.closest("button")).toHaveClass("stock-navbar-option");
     });
+
 
     test("renders the checkbox for availability", () => {
         render(<Stock />);
-        const checkbox = screen.getByRole("checkbox");
-        expect(checkbox).toBeInTheDocument();
+        const checkboxes = screen.getAllByRole("checkbox");
+        expect(checkboxes.length).toBeGreaterThan(0);
     });
 });

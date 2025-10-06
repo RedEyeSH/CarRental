@@ -17,25 +17,25 @@ describe('Register Component', () => {
         const headerElement = screen.getByRole('heading', { name: 'App Name' });
         expect(headerElement).toBeInTheDocument();
 
-        const emailInput = screen.getByPlaceholderText('email@domain.com');
+        const emailInput = screen.getByLabelText('Email address');
         expect(emailInput).toBeInTheDocument();
 
-        const firstNameInput = screen.getByPlaceholderText('First name');
+        const firstNameInput = screen.getByLabelText('First name');
         expect(firstNameInput).toBeInTheDocument();
 
-        const lastNameInput = screen.getByPlaceholderText('Last name');
+        const lastNameInput = screen.getByLabelText('Last name');
         expect(lastNameInput).toBeInTheDocument();
 
-        const phoneInput = screen.getByPlaceholderText('Phone number');
+        const phoneInput = screen.getByLabelText('Phone number');
         expect(phoneInput).toBeInTheDocument();
 
-        const addressInput = screen.getByPlaceholderText('Address');
+        const addressInput = screen.getByLabelText('Address');
         expect(addressInput).toBeInTheDocument();
 
-        const passwordInput = screen.getByPlaceholderText('Password');
+        const passwordInput = screen.getByLabelText('Password');
         expect(passwordInput).toBeInTheDocument();
 
-        const confirmPasswordInput = screen.getByPlaceholderText('Confirm password');
+        const confirmPasswordInput = screen.getByLabelText('Confirm password');
         expect(confirmPasswordInput).toBeInTheDocument();
 
         const submitButton = screen.getByRole('button', { name: 'Sign up with email' });
