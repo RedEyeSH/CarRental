@@ -90,6 +90,15 @@ const Admin = () => {
                                 </div>
                                 <span>Booking</span>
                             </button>
+                            <button
+                                className={`admin-sidebar-data ${activeSection === "payment" ? "active" : ""}`}
+                                onClick={() => setActiveSection("payment")}
+                            >
+                                <div className="admin-icon-wrapper">
+                                    <FontAwesomeIcon icon={faBook} />
+                                </div>
+                                <span>Payment</span>
+                            </button>
                         </div>
                     </div>
                 </div>

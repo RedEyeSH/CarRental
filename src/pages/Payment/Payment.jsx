@@ -1,138 +1,124 @@
 import React, { useState, useEffect } from "react";
 import "./Payment.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faPlus, faCreditCard } from "@fortawesome/free-solid-svg-icons";
+import { faCreditCard } from "@fortawesome/free-solid-svg-icons";
+import { useParams, useLocation } from "react-router-dom";
+import { cars as mockCars } from "../../data/mockData.js";
 
 const Payment = () => {
-    const [payments, setPayments] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [showForm, setShowForm] = useState(false);
-    const [newPayment, setNewPayment] = useState({
-        bookingId: "",
-        amount: "",
+    const { bookingId: carId } = useParams();
+    const location = useLocation();
+    const query = new URLSearchParams(location.search);
+    const startDate = query.get("start");
+    const endDate = query.get("end");
+
+    const [car, setCar] = useState(null);
+    const [total, setTotal] = useState(0);
+    const [payment, setPayment] = useState({
+        method: "Credit Card",
         status: "Pending",
-        method: "Credit Card"
     });
 
     useEffect(() => {
-        fetch("/api/v1/payments")
-            .then(res => res.json())
-            .then(data => {
-                setPayments(data);
-                setLoading(false);
-            })
-            .catch(err => {
-                setError("Failed to fetch payments.");
-                setLoading(false);
-            });
-    }, []);
+        if (carId) {
+            const selectedCar = mockCars.find((c) => String(c.id) === String(carId));
+            if (selectedCar) {
+                const start = new Date(startDate);
+                const end = new Date(endDate);
+                const diffDays = Math.max(1, Math.ceil((end - start) / (1000 * 60 * 60 * 24)));
+                const totalCost = diffDays * selectedCar.price;
+
+                setCar(selectedCar);
+                setTotal(totalCost.toFixed(2));
+            }
+        }
+    }, [carId, startDate, endDate]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setNewPayment(prev => ({ ...prev, [name]: value }));
+        setPayment((prev) => ({ ...prev, [name]: value }));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetch("/api/v1/payments", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(newPayment)
-        })
-            .then(res => res.json())
-            .then(data => {
-                setPayments(prev => [...prev, data]);
-                setShowForm(false);
-                setNewPayment({ bookingId: "", amount: "", status: "Pending", method: "Credit Card" });
-            })
-            .catch(() => setError("Failed to create payment."));
+        alert(`Payment successful for €${total} via ${payment.method}`);
     };
 
-    const handleDelete = (id) => {
-        if (!window.confirm("Are you sure you want to delete this payment?")) return;
-
-        fetch(`/api/v1/payments/${id}`, { method: "DELETE" })
-            .then(() => setPayments(prev => prev.filter(p => p.id !== id)))
-            .catch(() => setError("Failed to delete payment."));
-    };
-
-    if (loading) return <p>Loading payments...</p>;
-    if (error) return <p className="error">{error}</p>;
+    if (!car) return <p className="error">Car not found or invalid booking.</p>;
 
     return (
         <section className="payment">
             <div className="payment-header">
-                <h1><FontAwesomeIcon icon={faCreditCard} /> Payments</h1>
-                <button className="add-btn" onClick={() => setShowForm(!showForm)}>
-                    <FontAwesomeIcon icon={faPlus} /> Add Payment
-                </button>
+                <h1>
+                    <FontAwesomeIcon icon={faCreditCard} /> Checkout
+                </h1>
             </div>
 
-            {showForm && (
-                <form className="payment-form" onSubmit={handleSubmit}>
-                    <input
-                        type="text"
-                        name="bookingId"
-                        placeholder="Booking ID"
-                        value={newPayment.bookingId}
-                        onChange={handleChange}
-                        required
-                    />
-                    <input
-                        type="number"
-                        name="amount"
-                        placeholder="Amount"
-                        value={newPayment.amount}
-                        onChange={handleChange}
-                        required
-                    />
-                    <select name="status" value={newPayment.status} onChange={handleChange}>
-                        <option>Pending</option>
-                        <option>Completed</option>
-                        <option>Failed</option>
-                    </select>
-                    <select name="method" value={newPayment.method} onChange={handleChange}>
-                        <option>Credit Card</option>
-                        <option>PayPal</option>
-                        <option>Bank Transfer</option>
-                    </select>
-                    <button type="submit">Submit</button>
-                </form>
-            )}
+            <div className="payment-content">
+                <div className="payment-car">
+                    <img src={car.image} alt={car.brand} className="payment-car-image" />
+                    <div className="payment-car-details">
+                        <h2>{car.name} {car.model} ({car.creationDate})</h2>
+                    </div>
+                </div>
 
-            <table className="payment-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Booking ID</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                        <th>Method</th>
-                        <th>Date</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {payments.map(payment => (
-                        <tr key={payment.id}>
-                            <td>{payment.id}</td>
-                            <td>{payment.bookingId}</td>
-                            <td>€{payment.amount}</td>
-                            <td>{payment.status}</td>
-                            <td>{payment.method}</td>
-                            <td>{new Date(payment.createdAt).toLocaleDateString()}</td>
-                            <td>
-                                <FontAwesomeIcon
-                                    icon={faTrash}
-                                    className="delete-icon"
-                                    onClick={() => handleDelete(payment.id)}
-                                />
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+                <div className="payment-checkout">
+                    <h2>Payment Details</h2>
+                    <form onSubmit={handleSubmit} className="payment-form">
+                        <div className="form-group">
+                            <input
+                                type="text"
+                                id="price_per_day"
+                                name="price_per_day"
+                                value={`€${car.price}`}
+                                placeholder=" "
+                                readOnly
+                            />
+                            <label htmlFor="price_per_day">Price per Day</label>
+                        </div>
+
+                        <div className="form-group">
+                            <input
+                                type="text"
+                                id="rental_period"
+                                name="rental_period"
+                                value={`${startDate} → ${endDate}`}
+                                placeholder=" "
+                                readOnly
+                            />
+                            <label htmlFor="rental_period">Rental Period</label>
+                        </div>
+
+                        <div className="form-group">
+                            <input
+                                type="text"
+                                id="total_cost"
+                                name="total_cost"
+                                value={`€${total}`}
+                                placeholder=" "
+                                readOnly
+                            />
+                            <label htmlFor="total_cost">Total Cost</label>
+                        </div>
+
+                        <div className="form-group">
+                            <select
+                                id="payment_method"
+                                name="method"
+                                value={payment.method}
+                                onChange={handleChange}
+                            >
+                                <option>Credit Card</option>
+                                <option>PayPal</option>
+                                <option>Bank Transfer</option>
+                            </select>
+                            <label htmlFor="payment_method">Payment Method</label>
+                        </div>
+
+                        <button type="submit">Confirm Payment</button>
+                    </form>
+                </div>
+            </div>
         </section>
     );
 };

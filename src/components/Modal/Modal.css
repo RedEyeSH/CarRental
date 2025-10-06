@@ -157,6 +157,7 @@
 }
 
 .form-group input, .form-group select {
+    background: none;
     width: 100%;
     padding: 14px 10px;
     border-radius: 4px;
@@ -209,7 +210,6 @@
     transform: none;
     color: #aaa;
 }
-
 
 .fullscreen-overlay {
     position: fixed;
