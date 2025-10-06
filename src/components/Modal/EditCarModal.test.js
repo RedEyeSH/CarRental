@@ -7,6 +7,7 @@ global.alert = jest.fn();
 
 beforeEach(() => {
     global.fetch = jest.fn();
+    jest.spyOn(console, "error").mockImplementation(() => {}); // Suppress console.error
     jest.clearAllMocks();
 });
 
