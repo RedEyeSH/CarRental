@@ -2,7 +2,6 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import Dashboard from "./Dashboard";
 
-// Mock child components so Dashboard can render in isolation
 jest.mock("../../../components/KPICard/KPICard.jsx", () => () => <div data-testid="kpi-card" />);
 jest.mock("../../../components/LineChart/LineChart.jsx", () => () => <div data-testid="line-chart" />);
 
