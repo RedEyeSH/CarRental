@@ -7,6 +7,8 @@ const Login = ({ onClose, onSwitch }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
+    const [apiError, setApiError] = useState("");
 
     const validate = () => {
         const newErrors = {};
@@ -23,13 +25,39 @@ const Login = ({ onClose, onSwitch }) => {
         return newErrors;
     };
 
-    const handleSubmit = (e) => {
+   const handleSubmit = async (e) => {
         e.preventDefault();
         const validationErrors = validate();
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
+            return;
         } else {
             setErrors({});
+        }
+        setLoading(true);
+        setApiError("");
+        try {
+            const response = await fetch("http://localhost:3000/api/v1/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password,
+                }),
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                setApiError(data.message || "Login failed.");
+            } else {
+                // Login successful, close modal or show success
+                onClose();
+            }
+        } catch (error) {
+            setApiError("Network error. Please try again later.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -45,6 +73,7 @@ const Login = ({ onClose, onSwitch }) => {
                     <p className="login-title">Already have an account?</p>
                     <p className="login-subtitle">Enter your email and password to sign in.</p>
                     <form className="login-form" onSubmit={handleSubmit}>
+                        {apiError && <div className="error api-error">{apiError}</div>}
                         <div className="form-group">
                             <input 
                                 type="email" 
@@ -69,7 +98,9 @@ const Login = ({ onClose, onSwitch }) => {
                             <label htmlFor="login-password">Password</label>
                             {errors.password && <span className="error">{errors.password}</span>}
                         </div>
-                        <button className="login-submit" type="submit">Sign in</button>
+                        <button className="login-submit" type="submit" disabled={loading}>
+                            {loading ? "Signing in..." : "Sign in"}
+                        </button>
                     </form>
                     <div className="login-option">
                         <p>Don't have an account? <span onClick={onSwitch}>Click here!</span></p>

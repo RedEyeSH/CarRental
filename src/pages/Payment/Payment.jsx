@@ -2,37 +2,36 @@ import React, { useState, useEffect } from "react";
 import "./Payment.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCreditCard } from "@fortawesome/free-solid-svg-icons";
-import { useParams, useLocation } from "react-router-dom";
-import { cars as mockCars } from "../../data/mockData.js";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Payment = () => {
-    const { bookingId: carId } = useParams();
     const location = useLocation();
-    const query = new URLSearchParams(location.search);
-    const startDate = query.get("start");
-    const endDate = query.get("end");
+    const navigate = useNavigate();
 
-    const [car, setCar] = useState(null);
+    // Get car and initial dates from router state
+    const { car, startDate: initialStartDate, endDate: initialEndDate } = location.state || {};
+
+    const [startDate, setStartDate] = useState(initialStartDate || "");
+    const [endDate, setEndDate] = useState(initialEndDate || "");
     const [total, setTotal] = useState(0);
-    const [payment, setPayment] = useState({
-        method: "Credit Card",
-        status: "Pending",
-    });
+    const [payment, setPayment] = useState({ method: "Credit Card", status: "Pending" });
 
+    // Redirect if car data is missing
     useEffect(() => {
-        if (carId) {
-            const selectedCar = mockCars.find((c) => String(c.id) === String(carId));
-            if (selectedCar) {
-                const start = new Date(startDate);
-                const end = new Date(endDate);
-                const diffDays = Math.max(1, Math.ceil((end - start) / (1000 * 60 * 60 * 24)));
-                const totalCost = diffDays * selectedCar.price;
-
-                setCar(selectedCar);
-                setTotal(totalCost.toFixed(2));
-            }
+        if (!car) {
+            navigate("/"); // go back to home if no car
         }
-    }, [carId, startDate, endDate]);
+    }, [car, navigate]);
+
+    // Recalculate total whenever dates or car change
+    useEffect(() => {
+        if (startDate && endDate && car) {
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            const diffDays = Math.max(1, Math.ceil((end - start) / (1000 * 60 * 60 * 24)));
+            setTotal((diffDays * parseFloat(car.price_per_day)).toFixed(2));
+        }
+    }, [startDate, endDate, car]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -41,10 +40,15 @@ const Payment = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (!startDate || !endDate) {
+            alert("Please select both start and end dates.");
+            return;
+        }
         alert(`Payment successful for €${total} via ${payment.method}`);
+        navigate("/"); // redirect after payment
     };
 
-    if (!car) return <p className="error">Car not found or invalid booking.</p>;
+    if (!car) return null; // or a loading indicator
 
     return (
         <section className="payment">
@@ -53,57 +57,79 @@ const Payment = () => {
                     <FontAwesomeIcon icon={faCreditCard} /> Checkout
                 </h1>
             </div>
-
             <div className="payment-content">
                 <div className="payment-car">
-                    <img src={car.image} alt={car.brand} className="payment-car-image" />
+                    <img
+                        src={`http://localhost:3000/public/uploads/${car.image}`}
+                        alt={`${car.brand} ${car.model}`}
+                        className="payment-car-image"
+                        draggable={false}
+                    />
                     <div className="payment-car-details">
-                        <h2>{car.name} {car.model} ({car.creationDate})</h2>
+                        <h2>{car.brand} {car.model} ({car.year})</h2>
+                        <p>€{car.price_per_day}/day</p>
                     </div>
                 </div>
-
                 <div className="payment-checkout">
                     <h2>Payment Details</h2>
                     <form onSubmit={handleSubmit} className="payment-form">
                         <div className="form-group">
                             <input
-                                type="text"
-                                id="price_per_day"
-                                name="price_per_day"
-                                value={`€${car.price}`}
-                                placeholder=" "
-                                readOnly
+                                type="date"
+                                id="start_date"
+                                value={startDate}
+                                onChange={(e) => {
+                                    const newStart = e.target.value;
+                                    setStartDate(newStart);
+
+                                    if (endDate && new Date(endDate) < new Date(newStart)) {
+                                        setEndDate(newStart);
+                                    }
+                                }}
+                                required
                             />
-                            <label htmlFor="price_per_day">Price per Day</label>
+                            <label htmlFor="start_date">Start Date</label>
+                        </div>
+                        <div className="form-group">
+                            <input
+                                type="date"
+                                id="end_date"
+                                value={endDate}
+                                onChange={(e) => {
+                                    const newEnd = e.target.value;
+
+                                    if (startDate && new Date(newEnd) < new Date(startDate)) {
+                                        alert("End date cannot be before start date");
+                                        return;
+                                    }
+
+                                    setEndDate(newEnd);
+                                }}
+                                required
+                            />
+                            <label htmlFor="end_date">End Date</label>
                         </div>
 
                         <div className="form-group">
                             <input
                                 type="text"
-                                id="rental_period"
-                                name="rental_period"
-                                value={`${startDate} → ${endDate}`}
-                                placeholder=" "
+                                value={startDate && endDate ? `${startDate} → ${endDate}` : ""}
+                                placeholder="Rental Period"
                                 readOnly
                             />
-                            <label htmlFor="rental_period">Rental Period</label>
+                            <label>Rental Period</label>
                         </div>
-
                         <div className="form-group">
                             <input
                                 type="text"
-                                id="total_cost"
-                                name="total_cost"
                                 value={`€${total}`}
-                                placeholder=" "
+                                placeholder="Total Cost"
                                 readOnly
                             />
-                            <label htmlFor="total_cost">Total Cost</label>
+                            <label>Total Cost</label>
                         </div>
-
                         <div className="form-group">
                             <select
-                                id="payment_method"
                                 name="method"
                                 value={payment.method}
                                 onChange={handleChange}
@@ -112,9 +138,8 @@ const Payment = () => {
                                 <option>PayPal</option>
                                 <option>Bank Transfer</option>
                             </select>
-                            <label htmlFor="payment_method">Payment Method</label>
+                            <label>Payment Method</label>
                         </div>
-
                         <button type="submit">Confirm Payment</button>
                     </form>
                 </div>

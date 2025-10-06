@@ -187,3 +187,12 @@
     background-color: #0056b3;
 }
 
+.no-cars-message {
+    display: flex;
+    justify-content: center; /* horizontal center */
+    align-items: center;     /* vertical center */
+    height: 200px;           /* adjust based on your list container height */
+    font-size: 1.2rem;
+    color: #555;
+    font-weight: 500;
+}

@@ -37,8 +37,12 @@ const AddCarModal = ({ onClose }) => {
         });
 
         try {
+            const token = localStorage.getItem("token");
             const res = await fetch("http://localhost:3000/api/v1/cars", {
                 method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
                 body,
             });
 

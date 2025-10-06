@@ -157,7 +157,7 @@
 }
 
 .form-group input, .form-group select {
-    background: none;
+    /* background: none; */
     width: 100%;
     padding: 14px 10px;
     border-radius: 4px;

@@ -1,6 +1,6 @@
-import React from 'react';
-import './KPICard.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from "react";
+import "./KPICard.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const KPICard = ({ icon, label, value, change, color }) => {
   return (

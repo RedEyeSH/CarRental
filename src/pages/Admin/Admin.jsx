@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Admin.css";
 // import { Outlet, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faTruckFast, faGear, faCircleUser, faHome, faSquarePollVertical, faBook } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faTruckFast, faGear, faCircleUser, faHome, faSquarePollVertical, faBook, faCreditCard } from "@fortawesome/free-solid-svg-icons";
 // import KPICard from "../../components/KPICard/KPICard.jsx";
 // import LineChart from "../../components/LineChart/LineChart.jsx";
 // import { kpiData, LineChartData } from "../../data/mockData.js";
@@ -91,13 +91,13 @@ const Admin = () => {
                                 <span>Booking</span>
                             </button>
                             <button
-                                className={`admin-sidebar-data ${activeSection === "payment" ? "active" : ""}`}
-                                onClick={() => setActiveSection("payment")}
+                                className={`admin-sidebar-data ${activeSection === "transaction" ? "active" : ""}`}
+                                onClick={() => setActiveSection("transaction")}
                             >
                                 <div className="admin-icon-wrapper">
-                                    <FontAwesomeIcon icon={faBook} />
+                                    <FontAwesomeIcon icon={faCreditCard} />
                                 </div>
-                                <span>Payment</span>
+                                <span>Transaction</span>
                             </button>
                         </div>
                     </div>

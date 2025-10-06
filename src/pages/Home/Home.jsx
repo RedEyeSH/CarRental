@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Home.css";
-import { cars } from "../../data/mockData.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faCheck,
@@ -12,6 +11,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+    const [cars, setCars] = useState([]);
     const [toggle, setToggle] = useState("New");
     const [searchText, setSearchText] = useState("");
     const [startDate, setStartDate] = useState("");
@@ -28,6 +28,22 @@ const Home = () => {
         { label: "Rating", icon: faStar },
     ];
 
+    // Fetch cars from the API
+    useEffect(() => {
+        const fetchCars = async () => {
+            try {
+                const res = await fetch("http://localhost:3000/api/v1/cars/");
+                if (!res.ok) throw new Error("Failed to fetch cars");
+                const data = await res.json();
+                setCars(data);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        fetchCars();
+    }, []);
+
     const handleSearch = (e) => {
         e.preventDefault();
 
@@ -36,8 +52,13 @@ const Home = () => {
             return;
         }
 
+        if (new Date(endDate) < new Date(startDate)) {
+            alert("End date cannot be before start date.");
+            return;
+        }
+
         const results = cars.filter((car) =>
-            car.name.toLowerCase().includes(searchText.toLowerCase())
+            `${car.brand} ${car.model}`.toLowerCase().includes(searchText.toLowerCase())
         );
 
         setSearchResults(results);
@@ -45,9 +66,9 @@ const Home = () => {
     };
 
     const sortedCars = [...searchResults].sort((a, b) => {
-        if (toggle === "Price ascending") return a.price - b.price;
-        if (toggle === "Price descending") return b.price - a.price;
-        if (toggle === "New") return new Date(b.creationDate) - new Date(a.creationDate);
+        if (toggle === "Price ascending") return parseFloat(a.price_per_day) - parseFloat(b.price_per_day);
+        if (toggle === "Price descending") return parseFloat(b.price_per_day) - parseFloat(a.price_per_day);
+        if (toggle === "New") return new Date(b.created_at) - new Date(a.created_at);
         return 0;
     });
 
@@ -69,7 +90,13 @@ const Home = () => {
                         <input
                             type="date"
                             value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
+                            onChange={(e) => {
+                                const newStart = e.target.value;
+                                setStartDate(newStart);
+                                if (endDate && new Date(endDate) < new Date(newStart)) {
+                                    setEndDate(newStart);
+                                }
+                            }}
                             required
                         />
                     </div>
@@ -78,7 +105,14 @@ const Home = () => {
                         <input
                             type="date"
                             value={endDate}
-                            onChange={(e) => setEndDate(e.target.value)}
+                            onChange={(e) => {
+                                const newEnd = e.target.value;
+                                if (startDate && new Date(newEnd) < new Date(startDate)) {
+                                    alert("End date cannot be before start date.");
+                                    return;
+                                }
+                                setEndDate(newEnd);
+                            }}
                             required
                         />
                     </div>
@@ -92,9 +126,7 @@ const Home = () => {
                         {options.map((option) => (
                             <div
                                 key={option.label}
-                                className={`home-navbar-option ${
-                                    toggle === option.label ? "active" : ""
-                                }`}
+                                className={`home-navbar-option ${toggle === option.label ? "active" : ""}`}
                                 onClick={() => setToggle(option.label)}
                             >
                                 <p>{option.label}</p>
@@ -106,22 +138,30 @@ const Home = () => {
 
                 {searched && (
                     <div className="home-list">
-                        {sortedCars.map((car) => (
-                            <div
-                                key={car.id}
-                                className="home-card"
-                                onClick={() => navigate(`/payment/${car.id}?start=${startDate}&end=${endDate}`)}
-                            >
-                                <div className="home-card-image">
-                                    <img src={car.image} alt={car.imageName} draggable={false} />
+                        {sortedCars.length > 0 ? (
+                            sortedCars.map((car) => (
+                                <div
+                                    key={car.id}
+                                    className="home-card"
+                                    onClick={() => navigate("/payment", { state: { car, startDate, endDate } })}
+                                >
+                                    <div className="home-card-image">
+                                        <img
+                                            src={`http://localhost:3000/public/uploads/${car.image}`}
+                                            alt={`${car.brand} ${car.model}`}
+                                            draggable={false}
+                                        />
+                                    </div>
+                                    <div className="home-card-content">
+                                        <h2>{car.brand} {car.model} ({car.year})</h2>
+                                        <p>€{car.price_per_day}/day</p>
+                                        <p>Added: {new Date(car.created_at).toLocaleDateString()}</p>
+                                    </div>
                                 </div>
-                                <div className="home-card-content">
-                                    <h2>{car.name}</h2>
-                                    <p>€{car.price}/day</p>
-                                    <p>Added: {new Date(car.creationDate).toLocaleDateString()}</p>
-                                </div>
-                            </div>
-                        ))}
+                            ))
+                        ) : (
+                            <p className="no-cars-message">No cars found for your search.</p>
+                        )}
                     </div>
                 )}
             </div>

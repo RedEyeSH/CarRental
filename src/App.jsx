@@ -24,7 +24,8 @@ function App() {
           <Route path="/" element={<MainLayout><Home/></MainLayout>}/>
           {/* <Route path="/admin" element={<Admin />} /> testing */}
           <Route path="/booking/:carId" element={<MainLayout><Booking /></MainLayout>} />
-          <Route path="/payment/:bookingId" element={<MainLayout><Payment /></MainLayout>} />
+          <Route path="/payment" element={<MainLayout><Payment /></MainLayout>} />
+          {/* <Route path="/payment/:bookingId" element={<MainLayout><Payment /></MainLayout>} /> */}
           <Route path="/admin" element={<AdminLayout><Admin /></AdminLayout>} />
           {/* <Route path="/admin/stock" element={<AdminLayout><Stock /></AdminLayout>} /> */}
           {/* <Route path="/admin/rental" element={<AdminLayout><ActiveRentals /></AdminLayout>} /> */}

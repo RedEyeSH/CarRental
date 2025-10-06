@@ -6,12 +6,12 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 const Register = ({ onClose, onSwitch }) => {
     const [email, setEmail] = useState("");
     const [firstname, setFirstname] = useState("");
-    const [lastname, setLastname] = useState("");
     const [phonenumber, setPhonenumber] = useState("");
-    const [address, setAddress] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
+    const [apiError, setApiError] = useState("");
 
     const validate = () => {
         const newErrors = {};
@@ -23,16 +23,10 @@ const Register = ({ onClose, onSwitch }) => {
         if (!firstname) {
             newErrors.firstname = "First name is required.";
         }
-        if (!lastname) {
-            newErrors.lastname = "Last name is required.";
-        }
         if (!phonenumber) {
             newErrors.phonenumber = "Phone number is required.";
         } else if (!/^\d{7,15}$/.test(phonenumber)) {
             newErrors.phonenumber = "Phone number is invalid.";
-        }
-        if (!address) {
-            newErrors.address = "Address is required.";
         }
         if (!password) {
             newErrors.password = "Password is required.";
@@ -47,15 +41,44 @@ const Register = ({ onClose, onSwitch }) => {
         return newErrors;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const validationErrors = validate();
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
+            return;
         } else {
             setErrors({});
         }
+        setLoading(true);
+        setApiError("");
+        try {
+            const response = await fetch("http://localhost:3000/api/v1/auth/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    name: firstname,
+                    email: email,
+                    password: password,
+                    phone: phonenumber,
+                }),
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                setApiError(data.message || "Registration failed.");
+            } else {
+                // Registration successful, close modal or show success
+                onClose();
+            }
+        } catch (error) {
+            setApiError("Network error. Please try again later.");
+        } finally {
+            setLoading(false);
+        }
     };
+
 
     return (
         <div className="overlay" onClick={onClose}>
@@ -68,6 +91,7 @@ const Register = ({ onClose, onSwitch }) => {
                     <p className="register-title">Create an account</p>
                     <p className="register-subtitle">Enter your email to sign up for this app</p>
                     <form className="register-form" onSubmit={handleSubmit}>
+                        {apiError && <div className="error api-error">{apiError}</div>}
                         <div className="form-group">
                             <input
                                 type="email"
@@ -94,18 +118,6 @@ const Register = ({ onClose, onSwitch }) => {
                                 <label htmlFor="firstname">First name</label>
                                 {errors.firstname && <span className="error">{errors.firstname}</span>}
                             </div>
-                            <div className="form-group">
-                                <input
-                                    type="text"
-                                    id="lastname"
-                                    placeholder=" "
-                                    value={lastname}
-                                    onChange={e => setLastname(e.target.value)}
-                                    required
-                                />
-                                <label htmlFor="lastname">Last name</label>
-                                {errors.lastname && <span className="error">{errors.lastname}</span>}
-                            </div>
                         </div>
 
                         <div className="form-group">
@@ -121,18 +133,6 @@ const Register = ({ onClose, onSwitch }) => {
                             {errors.phonenumber && <span className="error">{errors.phonenumber}</span>}
                         </div>
 
-                        <div className="form-group">
-                            <input
-                                type="text"
-                                id="address"
-                                placeholder=" "
-                                value={address}
-                                onChange={e => setAddress(e.target.value)}
-                                required
-                            />
-                            <label htmlFor="address">Address</label>
-                            {errors.address && <span className="error">{errors.address}</span>}
-                        </div>
 
                         <div className="form-group">
                             <input
@@ -160,7 +160,9 @@ const Register = ({ onClose, onSwitch }) => {
                             {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
                         </div>
 
-                        <button className="register-submit" type="submit">Sign up with email</button>
+                        <button className="register-submit" type="submit" disabled={loading}>
+                            {loading ? "Registering..." : "Sign up with email"}
+                        </button>
                     </form>
 
                     <div className="login-option">
