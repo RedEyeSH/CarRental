@@ -110,7 +110,7 @@ const Home = () => {
                             <div
                                 key={car.id}
                                 className="home-card"
-                                onClick={() => navigate(`/booking/${car.id}`)}
+                                onClick={() => navigate(`/payment/${car.id}?start=${startDate}&end=${endDate}`)}
                             >
                                 <div className="home-card-image">
                                     <img src={car.image} alt={car.imageName} draggable={false} />

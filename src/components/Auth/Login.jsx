@@ -54,7 +54,7 @@ const Login = ({ onClose, onSwitch }) => {
                                 onChange={e => setEmail(e.target.value)}
                                 required 
                             />
-                            <label htmlFor="email">Email address</label>
+                            <label htmlFor="login-email">Email address</label>
                             {errors.email && <span className="error">{errors.email}</span>}
                         </div>
                         <div className="form-group">
@@ -66,7 +66,7 @@ const Login = ({ onClose, onSwitch }) => {
                                 onChange={e => setPassword(e.target.value)}
                                 required 
                             />
-                            <label htmlFor="password">Password</label>
+                            <label htmlFor="login-password">Password</label>
                             {errors.password && <span className="error">{errors.password}</span>}
                         </div>
                         <button className="login-submit" type="submit">Sign in</button>

@@ -180,9 +180,10 @@
     border-radius: 6px;
     padding: 10px 16px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: 0.25s;
 }
 
 .search-btn:hover {
     background-color: #0056b3;
 }
+
