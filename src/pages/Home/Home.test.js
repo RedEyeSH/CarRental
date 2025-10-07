@@ -1,7 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import Home from "./Home";
-import { cars } from "../../data/mockData";
 import { useNavigate } from "react-router-dom";
 
 // Mock useNavigate
@@ -12,6 +11,24 @@ jest.mock("react-router-dom", () => ({
 describe("Home component", () => {
     const navigateMock = jest.fn();
     const alertMock = jest.spyOn(window, "alert").mockImplementation(() => {});
+
+    beforeAll(() => {
+        // Mock the fetch API with expected data
+        global.fetch = jest.fn(() =>
+            Promise.resolve({
+                json: () => Promise.resolve([
+                    { id: 1, name: "Tesla Model S" },
+                    { id: 2, name: "Ford Mustang" },
+                ]), // Mocked response data
+            })
+        );
+    });
+
+    afterAll(() => {
+        // Clean up the fetch mock
+        global.fetch.mockClear();
+        delete global.fetch;
+    });
 
     beforeEach(() => {
         useNavigate.mockReturnValue(navigateMock);
