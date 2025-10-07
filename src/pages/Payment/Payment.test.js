@@ -2,63 +2,99 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import Payment from "./Payment";
-import { cars as mockCars } from "../../data/mockData";
 
-jest.mock("../../data/mockData", () => ({
-    cars: [
-        { id: 1, name: "Car A", model: "Model A", price: 50, image: "car-a.jpg", brand: "Brand A", creationDate: "2020" },
-        { id: 2, name: "Car B", model: "Model B", price: 70, image: "car-b.jpg", brand: "Brand B", creationDate: "2021" },
-    ],
+// define the mockLocation at top level and initialize it
+let mockLocation = { state: {} };
+const mockNavigate = jest.fn();
+
+// mock react-router-dom hooks
+jest.mock("react-router-dom", () => ({
+    ...jest.requireActual("react-router-dom"),
+    useNavigate: () => mockNavigate,
+    useLocation: () => mockLocation,
 }));
 
 describe("Payment Component", () => {
-    const renderWithRouter = (ui, { route = "/" } = {}) => {
+    const mockCar = {
+        id: 1,
+        brand: "Brand A",
+        model: "Model A",
+        year: "2020",
+        price_per_day: 50,
+        image: "car-a.jpg",
+    };
+
+    const renderWithRouter = (state = {}) => {
+        // ✅ ensure state is set before rendering
+        mockLocation.state = state;
+
         return render(
-            <MemoryRouter initialEntries={[route]}>
+            <MemoryRouter initialEntries={["/payment"]}>
                 <Routes>
-                    <Route path="/payment/:bookingId" element={ui} />
+                    <Route path="/payment" element={<Payment />} />
                 </Routes>
             </MemoryRouter>
         );
     };
 
-    test("renders correctly with valid car data", () => {
-        renderWithRouter(<Payment />, { route: "/payment/1?start=2023-10-01&end=2023-10-05" });
-
-        expect(screen.getByText(/Checkout/i)).toBeInTheDocument();
-        expect(screen.getByText(/Car A Model A \(2020\)/i)).toBeInTheDocument();
-        expect(screen.getByDisplayValue(/€200.00/i)).toBeInTheDocument(); // Use getByDisplayValue for input values
+    beforeEach(() => {
+        jest.clearAllMocks();
     });
 
-    test("shows error message for invalid car data", () => {
-        renderWithRouter(<Payment />, { route: "/payment/999?start=2023-10-01&end=2023-10-05" });
+    test("renders correctly with valid car data", () => {
+        renderWithRouter({
+            car: mockCar,
+            startDate: "2023-10-01",
+            endDate: "2023-10-05",
+        });
 
-        expect(screen.getByText(/Car not found or invalid booking/i)).toBeInTheDocument();
+        // the icon may split text, so we use a more flexible matcher
+        expect(screen.getByRole("heading", { name: /Checkout/i })).toBeInTheDocument();
+        expect(screen.getByText(/Brand A Model A \(2020\)/i)).toBeInTheDocument();
+        expect(screen.getByDisplayValue("€200.00")).toBeInTheDocument();
+    });
+
+    test("redirects when car data is missing", () => {
+        renderWithRouter({});
+        expect(mockNavigate).toHaveBeenCalledWith("/");
     });
 
     test("calculates total cost correctly", () => {
-        renderWithRouter(<Payment />, { route: "/payment/1?start=2023-10-01&end=2023-10-03" });
+        renderWithRouter({
+            car: mockCar,
+            startDate: "2023-10-01",
+            endDate: "2023-10-03",
+        });
 
-        expect(screen.getByDisplayValue(/€100.00/i)).toBeInTheDocument(); // Use getByDisplayValue for input values
+        expect(screen.getByDisplayValue("€100.00")).toBeInTheDocument();
     });
 
     test("handles form submission", () => {
         const alertMock = jest.spyOn(window, "alert").mockImplementation(() => {});
 
-        renderWithRouter(<Payment />, { route: "/payment/1?start=2023-10-01&end=2023-10-05" });
+        renderWithRouter({
+            car: mockCar,
+            startDate: "2023-10-01",
+            endDate: "2023-10-05",
+        });
 
-        const button = screen.getByText(/Confirm Payment/i);
+        const button = screen.getByRole("button", { name: /Confirm Payment/i });
         fireEvent.click(button);
 
         expect(alertMock).toHaveBeenCalledWith("Payment successful for €200.00 via Credit Card");
+        expect(mockNavigate).toHaveBeenCalledWith("/");
 
         alertMock.mockRestore();
     });
 
     test("changes payment method", () => {
-        renderWithRouter(<Payment />, { route: "/payment/1?start=2023-10-01&end=2023-10-05" });
+        renderWithRouter({
+            car: mockCar,
+            startDate: "2023-10-01",
+            endDate: "2023-10-05",
+        });
 
-        const select = screen.getByLabelText(/Payment Method/i);
+        const select = screen.getByRole("combobox");
         fireEvent.change(select, { target: { value: "PayPal" } });
 
         expect(select.value).toBe("PayPal");
