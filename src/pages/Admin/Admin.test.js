@@ -1,17 +1,32 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom"; // For Link components
+import { MemoryRouter } from "react-router-dom";
 import Admin from "./Admin";
-import Dashboard from "./Dashboard/Dashboard";
-import Stock from "./Stock/Stock";
-import Rental from "./ActiveRentals/ActiveRentals";
-import Booking from "../Booking/Booking";
 
-// Mock child components to simplify tests
-jest.mock("./Dashboard/Dashboard", () => () => <div data-testid="dashboard">Dashboard Component</div>);
-jest.mock("./Stock/Stock", () => () => <div data-testid="stock">Stock Component</div>);
-jest.mock("./ActiveRentals/ActiveRentals", () => () => <div data-testid="rental">Rental Component</div>);
-jest.mock("../Booking/Booking", () => () => <div data-testid="booking">Booking Component</div>);
+// Mock child components
+jest.mock("./Dashboard/Dashboard.jsx", () => () => <div data-testid="dashboard">Dashboard Component</div>);
+jest.mock("./Stock/Stock.jsx", () => () => <div data-testid="stock">Stock Component</div>);
+jest.mock("./ActiveRentals/ActiveRentals.jsx", () => () => <div data-testid="rental">Rental Component</div>);
+jest.mock("./Booking/Booking.jsx", () => () => <div data-testid="booking">Booking Component</div>);
+jest.mock("./Users/Users.jsx", () => () => <div data-testid="users">Users Component</div>);
+jest.mock("./Feedback/Feedback.jsx", () => () => <div data-testid="feedback">Feedback Component</div>);
+jest.mock("./Payment/Payment.jsx", () => () => <div data-testid="payment">Payment Component</div>);
+
+// Mock LoginModal so it doesn’t block rendering
+jest.mock("../../components/Modal/LoginModal.jsx", () => () => (
+    <div data-testid="login-modal">Login Modal</div>
+));
+
+beforeEach(() => {
+    // Ensure tests always start with an admin user
+    localStorage.setItem("user", JSON.stringify({ name: "AdminUser", role: "ADMIN" }));
+    localStorage.setItem("token", "test-token");
+});
+
+afterEach(() => {
+    localStorage.clear();
+    jest.clearAllMocks();
+});
 
 describe("Admin Component", () => {
     test("renders admin page and default section is dashboard", () => {
@@ -21,8 +36,9 @@ describe("Admin Component", () => {
             </MemoryRouter>
         );
 
-        // Check sidebar header
+        // Sidebar header
         expect(screen.getByText("Admin Page")).toBeInTheDocument();
+
         // Default section is dashboard
         expect(screen.getByTestId("dashboard")).toBeInTheDocument();
     });
@@ -76,13 +92,12 @@ describe("Admin Component", () => {
         const dashboardButton = screen.getByRole("button", { name: /Dashboard/i });
         const rentalButton = screen.getByRole("button", { name: /Active rentals/i });
 
-        // Dashboard should be active by default
+        // Dashboard active by default
         expect(dashboardButton).toHaveClass("active");
 
         // Click rental button
         fireEvent.click(rentalButton);
 
-        // Rental should now be active, dashboard should not
         expect(rentalButton).toHaveClass("active");
         expect(dashboardButton).not.toHaveClass("active");
     });
