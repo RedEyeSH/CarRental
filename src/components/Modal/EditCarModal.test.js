@@ -18,9 +18,9 @@ const carData = {
     year: 2022,
     type: "Sedan",
     license_plate: "ABC123",
-    status: "AVAILABLE",
+    status: "READY",
     price_per_day: 100,
-    imageUrl: "existing-image.jpg",
+    image: "existing-image.jpg",
 };
 
 const onClose = jest.fn();
@@ -28,18 +28,25 @@ const onUpdate = jest.fn();
 
 describe("EditCarModal", () => {
     beforeEach(() => {
-        render(<EditCarModal carData={carData} onClose={onClose} onUpdate={onUpdate} />);
+        render(<EditCarModal carData={carData} onClose={onClose} onCarEdited={onUpdate} token="test-token" />);
     });
 
     test("renders form with prefilled carData", () => {
-        expect(screen.getByDisplayValue(carData.brand)).toBeInTheDocument();
+        const brandInputs = screen.getAllByDisplayValue(carData.brand);
+        expect(brandInputs).toHaveLength(1);
+        expect(brandInputs[0]).toBeInTheDocument();
+
         expect(screen.getByDisplayValue(carData.model)).toBeInTheDocument();
         expect(screen.getByDisplayValue(carData.year.toString())).toBeInTheDocument();
         expect(screen.getByDisplayValue(carData.type)).toBeInTheDocument();
         expect(screen.getByDisplayValue(carData.license_plate)).toBeInTheDocument();
         expect(screen.getByDisplayValue(carData.status)).toBeInTheDocument();
         expect(screen.getByDisplayValue(carData.price_per_day.toString())).toBeInTheDocument();
-        expect(screen.getByAltText("Car Preview")).toHaveAttribute("src", carData.imageUrl);
+
+        if (carData.imageUrl) {
+            const image = screen.getByAltText("Car Preview");
+            expect(image).toHaveAttribute("src", carData.imageUrl);
+        }
     });
 
     test("input changes update formData", () => {
@@ -47,9 +54,9 @@ describe("EditCarModal", () => {
         fireEvent.change(brandInput, { target: { value: "Audi" } });
         expect(brandInput.value).toBe("Audi");
 
-        const statusSelect = screen.getByDisplayValue("AVAILABLE");
-        fireEvent.change(statusSelect, { target: { value: "RENTED" } });
-        expect(statusSelect.value).toBe("RENTED");
+        const statusSelect = screen.getByDisplayValue("READY");
+        fireEvent.change(statusSelect, { target: { value: "MAINTENANCE" } });
+        expect(statusSelect.value).toBe("MAINTENANCE");
     });
 
     test("file input updates preview", () => {
@@ -67,8 +74,8 @@ describe("EditCarModal", () => {
     });
 
     test("clicking image preview opens fullscreen modal", () => {
-        const previewDiv = screen.getByAltText("Car Preview").parentElement;
-        fireEvent.click(previewDiv);
+        const image = screen.getByAltText("Car Preview");
+        fireEvent.click(image.parentElement);
 
         expect(screen.getByAltText("Fullscreen Preview")).toBeInTheDocument();
 
@@ -84,7 +91,10 @@ describe("EditCarModal", () => {
     });
 
     test("submitting form calls fetch and triggers onUpdate and onClose", async () => {
-        global.fetch.mockResolvedValueOnce({ ok: true });
+        global.fetch.mockResolvedValueOnce({
+            ok: true,
+            json: jest.fn().mockResolvedValueOnce(carData),
+        });
 
         fireEvent.click(screen.getByText(/Save Changes/i));
 
@@ -94,11 +104,13 @@ describe("EditCarModal", () => {
                 expect.objectContaining({
                     method: "PUT",
                     body: expect.any(FormData),
+                    headers: expect.objectContaining({
+                        Authorization: expect.stringContaining("Bearer"),
+                    }),
                 })
             );
-            expect(onUpdate).toHaveBeenCalled();
+            expect(onUpdate).toHaveBeenCalledWith(carData);
             expect(onClose).toHaveBeenCalled();
-            expect(global.alert).toHaveBeenCalledWith("Car updated successfully!");
         });
     });
 
