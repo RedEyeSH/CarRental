@@ -16,6 +16,8 @@ import Payment from "./pages/Payment/Payment.jsx";
 // For now admin goes here for testing the UI design
 import Admin from "./pages/Admin/Admin.jsx";
 
+import Profile from "./pages/Profile/Profile.jsx";
+
 function App() {
   return (
     <>
@@ -27,6 +29,7 @@ function App() {
           <Route path="/payment" element={<MainLayout><Payment /></MainLayout>} />
           {/* <Route path="/payment/:bookingId" element={<MainLayout><Payment /></MainLayout>} /> */}
           <Route path="/admin" element={<AdminLayout><Admin /></AdminLayout>} />
+          <Route path="/profile" element={<MainLayout><Profile /></MainLayout>} />
           {/* <Route path="/admin/stock" element={<AdminLayout><Stock /></AdminLayout>} /> */}
           {/* <Route path="/admin/rental" element={<AdminLayout><ActiveRentals /></AdminLayout>} /> */}
         </Routes>

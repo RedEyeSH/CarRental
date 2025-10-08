@@ -9,6 +9,7 @@ import {
     faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import BookingModal from "../../components/Modal/BookingModal.jsx";
 
 const Home = () => {
     const [cars, setCars] = useState([]);
@@ -18,6 +19,7 @@ const Home = () => {
     const [endDate, setEndDate] = useState("");
     const [searched, setSearched] = useState(false);
     const [searchResults, setSearchResults] = useState([]);
+    const [bookingCar, setBookingCar] = useState(null);
 
     const navigate = useNavigate();
 
@@ -28,7 +30,6 @@ const Home = () => {
         { label: "Rating", icon: faStar },
     ];
 
-    // Fetch cars from the API
     useEffect(() => {
         const fetchCars = async () => {
             try {
@@ -40,9 +41,28 @@ const Home = () => {
                 console.error(err);
             }
         };
-
         fetchCars();
     }, []);
+
+    useEffect(() => {
+        const storedSearch = JSON.parse(localStorage.getItem("homeSearch"));
+        if (storedSearch) {
+            const today = new Date().toISOString().split("T")[0];
+            if (storedSearch.startDate >= today) {
+                setSearchText(storedSearch.searchText);
+                setStartDate(storedSearch.startDate);
+                setEndDate(storedSearch.endDate);
+                setSearched(true);
+                setSearchResults(cars.filter((car) =>
+                    `${car.brand} ${car.model}`
+                        .toLowerCase()
+                        .includes(storedSearch.searchText.toLowerCase())
+                ));
+            } else {
+                localStorage.removeItem("homeSearch");
+            }
+        }
+    }, [cars]);
 
     const handleSearch = (e) => {
         e.preventDefault();
@@ -63,6 +83,11 @@ const Home = () => {
 
         setSearchResults(results);
         setSearched(true);
+
+        localStorage.setItem(
+            "homeSearch",
+            JSON.stringify({ searchText, startDate, endDate })
+        );
     };
 
     const sortedCars = [...searchResults].sort((a, b) => {
@@ -137,14 +162,10 @@ const Home = () => {
                 )}
 
                 {searched && (
-                    <div className="home-list">
+                    <div className={`home-list ${sortedCars.length === 0 ? "no-cars" : ""}`}>
                         {sortedCars.length > 0 ? (
                             sortedCars.map((car) => (
-                                <div
-                                    key={car.id}
-                                    className="home-card"
-                                    onClick={() => navigate("/payment", { state: { car, startDate, endDate } })}
-                                >
+                                <div key={car.id} className="home-card">
                                     <div className="home-card-image">
                                         <img
                                             src={`http://localhost:3000/public/uploads/${car.image}`}
@@ -156,6 +177,9 @@ const Home = () => {
                                         <h2>{car.brand} {car.model} ({car.year})</h2>
                                         <p>€{car.price_per_day}/day</p>
                                         <p>Added: {new Date(car.created_at).toLocaleDateString()}</p>
+                                        <button className="book-btn" onClick={() => setBookingCar(car)}>
+                                            Book Now
+                                        </button>
                                     </div>
                                 </div>
                             ))
@@ -164,6 +188,16 @@ const Home = () => {
                         )}
                     </div>
                 )}
+
+                {bookingCar && (
+                    <BookingModal
+                        car={bookingCar}
+                        startDate={startDate}
+                        endDate={endDate}
+                        onClose={() => setBookingCar(null)}
+                    />
+                )}
+
             </div>
         </section>
     );

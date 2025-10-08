@@ -1,13 +1,40 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import Login from "../Auth/Login.jsx";
 import Register from "../Auth/Register.jsx";
-import viteLogo from '../../assets/vite.svg';
+import viteLogo from "../../assets/vite.svg";
 
 const Navbar = () => {
     const [authModal, setAuthModal] = useState(null);
-    const [loggedIn, setLoggedIn] = useState(false);
+    const [user, setUser] = useState(null);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const navigate = useNavigate();
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) setUser(JSON.parse(storedUser));
+
+        const handleClickOutside = (e) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+                setDropdownOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem("user");
+        setUser(null);
+        navigate("/");
+    };
+
+    const handleProfileClick = () => {
+        navigate("/profile");
+        setDropdownOpen(false);
+    };
 
     return (
         <>
@@ -16,25 +43,36 @@ const Navbar = () => {
                     <img src={viteLogo} alt="logo" />
                     <p>Logo name</p>
                 </Link>
+
                 <div className="navbar-right">
-                    <div className="navbar-links">
-                        <div className="navbar-link"><p>Products</p></div>
-                        <div className="navbar-link"><p>Pricing</p></div>
-                        <div className="navbar-link"><p>Contact</p></div>
-                    </div>
+                    <div className="navbar-links"></div>
                     <div className="navbar-buttons">
-                        {loggedIn ? (
-                            <div className="navbar-profile">
-                                <button onClick={() => alert("Go to Profile")}>Profile</button>
+                        {user ? (
+                            <div className="navbar-user" ref={dropdownRef}>
+                                <p
+                                    className="navbar-username clickable"
+                                    onClick={() => setDropdownOpen((prev) => !prev)}
+                                >
+                                    Hi, {user.name} <span className="dropdown-arrow">▾</span>
+                                </p>
+
+                                {dropdownOpen && (
+                                    <div className="navbar-dropdown">
+                                        <p onClick={handleProfileClick}>Profile</p>
+                                        <p className="logout-option" onClick={handleLogout}>
+                                            Logout
+                                        </p>
+                                    </div>
+                                )}
                             </div>
                         ) : (
                             <>
-                                <div className="navbar-login">
-                                    <button onClick={() => setAuthModal("login")}>Sign in</button>
-                                </div>
-                                <div className="navbar-register">
-                                    <button onClick={() => setAuthModal("register")}>Register</button>
-                                </div>
+                                <button className="navbar-btn navbar-login" onClick={() => setAuthModal("login")}>
+                                    Sign In
+                                </button>
+                                <button className="navbar-btn navbar-register" onClick={() => setAuthModal("register")}>
+                                    Register
+                                </button>
                             </>
                         )}
                     </div>
@@ -42,20 +80,21 @@ const Navbar = () => {
             </div>
 
             {authModal === "login" && (
-                <Login 
-                    onClose={() => setAuthModal(null)} 
+                <Login
+                    onClose={() => setAuthModal(null)}
                     onSwitch={() => setAuthModal("register")}
+                    onLoginSuccess={(userData) => setUser(userData)}
                 />
             )}
 
             {authModal === "register" && (
-                <Register 
-                    onClose={() => setAuthModal(null)} 
+                <Register
+                    onClose={() => setAuthModal(null)}
                     onSwitch={() => setAuthModal("login")}
                 />
             )}
         </>
     );
-}
+};
 
 export default Navbar;

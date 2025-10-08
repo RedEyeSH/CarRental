@@ -18,7 +18,7 @@ const Dashboard = () => {
             </div>
             <div className="admin-linechart">
                 <p>Revenue Generated</p>
-                <span>$5,000</span>
+                <span>100€</span>
                 <LineChart data={LineChartData} />
             </div>
             <div className="admin-transaction"></div>

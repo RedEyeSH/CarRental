@@ -90,15 +90,6 @@ const Admin = () => {
                                 </div>
                                 <span>Booking</span>
                             </button>
-                            <button
-                                className={`admin-sidebar-data ${activeSection === "transaction" ? "active" : ""}`}
-                                onClick={() => setActiveSection("transaction")}
-                            >
-                                <div className="admin-icon-wrapper">
-                                    <FontAwesomeIcon icon={faCreditCard} />
-                                </div>
-                                <span>Transaction</span>
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -106,10 +97,10 @@ const Admin = () => {
                     <div className="admin-navbar">
                         <div className="admin-navbar-links">
                             <div className="admin-navbar-link">
-                                <FontAwesomeIcon icon={faGear} />
+                                {/* <FontAwesomeIcon icon={faGear} /> */}
                             </div>
                             <div className="admin-navbar-link">
-                                <FontAwesomeIcon icon={faCircleUser} />
+                                {/* <FontAwesomeIcon icon={faCircleUser} /> */}
                             </div>
                         </div>
                     </div>
