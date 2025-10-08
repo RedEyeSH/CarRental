@@ -10,7 +10,7 @@ import AdminLayout from "./layouts/AdminLayout.jsx";
 // import Stock from "./pages/Admin/Stock/Stock.jsx";
 // import ActiveRentals from "./pages/Admin/ActiveRentals/ActiveRentals.jsx";
 
-import Booking from "./pages/Booking/Booking.jsx";
+import Booking from "./pages/Admin/Booking/Booking.jsx";
 import Payment from "./pages/Payment/Payment.jsx";
 
 // For now admin goes here for testing the UI design
@@ -26,8 +26,7 @@ function App() {
           <Route path="/" element={<MainLayout><Home/></MainLayout>}/>
           {/* <Route path="/admin" element={<Admin />} /> testing */}
           <Route path="/booking/:carId" element={<MainLayout><Booking /></MainLayout>} />
-          <Route path="/payment" element={<MainLayout><Payment /></MainLayout>} />
-          {/* <Route path="/payment/:bookingId" element={<MainLayout><Payment /></MainLayout>} /> */}
+          <Route path="/payment/:bookingId" element={<MainLayout><Payment /></MainLayout>} />
           <Route path="/admin" element={<AdminLayout><Admin /></AdminLayout>} />
           <Route path="/profile" element={<MainLayout><Profile /></MainLayout>} />
           {/* <Route path="/admin/stock" element={<AdminLayout><Stock /></AdminLayout>} /> */}

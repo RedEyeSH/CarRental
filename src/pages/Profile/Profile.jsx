@@ -18,7 +18,6 @@ const Profile = () => {
 
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
-        console.log(storedUser)
         if (storedUser) {
             setUser(JSON.parse(storedUser));
         } else {
@@ -30,6 +29,10 @@ const Profile = () => {
         localStorage.removeItem("user");
         navigate("/");
     };
+
+    // Normalize role for className
+    const normalizedRole = user?.role?.toLowerCase() || "customer";
+    const roleClassName = `${normalizedRole}-role`;
 
     return (
         <section className="profile-page">
@@ -45,8 +48,11 @@ const Profile = () => {
                             </div>
                             <div className="profile-user-info">
                                 <h3>{user.name}</h3>
-                                <span className={`profile-role ${user.role?.toLowerCase() || "customer"}`}>
-                                    {user.role || "Customer"}
+                                <span className={`profile-role ${roleClassName}`}>
+                                    {user?.role
+                                        ? user.role.charAt(0).toUpperCase() +
+                                          user.role.slice(1).toLowerCase()
+                                        : "Customer"}
                                 </span>
                             </div>
                         </div>
@@ -97,8 +103,11 @@ const Profile = () => {
                                             </div>
                                             <div>
                                                 <h3>{user.name}</h3>
-                                                <span className={`profile-role ${user.role?.toLowerCase() || "customer"}`}>
-                                                    {user.role ? user.role.charAt(0) + user.role.slice(1).toLowerCase() : "Customer"}
+                                                <span className={`profile-role ${roleClassName}`}>
+                                                    {user?.role
+                                                        ? user.role.charAt(0).toUpperCase() +
+                                                          user.role.slice(1).toLowerCase()
+                                                        : "Customer"}
                                                 </span>
                                             </div>
                                         </div>
@@ -156,9 +165,15 @@ const Profile = () => {
                                             </div>
                                             <div className="history-info">
                                                 <h4>{rental.carModel}</h4>
-                                                <p><strong>Rented:</strong> {rental.startDate} to {rental.endDate}</p>
+                                                <p>
+                                                    <strong>Rented:</strong> {rental.startDate} to {rental.endDate}
+                                                </p>
                                                 <p><strong>Total:</strong> €{rental.total}</p>
-                                                {rental.status && <p className={`rental-status ${rental.status.toLowerCase()}`}>{rental.status}</p>}
+                                                {rental.status && (
+                                                    <p className={`rental-status ${rental.status.toLowerCase()}`}>
+                                                        {rental.status}
+                                                    </p>
+                                                )}
                                             </div>
                                         </div>
                                     ))

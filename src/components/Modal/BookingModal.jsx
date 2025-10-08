@@ -9,7 +9,7 @@ const BookingModal = ({ car, startDate, endDate, onClose }) => {
 
     return (
         <div className="booking-modal-overlay" onClick={onClose}>
-            <div className="booking-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="booking-modal-home" onClick={(e) => e.stopPropagation()}>
                 <h2>Book {car.brand} {car.model}</h2>
                 <p>From: {startDate}</p>
                 <p>To: {endDate}</p>

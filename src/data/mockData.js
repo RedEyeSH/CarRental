@@ -72,36 +72,27 @@ export const kpiData = [
     {
         icon: faBook,
         label: "New Bookings",
-        value: 2,
-        change: "+10%",
+        value: 12361,
         color: '#00d1b2',
     },
     {
-        icon: faBoxOpen,
-        label: "Available Units",
-        value: 2,
-        change: "+20%",
+        icon: faCarSide, // car icon
+        label: "Total Cars", // changed from 'Cars'
+        value: 431225,
         color: '#00ffab',
     },
     {
         icon: faMoneyBill,
         label: "Total Revenue",
-        value: 100,
-        change: "+50%",
+        value: 32441,
         color: '#a78bfa',
-    },
-    {
-        icon: faCarSide,
-        label: "Rented Cars",
-        value: 10,
-        change: '+5%',
-        color: "#38bdf8",
-    },
+    }
 ];
 
+// api/mockApi.js
 export let booking = [
-    { id: 1, user: "user1", car: "Toyota Corolla", start_date: "2025-10-15", end_date: "2025-10-20", total_price: 150.0, payment_status: "PENDING", created_at: new Date().toISOString() },
-    { id: 2, user: "user2", car: "BMW 320i", start_date: "2025-10-18", end_date: "2025-10-21", total_price: 200.0, payment_status: "PAID", created_at: new Date().toISOString() }
+    { id: 1, user: "John Doe", car: "Toyota Corolla", start_date: "2025-10-15", end_date: "2025-10-20", total_price: 150.0, payment_status: "PENDING", created_at: new Date().toISOString() },
+    { id: 2, user: "Jane Smith", car: "BMW 320i", start_date: "2025-10-18", end_date: "2025-10-21", total_price: 200.0, payment_status: "PAID", created_at: new Date().toISOString() }
 ];
 
 let nextId = booking.length + 1;
@@ -124,6 +115,8 @@ export const bookingApi = {
     }
 };
 
+
+// LineChart.jsx
 export const LineChartData = [
     {
         "id": "japan",

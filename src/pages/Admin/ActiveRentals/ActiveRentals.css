@@ -132,3 +132,111 @@
 }
 
 /* Stock main ends here */
+
+.active-rentals-section {
+    padding: 20px;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+
+.active-rentals-section h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.active-rentals-search {
+    display: block;
+    width: 300px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid #fff;
+    background: #161B22;
+    color: #fff;
+    margin-bottom: 20px;
+    outline: none;
+    font-size: 14px;
+    transition: border-color 0.25s;
+}
+
+.active-rentals-search:focus {
+    border-color: #1f6feb;
+}
+
+.active-rentals-loading,
+.active-rentals-error {
+    margin: 20px 0;
+    color: #ff7675;
+    font-size: 16px;
+}
+
+.active-rentals-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #161B22;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.active-rentals-table th,
+.active-rentals-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #333;
+    text-align: left;
+    font-size: 14px;
+}
+
+.active-rentals-table th {
+    background-color: #1c2026;
+}
+
+.active-rentals-table tr:hover {
+    background-color: #1f242c;
+}
+
+.active-rentals-table tr:last-child td {
+    border-bottom: none;
+}
+
+.notification-container {
+    position: fixed;
+    right: 30px;
+    top: 30px;
+    z-index: 9999;
+}
+
+.notification {
+    background: #23272f;
+    color: #fff;
+    padding: 16px 24px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    font-size: 15px;
+    min-width: 220px;
+    transition: transform 0.4s, opacity 0.4s;
+}
+
+.slide-in {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.slide-out {
+    opacity: 0;
+    transform: translateX(120%);
+}
+
+@media (max-width: 768px) {
+    .active-rentals-section {
+        padding: 10px;
+    }
+    .active-rentals-search {
+        width: 100%;
+    }
+    .active-rentals-table th,
+    .active-rentals-table td {
+        font-size: 12px;
+        padding: 8px 10px;
+    }
+}

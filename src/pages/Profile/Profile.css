@@ -339,11 +339,11 @@
     color: #fff;
 }
 
-.profile-role.customer {
+.customer-role {
     background-color: #238636;
 }
 
-.profile-role.admin {
+.admin-role {
     background-color: #8957e5;
 }
 

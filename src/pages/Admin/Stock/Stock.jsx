@@ -1,45 +1,52 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "./Stock.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircle, faEllipsis, faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faEye, faEdit, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
 import AddCarModal from "../../../components/Modal/AddCarModal.jsx";
 import EditCarModal from "../../../components/Modal/EditCarModal.jsx";
 import RemoveCarModal from "../../../components/Modal/RemoveCarModal.jsx";
+import ViewCarModal from "../../../components/Modal/ViewCarModal.jsx";
 
 const Stock = () => {
-    const [toggle, setToggle] = useState("Filter"); 
     const [searchTerm, setSearchTerm] = useState("");
-
     const [activeModal, setActiveModal] = useState(null);
     const [removeModal, setRemoveModal] = useState(null);
-    const [activeEllipsis, setActiveEllipsis] = useState(null);
-
+    const [viewModalOpen, setViewModalOpen] = useState(false);
+    const [selectedCarToView, setSelectedCarToView] = useState(null);
     const [notifications, setNotifications] = useState([]);
+    const [stockData, setStockData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const dropdownRef = useRef(null);
-
-    const options = [
-        { label: "Filter", icon: faFilter },
-        { label: "Add Car", icon: "" },
-    ];
-
-    const [stockData, setStockData] = useState([
-        { id: 1, city: "HEL-1", title: "Fiat 500 for 5 days in Helsinki", price: "100€/day", available: true },
-        { id: 2, city: "TAMP-2", title: "Toyota Corolla for 3 days in Tampere", price: "120€/day", available: true },
-    ]);
+    useEffect(() => {
+        const fetchCars = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const response = await fetch("http://localhost:3000/api/v1/cars/");
+                if (!response.ok) throw new Error("Failed to fetch cars");
+                const data = await response.json();
+                setStockData(Array.isArray(data) ? data : []);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchCars();
+    }, []);
 
     const filteredStockData = stockData.filter(car =>
-        car.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        car.title.toLowerCase().includes(searchTerm.toLowerCase())
+        (car.license_plate?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            car.brand?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            car.model?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            car.year?.toString().includes(searchTerm) ||
+            car.type?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            car.status?.toLowerCase().includes(searchTerm.toLowerCase()))
     );
-
-    const handleEllipsisClick = (carId) => {
-        setActiveEllipsis(prev => (prev === carId ? null : carId));
-    };
 
     const handleEditClick = (car) => {
         setActiveModal({ type: "edit", data: car });
-        setActiveEllipsis(null);
     };
 
     const handleCarAdded = (newCar) => {
@@ -50,154 +57,172 @@ const Stock = () => {
     const showNotification = (message) => {
         const id = Date.now();
         setNotifications(prev => [...prev, { id, message, exiting: false }]);
-
         setTimeout(() => {
             setNotifications(prev => prev.map(n => n.id === id ? { ...n, exiting: true } : n));
         }, 2500);
-
         setTimeout(() => {
             setNotifications(prev => prev.filter(n => n.id !== id));
         }, 3000);
     };
 
-    const handleDeleteConfirm = (carId) => {
-        setStockData(prev => prev.filter(car => car.id !== carId));
-        setRemoveModal(null);
-        showNotification("Item successfully deleted!");
+    const handleDeleteConfirm = async (carId) => {
+        const token = localStorage.getItem("token");
+        try {
+            const response = await fetch(`http://localhost:3000/api/v1/cars/${carId}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                },
+            });
+            if (!response.ok) throw new Error("Failed to delete car");
+            setStockData(prev => prev.filter(car => car.id !== carId));
+            setRemoveModal(null);
+            showNotification("Item successfully deleted!");
+        } catch (err) {
+            setRemoveModal(null);
+            showNotification("Failed to delete item!");
+        }
     };
 
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setActiveEllipsis(null);
-            }
-        };
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
+    const handleViewClick = (carId) => {
+        setSelectedCarToView(carId);
+        setViewModalOpen(true);
+    };
+
+    const handleViewModalClose = () => {
+        setViewModalOpen(false);
+        setSelectedCarToView(null);
+    };
+
+    const token = localStorage.getItem("token");
 
     return (
-        <>
-            <section className="stock">
-                <div className="notification-container">
-                    {notifications.map((n, index) => (
-                        <div
-                            key={n.id}
-                            className={`notification ${n.exiting ? "slide-out" : "slide-in"}`}
-                            style={{ top: `${index * 60}px` }}
-                        >
-                            {n.message}
-                        </div>
-                    ))}
-                </div>
-                <div className="stock-container">
-                    <div className="stock-sidebar">
-                        <h1>Current Stock</h1>
-                        {["Helsinki", "Tampere", "Espoo", "Vantaa"].map(location => (
-                            <div key={location} className="stock-sidebar-item">
-                                <div className="stock-icon-wrapper">
-                                    <FontAwesomeIcon icon={faCircle} />
-                                </div>
-                                <p>{location}</p>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="stock-main">
-                        <div className="stock-navbar">
-                            <div className="stock-navbar-search">
-                                <input
-                                    type="text"
-                                    id="stock-search"
-                                    placeholder="Search..."
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                />
-                                <FontAwesomeIcon icon={faSearch} />
-                            </div>
-                            <div className="stock-navbar-options">
-                            {options.map(option => (
-                                <button
-                                    key={option.label}
-                                    className={`stock-navbar-option ${
-                                        option.label === "Filter" && toggle === "Filter" ? "active" : ""
-                                    }`}
-                                    onClick={() => {
-                                        if (option.label === "Filter") {
-                                        setToggle(prev => (prev === "Filter" ? "" : "Filter"));
-                                        } else if (option.label === "Add Car") {
-                                        setActiveModal({ type: "add" });
-                                        }
-                                    }}
-                                    >
-                                    <p>{option.label}</p>
-                                    <FontAwesomeIcon icon={option.icon} />
-                                </button>
-                            ))}
-                            </div>
-                        </div>
+        <div className="stock-section">
+            <h2>Stock</h2>
+            <div className="stock-header-bar">
+                <input
+                    type="text"
+                    placeholder="Search by brand, model, license plate, ..."
+                    value={searchTerm}
+                    onChange={e => setSearchTerm(e.target.value)}
+                    className="stock-search"
+                />
+                <button
+                    className="stock-add-btn"
+                    onClick={() => setActiveModal({ type: "add" })}
+                >
+                    <FontAwesomeIcon icon={faPlus} style={{ marginRight: 8 }} /> Add Car
+                </button>
+            </div>
+            {loading ? (
+                <div className="stock-loading">Loading cars...</div>
+            ) : error ? (
+                <div className="stock-error">{error}</div>
+            ) : (
+                <table className="stock-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Brand</th>
+                            <th>Model</th>
+                            <th>Year</th>
+                            <th>Type</th>
+                            <th>License Plate</th>
+                            <th>Status</th>
+                            <th>Price/Day</th>
+                            <th>Image</th>
+                            <th>Created At</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredStockData.length === 0 ? (
+                            <tr><td colSpan="11">No cars found.</td></tr>
+                        ) : (
+                            filteredStockData.map(car => (
+                                <tr key={car.id}>
+                                    <td>{car.id}</td>
+                                    <td>{car.brand}</td>
+                                    <td>{car.model}</td>
+                                    <td>{car.year}</td>
+                                    <td>{car.type}</td>
+                                    <td>{car.license_plate}</td>
+                                    <td>
+                                        <span className={`badge badge-${(car.status || '').toLowerCase().replace(/\s/g, '-')}`}>{car.status}</span>
+                                    </td>
+                                    <td>{car.price_per_day}€</td>
+                                    <td>
+                                        {car.image ? (
+                                            <img
+                                                src={`http://localhost:3000/public/uploads/${car.image}`}
+                                                alt="car"
+                                                style={{ width: 60, borderRadius: 4 }}
+                                            />
+                                        ) : (
+                                            "-"
+                                        )}
+                                    </td>
+                                    <td>
+                                        {car.created_at
+                                            ? new Date(car.created_at).toLocaleString('en-GB', {
+                                                year: 'numeric',
+                                                month: '2-digit',
+                                                day: '2-digit',
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                                second: '2-digit'
+                                            })
+                                            : "-"}
+                                    </td>
+                                    <td style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
 
-                        <div className="stock-list">
-                            <table className="stock-table">
-                                <thead>
-                                    <tr>
-                                        <th>City</th>
-                                        <th>Title</th>
-                                        <th>Price</th>
-                                        <th>Availability</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {filteredStockData.map(car => (
-                                        <tr key={car.id}>
-                                            <td>{car.city}</td>
-                                            <td>{car.title}</td>
-                                            <td>{car.price}</td>
-                                            <td><input type="checkbox" checked={car.available} readOnly /></td>
-                                            <td style={{ position: "relative", textAlign: "center" }}>
-                                                <FontAwesomeIcon
-                                                    icon={faEllipsis}
-                                                    onClick={() => handleEllipsisClick(car.id)}
-                                                    style={{ cursor: "pointer" }}
-                                                />
-                                                {activeEllipsis === car.id && (
-                                                    <div className="ellipsis-dropdown" ref={dropdownRef}>
-                                                        <p onClick={() => handleEditClick(car)}>Edit Item</p>
-                                                        <p onClick={() => { setRemoveModal(car); setActiveEllipsis(null); }}>Delete Item</p>
-                                                    </div>
-                                                )}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                                    <button className="stock-icon-btn" title="View" onClick={() => handleViewClick(car.id)}>
+                                            <FontAwesomeIcon icon={faEye} />
+                                        </button>
+                                        <button className="stock-icon-btn" title="Edit" onClick={() => handleEditClick(car)}>
+                                            <FontAwesomeIcon icon={faEdit} />
+                                        </button>
+                                        <button className="stock-icon-btn" title="Delete" onClick={() => setRemoveModal(car)}>
+                                            <FontAwesomeIcon icon={faTrashAlt} />
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
+                    </tbody>
+                </table>
+            )}
+            <div className="notification-container">
+                {notifications.map((n, index) => (
+                    <div
+                        key={n.id}
+                        className={`notification ${n.exiting ? "slide-out" : "slide-in"}`}
+                        style={{ top: `${index * 60}px` }}
+                    >
+                        {n.message}
                     </div>
-                </div>
-            </section>
-
-            {activeModal?.type === "add" && (
-                <AddCarModal 
-                    onClose={() => setActiveModal(null)} 
-                    onCarAdded={handleCarAdded} 
+                ))}
+            </div>
+            {activeModal && activeModal.type === "add" && (
+                <AddCarModal
+                    onClose={() => setActiveModal(null)}
+                    onCarAdded={handleCarAdded}
+                    token={token}
                 />
             )}
-
             {activeModal?.type === "edit" && (
-                <EditCarModal 
-                    carData={activeModal.data} 
-                    onClose={() => setActiveModal(null)} 
+                <EditCarModal
+                    carData={activeModal.data}
+                    onClose={() => setActiveModal(null)}
                     onCarEdited={(updatedCar) => {
                         setStockData(prev =>
                             prev.map(car => car.id === updatedCar.id ? updatedCar : car)
                         );
                         showNotification("Car updated successfully!");
                     }}
+                    token={token}
                 />
             )}
-
             {removeModal && (
                 <RemoveCarModal
                     car={removeModal}
@@ -205,7 +230,12 @@ const Stock = () => {
                     onConfirm={handleDeleteConfirm}
                 />
             )}
-        </>
+            <ViewCarModal
+                isOpen={viewModalOpen}
+                onClose={handleViewModalClose}
+                carId={selectedCarToView}
+            />
+        </div>
     );
 };
 

@@ -1,0 +1,113 @@
+/* Feedbacks Section - styled to match Users */
+
+.feedbacks-section {
+    padding: 20px;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+
+.feedbacks-section h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.feedbacks-search {
+    display: block;
+    width: 300px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid #fff;
+    background: #161B22;
+    color: #fff;
+    margin-bottom: 20px;
+    outline: none;
+    font-size: 14px;
+    transition: border-color 0.25s;
+}
+
+.feedbacks-search:focus {
+    border-color: #1f6feb;
+}
+
+.feedbacks-loading,
+.feedbacks-error {
+    margin: 20px 0;
+    color: #ff7675;
+    font-size: 16px;
+}
+
+.feedbacks-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #161B22;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.feedbacks-table th,
+.feedbacks-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #333;
+    text-align: left;
+    font-size: 14px;
+}
+
+.feedbacks-table th {
+    background-color: #1c2026;
+}
+
+.feedbacks-table tr:hover {
+    background-color: #1f242c;
+}
+
+.feedbacks-table tr:last-child td {
+    border-bottom: none;
+}
+
+.feedbacks-icon-btn {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 6px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.feedbacks-icon-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+/* Notification styles (copied from Users) */
+.notification-container {
+    position: fixed;
+    right: 30px;
+    top: 80px;
+    z-index: 9999;
+}
+
+.notification {
+    background: #23272f;
+    color: #fff;
+    padding: 16px 24px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    min-width: 220px;
+    font-size: 15px;
+    opacity: 1;
+    transition: opacity 0.5s, transform 0.5s;
+}
+
+.notification.slide-in {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.notification.slide-out {
+    opacity: 0;
+    transform: translateX(120%);
+}

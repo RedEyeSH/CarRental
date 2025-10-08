@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
 import "./Modal.css";
 
-const EditCarModal = ({ carData, onClose, onUpdate }) => {
+const EditCarModal = ({ carData, onClose, onCarEdited, token }) => {
     const [formData, setFormData] = useState({
         brand: "",
         model: "",
         year: "",
         type: "Sedan",
         license_plate: "",
-        status: "AVAILABLE",
+        status: "",
         price_per_day: "",
         image: null,
     });
 
     const [preview, setPreview] = useState(null);
+    const [originalImage, setOriginalImage] = useState(null); // Store the original image filename
     const [imageModalOpen, setImageModalOpen] = useState(false);
 
     useEffect(() => {
@@ -24,44 +25,95 @@ const EditCarModal = ({ carData, onClose, onUpdate }) => {
                 year: carData.year || "",
                 type: carData.type || "Sedan",
                 license_plate: carData.license_plate || "",
-                status: carData.status || "AVAILABLE",
+                status: carData.status || "",
                 price_per_day: carData.price_per_day || "",
                 image: null,
             });
-            if (carData.imageUrl) {
-                setPreview(carData.imageUrl);
+
+            // Set the original image filename if the car data has an image
+            if (carData.image) {
+                setOriginalImage(carData.image); // Store just the image filename
+                setPreview(`http://localhost:3000/public/uploads/${carData.image}`);
+            } else {
+                setPreview(null);
+                setOriginalImage(null);
             }
         }
     }, [carData]);
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
-        if (name === "image") {
+        if (name === "image" && files) {
             const file = files[0];
-            setFormData({ ...formData, image: file });
-            if (file) setPreview(URL.createObjectURL(file));
+            setFormData((prevData) => ({
+                ...prevData,
+                image: file,
+            }));
+            if (file) {
+                setPreview(URL.createObjectURL(file)); // Preview the new image
+            }
+        } else if (name === "status") {
+            // If user selects AVAILABLE or RENTED or '-', set status as '-'
+            setFormData((prevData) => ({
+                ...prevData,
+                status: value === "AVAILABLE" || value === "RENTED" || value === "READY" ? "READY" : value,
+            }));
         } else {
-            setFormData({ ...formData, [name]: value });
+            setFormData((prevData) => ({
+                ...prevData,
+                [name]: value,
+            }));
         }
+    };
+
+    const handleCancelImage = () => {
+        // Reset to the original image filename if user cancels
+        setPreview(`http://localhost:3000/public/uploads/${originalImage}`);
+        setFormData((prevData) => ({
+            ...prevData,
+            image: null, // Clear the new image selection
+        }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         const body = new FormData();
+
+        // Append form data (excluding the image field if no new image is selected)
         Object.entries(formData).forEach(([key, value]) => {
-            if (value) body.append(key, value);
+            if (key === "status" && (value === "AVAILABLE" || value === "RENTED")) {
+                body.append(key, "READY");
+            } else if (value) {
+                body.append(key, value);
+            }
         });
+
+        // If no new image is selected, append the original image filename (not URL)
+        if (!formData.image && originalImage) {
+            body.append("image", originalImage); // Send the image filename, not the URL
+        }
+
+        // Get the token from localStorage or wherever it's stored
+        // Use the token prop if provided, otherwise fallback to localStorage
+        const authToken = token || localStorage.getItem("token");
 
         try {
             const res = await fetch(`http://localhost:3000/api/v1/cars/${carData.id}`, {
                 method: "PUT",
                 body,
+                headers: {
+                    "Authorization": `Bearer ${authToken}`,
+                },
             });
 
             if (!res.ok) throw new Error("Failed to update car");
 
-            alert("Car updated successfully!");
-            onUpdate?.();
+            if (onCarEdited) {
+                const updatedCar = await res.json();
+                onCarEdited(updatedCar);
+            }
+
             onClose();
         } catch (err) {
             console.error(err);
@@ -137,10 +189,9 @@ const EditCarModal = ({ carData, onClose, onUpdate }) => {
                         </div>
 
                         <div className="form-group">
-                            <select name="status" value={formData.status} onChange={handleChange} required>
+                            <select name="status" value={formData.status === "AVAILABLE" || formData.status === "RENTED" ? "-" : formData.status} onChange={handleChange} required>
                                 <option value="" disabled hidden> </option>
-                                <option value="AVAILABLE">AVAILABLE</option>
-                                <option value="RENTED">RENTED</option>
+                                <option value="READY">READY</option>
                                 <option value="MAINTENANCE">MAINTENANCE</option>
                                 <option value="RESERVED">RESERVED</option>
                                 <option value="RETIRED">RETIRED</option>
@@ -175,6 +226,13 @@ const EditCarModal = ({ carData, onClose, onUpdate }) => {
                             <div className="image-preview" onClick={() => setImageModalOpen(true)}>
                                 <img src={preview} alt="Car Preview" />
                             </div>
+                        )}
+
+                        {/* Show cancel button only if a new image is selected */}
+                        {preview && preview !== `http://localhost:3000/public/uploads/${originalImage}` && (
+                            <button type="button" onClick={handleCancelImage} className="cancel-image-btn">
+                                Cancel Image
+                            </button>
                         )}
 
                         <div className="modal-actions">

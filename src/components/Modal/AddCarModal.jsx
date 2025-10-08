@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Modal.css";
 
-const AddCarModal = ({ onClose }) => {
+const AddCarModal = ({ onClose, onCarAdded, token, onShowNotification }) => {
     const [formData, setFormData] = useState({
         brand: "",
         model: "",
@@ -37,13 +37,12 @@ const AddCarModal = ({ onClose }) => {
         });
 
         try {
-            const token = localStorage.getItem("token");
             const res = await fetch("http://localhost:3000/api/v1/cars", {
                 method: "POST",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
                 body,
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
             });
 
             if (!res.ok) throw new Error("Failed to add car");
@@ -56,7 +55,9 @@ const AddCarModal = ({ onClose }) => {
             onClose();
         } catch (err) {
             console.error(err);
-            alert("Error adding car");
+            if (onShowNotification) {
+                onShowNotification("Error adding car");
+            }
         }
     };
 
@@ -130,8 +131,7 @@ const AddCarModal = ({ onClose }) => {
                         <div className="form-group">
                             <select name="status" value={formData.status} onChange={handleChange} required>
                                 <option value="" disabled hidden> </option>
-                                <option value="AVAILABLE">AVAILABLE</option>
-                                <option value="RENTED">RENTED</option>
+                                <option value="READY">READY</option>
                                 <option value="MAINTENANCE">MAINTENANCE</option>
                                 <option value="RESERVED">RESERVED</option>
                                 <option value="RETIRED">RETIRED</option>
