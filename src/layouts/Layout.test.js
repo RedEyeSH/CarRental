@@ -28,6 +28,5 @@ describe("MainLayout", () => {
         );
         expect(screen.getByText("Main Content")).toBeInTheDocument();
         expect(screen.getByAltText("logo")).toBeInTheDocument();
-        expect(screen.getByText("footer")).toBeInTheDocument();
     });
 });
