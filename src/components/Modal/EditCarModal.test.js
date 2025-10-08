@@ -20,7 +20,7 @@ const carData = {
     license_plate: "ABC123",
     status: "READY",
     price_per_day: 100,
-    image: "existing-image.jpg", // ✅ instead of imageUrl
+    image: "existing-image.jpg",
 };
 
 const onClose = jest.fn();
@@ -33,7 +33,7 @@ describe("EditCarModal", () => {
 
     test("renders form with prefilled carData", () => {
         const brandInputs = screen.getAllByDisplayValue(carData.brand);
-        expect(brandInputs).toHaveLength(1); // Ensure only one input with the value "Tesla"
+        expect(brandInputs).toHaveLength(1);
         expect(brandInputs[0]).toBeInTheDocument();
 
         expect(screen.getByDisplayValue(carData.model)).toBeInTheDocument();
@@ -54,8 +54,8 @@ describe("EditCarModal", () => {
         fireEvent.change(brandInput, { target: { value: "Audi" } });
         expect(brandInput.value).toBe("Audi");
 
-        const statusSelect = screen.getByDisplayValue("READY"); // Updated to match the existing value
-        fireEvent.change(statusSelect, { target: { value: "MAINTENANCE" } }); // Use a valid option
+        const statusSelect = screen.getByDisplayValue("READY");
+        fireEvent.change(statusSelect, { target: { value: "MAINTENANCE" } });
         expect(statusSelect.value).toBe("MAINTENANCE");
     });
 
@@ -75,7 +75,7 @@ describe("EditCarModal", () => {
 
     test("clicking image preview opens fullscreen modal", () => {
         const image = screen.getByAltText("Car Preview");
-        fireEvent.click(image.parentElement); // ✅ triggers setImageModalOpen(true)
+        fireEvent.click(image.parentElement);
 
         expect(screen.getByAltText("Fullscreen Preview")).toBeInTheDocument();
 
