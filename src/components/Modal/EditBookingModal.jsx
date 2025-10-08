@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Modal.css";
+import { toast } from "react-toastify";
 
 const EditBookingModal = ({ bookingId, onClose, onBookingEdited, token, users = [], cars = [] }) => {
     const [formData, setFormData] = useState({
@@ -66,9 +67,11 @@ const EditBookingModal = ({ bookingId, onClose, onBookingEdited, token, users = 
             if (!res.ok) throw new Error("Failed to update booking");
             const updatedBooking = await res.json();
             if (onBookingEdited) onBookingEdited(updatedBooking);
+            toast.success("Booking updated successfully!");
             onClose();
         } catch (err) {
             setError(err.message);
+            toast.error("Error updating booking");
         }
     };
 

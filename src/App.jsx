@@ -18,22 +18,24 @@ import Admin from "./pages/Admin/Admin.jsx";
 
 import Profile from "./pages/Profile/Profile.jsx";
 
+import { AuthProvider } from "./contexts/AuthContext.jsx";
+
 function App() {
   return (
-    <>
+    <AuthProvider>
       <Router>
         <Routes>
           <Route path="/" element={<MainLayout><Home/></MainLayout>}/>
           {/* <Route path="/admin" element={<Admin />} /> testing */}
           <Route path="/booking/:carId" element={<MainLayout><Booking /></MainLayout>} />
-          <Route path="/payment/:bookingId" element={<MainLayout><Payment /></MainLayout>} />
+          <Route path="/payment/" element={<MainLayout><Payment /></MainLayout>} />
           <Route path="/admin" element={<AdminLayout><Admin /></AdminLayout>} />
           <Route path="/profile" element={<MainLayout><Profile /></MainLayout>} />
           {/* <Route path="/admin/stock" element={<AdminLayout><Stock /></AdminLayout>} /> */}
           {/* <Route path="/admin/rental" element={<AdminLayout><ActiveRentals /></AdminLayout>} /> */}
         </Routes>
       </Router>
-    </>
+    </AuthProvider>
   )
 }
 

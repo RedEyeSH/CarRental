@@ -87,7 +87,7 @@ const Register = ({ onClose, onSwitch }) => {
                     <div className="register-header">
                         <FontAwesomeIcon icon={faXmark} onClick={onClose} />
                     </div>
-                    <h1 className="register-logo-title">App Name</h1>
+                    <h1 className="register-logo-title">Car Rental</h1>
                     <p className="register-title">Create an account</p>
                     <p className="register-subtitle">Enter your email to sign up for this app</p>
                     <form className="register-form" onSubmit={handleSubmit}>

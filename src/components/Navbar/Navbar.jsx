@@ -4,18 +4,16 @@ import "./Navbar.css";
 import Login from "../Auth/Login.jsx";
 import Register from "../Auth/Register.jsx";
 import viteLogo from "../../assets/vite.svg";
+import { useAuth } from "../../contexts/AuthContext.jsx";
 
 const Navbar = () => {
     const [authModal, setAuthModal] = useState(null);
-    const [user, setUser] = useState(null);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const navigate = useNavigate();
     const dropdownRef = useRef(null);
+    const { user, loading, error, logout } = useAuth();
 
     useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) setUser(JSON.parse(storedUser));
-
         const handleClickOutside = (e) => {
             if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
                 setDropdownOpen(false);
@@ -26,8 +24,7 @@ const Navbar = () => {
     }, []);
 
     const handleLogout = () => {
-        localStorage.removeItem("user");
-        setUser(null);
+        logout();
         navigate("/");
     };
 
@@ -40,14 +37,15 @@ const Navbar = () => {
         <>
             <div className="navbar">
                 <Link to="/" className="navbar-logo">
-                    <img src={viteLogo} alt="logo" />
-                    <p>Logo name</p>
+                    {/* <img src={viteLogo} alt="logo" /> */}
+                    <p>Car Rental</p>
                 </Link>
-
                 <div className="navbar-right">
                     <div className="navbar-links"></div>
                     <div className="navbar-buttons">
-                        {user ? (
+                        {loading ? (
+                            <span>Loading...</span>
+                        ) : user ? (
                             <div className="navbar-user" ref={dropdownRef}>
                                 <p
                                     className="navbar-username clickable"
@@ -65,6 +63,8 @@ const Navbar = () => {
                                     </div>
                                 )}
                             </div>
+                        ) : error ? (
+                            <span style={{ color: 'red' }}>{error}</span>
                         ) : (
                             <>
                                 <button className="navbar-btn navbar-login" onClick={() => setAuthModal("login")}>
@@ -83,7 +83,7 @@ const Navbar = () => {
                 <Login
                     onClose={() => setAuthModal(null)}
                     onSwitch={() => setAuthModal("register")}
-                    onLoginSuccess={(userData) => setUser(userData)}
+                    onLoginSuccess={() => window.location.reload()}
                 />
             )}
 

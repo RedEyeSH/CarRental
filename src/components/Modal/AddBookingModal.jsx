@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Modal.css";
 import { bookingApi } from "../../data/mockData.js";
 import { cars } from "../../data/mockData.js";
-
+import { toast } from "react-toastify";
 
 const AddBookingModal = ({ onClose, onAdd }) => {
     const [newBooking, setNewBooking] = useState({
@@ -37,7 +37,11 @@ const AddBookingModal = ({ onClose, onAdd }) => {
         e.preventDefault();
         bookingApi.create(newBooking).then(created => {
             onAdd(created);
+            toast.success("Booking added successfully!");
             onClose();
+         }).catch(err => {
+            console.error(err);
+            toast.error("Error adding booking");
         });
     };
 

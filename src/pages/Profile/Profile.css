@@ -347,6 +347,39 @@
     background-color: #8957e5;
 }
 
+/* Rental history table styles */
+.rental-history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #161b22;
+    color: #c9d1d9;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.rental-history-table th, .rental-history-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #30363d;
+    text-align: left;
+}
+
+.rental-history-table th {
+    background-color: #21262d;
+    color: #58a6ff;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.rental-history-table tr:last-child td {
+    border-bottom: none;
+}
+
+.rental-history-table tr:hover {
+    background-color: #21262d;
+}
+
 /* Responsive web design */
 @media (max-width: 768px) {
     .profile-sidebar {
@@ -385,3 +418,5 @@
         font-size: 24px;
     }
 }
+
+

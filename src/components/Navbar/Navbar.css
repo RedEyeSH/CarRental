@@ -57,6 +57,11 @@
 }
 
 /* Navbar Buttons (Sign In / Register) */
+.navbar-buttons {
+    display: flex;
+    gap: 15px;
+}
+
 .navbar-buttons button,
 .navbar-btn {
     padding: 8px 16px;

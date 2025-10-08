@@ -29,18 +29,23 @@ const ViewCarModal = ({ isOpen, onClose, carId }) => {
         if (!isOpen || !carId) return;
 
         const token = localStorage.getItem("token");
-        fetch(`http://localhost:3000/api/v1/feedbacks?car_id=${carId}`, {
+        fetch(`http://localhost:3000/api/v1/feedbacks/`, {
             headers: token ? { 'Authorization': `Bearer ${token}` } : {}
         })
             .then(res => {
                 if (!res.ok) throw new Error("Failed to fetch feedbacks");
                 return res.json();
             })
-            .then(data => {
-                setFeedbacks(data);
+           .then(data => {
+                // Defensive: ensure feedbacks is always an array
+                let allFeedbacks = Array.isArray(data) ? data : (data && typeof data === 'object' ? [data] : []);
+                // Filter feedbacks for the current car
+                const filtered = allFeedbacks.filter(fb => String(fb.car_id) === String(carId));
+                setFeedbacks(filtered);
             })
             .catch(err => {
                 console.error("Feedback fetch error:", err);
+                setFeedbacks([]);
             });
     }, [isOpen, carId]);
 

@@ -1,54 +1,115 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useContext } from "react";
 import "./Payment.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCreditCard } from "@fortawesome/free-solid-svg-icons";
+import { faCreditCard, faCheckCircle, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const Payment = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    const { user } = useContext(AuthContext);
 
-    // Get car and initial dates from router state
     const { car, startDate: initialStartDate, endDate: initialEndDate } = location.state || {};
 
     const [startDate, setStartDate] = useState(initialStartDate || "");
     const [endDate, setEndDate] = useState(initialEndDate || "");
-    const [total, setTotal] = useState(0);
-    const [payment, setPayment] = useState({ method: "Credit Card", status: "Pending" });
+    const [payment, setPayment] = useState({ method: "Card", status: "Pending" });
+    const [receipt, setReceipt] = useState(null);
 
-    // Redirect if car data is missing
     useEffect(() => {
-        if (!car) {
-            navigate("/"); // go back to home if no car
-        }
+        if (!car) navigate("/");
     }, [car, navigate]);
 
-    // Recalculate total whenever dates or car change
-    useEffect(() => {
-        if (startDate && endDate && car) {
-            const start = new Date(startDate);
-            const end = new Date(endDate);
-            const diffDays = Math.max(1, Math.ceil((end - start) / (1000 * 60 * 60 * 24)));
-            setTotal((diffDays * parseFloat(car.price_per_day)).toFixed(2));
-        }
-    }, [startDate, endDate, car]);
+    const totalDays = useMemo(() => {
+        if (!startDate || !endDate) return 0;
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        const diff = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+        return diff > 0 ? diff : 1;
+    }, [startDate, endDate]);
+
+    const totalPrice = useMemo(() => {
+        return car ? (totalDays * parseFloat(car.price_per_day)).toFixed(2) : 0;
+    }, [car, totalDays]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setPayment((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!startDate || !endDate) {
-            alert("Please select both start and end dates.");
-            return;
+        if (!startDate || !endDate) return alert("Please select both start and end dates.");
+        if (!user || !user.id) return alert("User not logged in. Please log in to continue.");
+
+        try {
+            const token = localStorage.getItem("token");
+
+            const methodMap = {
+                "Card": "CARD",
+                "Cash": "CASH",
+                "Online": "ONLINE"
+            };
+            const selectedMethod = methodMap[payment.method] || "CARD";
+            const paymentStatus = selectedMethod === "CARD" ? "PAID" : "PENDING";
+
+            // Create booking
+            const bookingResponse = await fetch("http://localhost:3000/api/v1/bookings", {
+                method: "POST",
+                headers: { 
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    user_id: user.id,
+                    car_id: car.id,
+                    start_date: startDate,
+                    end_date: endDate,
+                    total_price: totalPrice,
+                    payment_status: paymentStatus
+                }),
+            });
+
+            if (!bookingResponse.ok) throw new Error("Failed to create booking");
+            const bookingData = await bookingResponse.json();
+
+            // Process payment
+            const paymentResponse = await fetch("http://localhost:3000/api/v1/payments", {
+                method: "POST",
+                headers: { 
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    booking_id: bookingData.id,
+                    amount: parseFloat(totalPrice),
+                    method: selectedMethod,
+                }),
+            });
+
+            if (!paymentResponse.ok) throw new Error("Payment failed");
+            const paymentData = await paymentResponse.json();
+
+            // Show receipt instead of alert
+            setReceipt({
+                bookingId: bookingData.id,
+                car: `${car.brand} ${car.model} (${car.year})`,
+                startDate,
+                endDate,
+                totalDays,
+                totalPrice,
+                paymentMethod: payment.method,
+                paymentStatus
+            });
+
+        } catch (error) {
+            console.error(error);
+            alert("Something went wrong. Please try again.");
         }
-        alert(`Payment successful for €${total} via ${payment.method}`);
-        navigate("/"); // redirect after payment
     };
 
-    if (!car) return null; // or a loading indicator
+    if (!car) return null;
 
     return (
         <section className="payment">
@@ -70,78 +131,86 @@ const Payment = () => {
                         <p>€{car.price_per_day}/day</p>
                     </div>
                 </div>
+
+                {/* Payment / Receipt Section */}
                 <div className="payment-checkout">
-                    <h2>Payment Details</h2>
-                    <form onSubmit={handleSubmit} className="payment-form">
-                        <div className="form-group">
-                            <input
-                                type="date"
-                                id="start_date"
-                                value={startDate}
-                                onChange={(e) => {
-                                    const newStart = e.target.value;
-                                    setStartDate(newStart);
-
-                                    if (endDate && new Date(endDate) < new Date(newStart)) {
-                                        setEndDate(newStart);
-                                    }
-                                }}
-                                required
-                            />
-                            <label htmlFor="start_date">Start Date</label>
+                    {!receipt ? (
+                        <>
+                            <h2>Payment Details</h2>
+                            <form onSubmit={handleSubmit} className="payment-form">
+                                <div className="form-group">
+                                    <input
+                                        type="date"
+                                        value={startDate}
+                                        onChange={(e) => {
+                                            const newStart = e.target.value;
+                                            setStartDate(newStart);
+                                            if (endDate && new Date(endDate) < new Date(newStart)) {
+                                                setEndDate(newStart);
+                                            }
+                                        }}
+                                        required
+                                    />
+                                    <label>Start Date</label>
+                                </div>
+                                <div className="form-group">
+                                    <input
+                                        type="date"
+                                        value={endDate}
+                                        onChange={(e) => {
+                                            const newEnd = e.target.value;
+                                            if (startDate && new Date(newEnd) < new Date(startDate)) {
+                                                alert("End date cannot be before start date");
+                                                return;
+                                            }
+                                            setEndDate(newEnd);
+                                        }}
+                                        required
+                                    />
+                                    <label>End Date</label>
+                                </div>
+                                <div className="form-group">
+                                    <input type="text" value={`${totalDays} day(s)`} readOnly />
+                                    <label>Rental Duration</label>
+                                </div>
+                                <div className="form-group">
+                                    <input type="text" value={`€${totalPrice}`} readOnly />
+                                    <label>Total Cost</label>
+                                </div>
+                                <div className="form-group">
+                                    <select name="method" value={payment.method} onChange={handleChange}>
+                                        <option>Card</option>
+                                        <option>Cash</option>
+                                        <option>Online</option>
+                                    </select>
+                                    <label>Payment Method</label>
+                                </div>
+                                <button type="submit">Confirm Payment</button>
+                            </form>
+                        </>
+                    ) : (
+                        <div className="payment-receipt">
+                            <div className="success-message">
+                                <FontAwesomeIcon icon={faCheckCircle} /> Payment {receipt.paymentStatus === "PAID" ? "Successful!" : "Pending"}
+                            </div>
+                            <div className="receipt-section">
+                                <h3><FontAwesomeIcon icon={faInfoCircle} /> Booking Info</h3>
+                                <p><strong>Booking ID:</strong> {receipt.bookingId}</p>
+                                <p><strong>Car:</strong> {receipt.car}</p>
+                                <p><strong>Rental Period:</strong> {receipt.startDate} → {receipt.endDate}</p>
+                                <p><strong>Duration:</strong> {receipt.totalDays} day(s)</p>
+                            </div>
+                            <div className="receipt-section">
+                                <h3><FontAwesomeIcon icon={faInfoCircle} /> Payment Info</h3>
+                                <p><strong>Total Paid:</strong> €{receipt.totalPrice}</p>
+                                <p><strong>Method:</strong> {receipt.paymentMethod}</p>
+                                <p><strong>Status:</strong> {receipt.paymentStatus}</p>
+                            </div>
+                            <button className="back-home-btn" onClick={() => navigate("/")}>
+                                Back to Home
+                            </button>
                         </div>
-                        <div className="form-group">
-                            <input
-                                type="date"
-                                id="end_date"
-                                value={endDate}
-                                onChange={(e) => {
-                                    const newEnd = e.target.value;
-
-                                    if (startDate && new Date(newEnd) < new Date(startDate)) {
-                                        alert("End date cannot be before start date");
-                                        return;
-                                    }
-
-                                    setEndDate(newEnd);
-                                }}
-                                required
-                            />
-                            <label htmlFor="end_date">End Date</label>
-                        </div>
-
-                        <div className="form-group">
-                            <input
-                                type="text"
-                                value={startDate && endDate ? `${startDate} → ${endDate}` : ""}
-                                placeholder="Rental Period"
-                                readOnly
-                            />
-                            <label>Rental Period</label>
-                        </div>
-                        <div className="form-group">
-                            <input
-                                type="text"
-                                value={`€${total}`}
-                                placeholder="Total Cost"
-                                readOnly
-                            />
-                            <label>Total Cost</label>
-                        </div>
-                        <div className="form-group">
-                            <select
-                                name="method"
-                                value={payment.method}
-                                onChange={handleChange}
-                            >
-                                <option>Credit Card</option>
-                                <option>PayPal</option>
-                                <option>Bank Transfer</option>
-                            </select>
-                            <label>Payment Method</label>
-                        </div>
-                        <button type="submit">Confirm Payment</button>
-                    </form>
+                    )}
                 </div>
             </div>
         </section>

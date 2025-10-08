@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./Modal.css";
+import { toast } from "react-toastify";
 
 const AddCarModal = ({ onClose, onCarAdded, token, onShowNotification }) => {
     const [formData, setFormData] = useState({
@@ -8,7 +9,7 @@ const AddCarModal = ({ onClose, onCarAdded, token, onShowNotification }) => {
         year: "",
         type: "Sedan",
         license_plate: "",
-        status: "AVAILABLE",
+        status: "READY",
         price_per_day: "",
         image: null,
     });
@@ -51,13 +52,10 @@ const AddCarModal = ({ onClose, onCarAdded, token, onShowNotification }) => {
                 const newCar = await res.json();
                 onCarAdded(newCar);
             }
-
             onClose();
         } catch (err) {
             console.error(err);
-            if (onShowNotification) {
-                onShowNotification("Error adding car");
-            }
+            toast.error("Error adding car");
         }
     };
 

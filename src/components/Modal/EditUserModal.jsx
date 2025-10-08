@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "./Modal.css";
+import { toast } from "react-toastify";
 
 const roles = ["ADMIN", "CUSTOMER"];
 
-const EditUserModal = ({ userId, isOpen, onClose, onUserUpdated, showNotification }) => {
+const EditUserModal = ({ userId, isOpen, onClose, onUserUpdated }) => {
     const [form, setForm] = useState({ name: "", email: "", phone: "", role: "CUSTOMER" });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -49,18 +50,20 @@ const EditUserModal = ({ userId, isOpen, onClose, onUserUpdated, showNotificatio
             const token = localStorage.getItem("token");
             const res = await fetch(`http://localhost:3000/api/v1/auth/users/${userId}`, {
                 method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
+              headers: {
                     "Authorization": token ? `Bearer ${token}` : undefined,
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify(form),
             });
             if (!res.ok) throw new Error("Failed to update user");
-            onUserUpdated();
-            showNotification && showNotification("User updated successfully!");
+            const updated = await res.json();
+            onUserUpdated && onUserUpdated(updated);
+            toast.success("User updated successfully!");
             onClose();
         } catch (err) {
             setError(err.message);
+            toast.error("Error updating user");
         } finally {
             setLoading(false);
         }

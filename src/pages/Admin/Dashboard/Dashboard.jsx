@@ -157,13 +157,13 @@ const Dashboard = () => {
                 <div style={{ fontWeight: 600, fontSize: '1.2rem', marginBottom: 8 }}>
                     Total: {formatCurrency(totalRevenue)}
                 </div>
-                <LineChart data={revenueChartData} />
+                <LineChart data={revenueChartData} xLabel="Date" yLabel="Total Price" />
             </div>
 
             {/* Car Rental Count Chart */}
             <div className="admin-chart">
                 <h3>Car Rental Count</h3>
-                <LineChart data={carRentalChartData} />
+                <LineChart data={carRentalChartData} xLabel="Car Brand" yLabel="Rental Count" />
             </div>
 
             {/* Show any errors */}

@@ -15,6 +15,8 @@ import Feedback from "./Feedback/Feedback.jsx"
 import { Link } from "react-router-dom";
 import LoginModal from "../../components/Modal/LoginModal.jsx";
 import Payment from "./Payment/Payment.jsx";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Admin = () => {
     const [activeSection, setActiveSection] = useState("dashboard");
@@ -31,6 +33,7 @@ const Admin = () => {
     const handleLogin = (userData) => {
         setUser(userData);
         setShowLogin(false);
+        toast.success("Login successful!");
     };
 
     const handleLogout = () => {
@@ -38,6 +41,7 @@ const Admin = () => {
         localStorage.removeItem("user");
         setUser(null);
         setShowLogin(true);
+        toast.success("Logout successful!");
     };
 
     if (showLogin) {
@@ -46,6 +50,7 @@ const Admin = () => {
 
     return (
         <section className="admin">
+            <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick pauseOnFocusLoss draggable pauseOnHover />
             <div className="admin-container">
                 <div className="admin-sidebar">
                     <div className="admin-sidebar-header">

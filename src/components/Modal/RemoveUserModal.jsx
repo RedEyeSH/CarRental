@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 import "./Modal.css";
 
 const RemoveUserModal = ({ isOpen, onClose, onUserDeleted, userId, showNotification }) => {
@@ -19,7 +20,7 @@ const RemoveUserModal = ({ isOpen, onClose, onUserDeleted, userId, showNotificat
             });
             if (!res.ok) throw new Error("Failed to delete user");
             onUserDeleted();
-            showNotification && showNotification("User deleted successfully!");
+             toast.success("User deleted successfully!");
             onClose();
         } catch (err) {
             setError(err.message);

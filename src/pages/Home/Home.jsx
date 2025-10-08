@@ -32,8 +32,9 @@ const Home = () => {
 
     useEffect(() => {
         const fetchCars = async () => {
+            if (!startDate || !endDate) return;
             try {
-                const res = await fetch("http://localhost:3000/api/v1/cars/");
+                const res = await fetch(`http://localhost:3000/api/v1/cars/available?start_date=${startDate}&end_date=${endDate}`);
                 if (!res.ok) throw new Error("Failed to fetch cars");
                 const data = await res.json();
                 setCars(data);
@@ -42,8 +43,9 @@ const Home = () => {
             }
         };
         fetchCars();
-    }, []);
+    }, [startDate, endDate]);
 
+    // Restore search from localStorage
     useEffect(() => {
         const storedSearch = JSON.parse(localStorage.getItem("homeSearch"));
         if (storedSearch) {
@@ -53,16 +55,11 @@ const Home = () => {
                 setStartDate(storedSearch.startDate);
                 setEndDate(storedSearch.endDate);
                 setSearched(true);
-                setSearchResults(cars.filter((car) =>
-                    `${car.brand} ${car.model}`
-                        .toLowerCase()
-                        .includes(storedSearch.searchText.toLowerCase())
-                ));
             } else {
                 localStorage.removeItem("homeSearch");
             }
         }
-    }, [cars]);
+    }, []);
 
     const handleSearch = (e) => {
         e.preventDefault();
@@ -100,6 +97,7 @@ const Home = () => {
     return (
         <section className="home">
             <div className="home-main-centered">
+                <h1 className="home-heading">Find Your Perfect Rental Car</h1>
                 <form className="home-search-box" onSubmit={handleSearch}>
                     <div className="search-text-input">
                         <label>Search Car</label>
@@ -204,3 +202,4 @@ const Home = () => {
 };
 
 export default Home;
+

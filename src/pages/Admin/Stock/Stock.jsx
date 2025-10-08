@@ -6,6 +6,8 @@ import AddCarModal from "../../../components/Modal/AddCarModal.jsx";
 import EditCarModal from "../../../components/Modal/EditCarModal.jsx";
 import RemoveCarModal from "../../../components/Modal/RemoveCarModal.jsx";
 import ViewCarModal from "../../../components/Modal/ViewCarModal.jsx";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Stock = () => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -13,7 +15,6 @@ const Stock = () => {
     const [removeModal, setRemoveModal] = useState(null);
     const [viewModalOpen, setViewModalOpen] = useState(false);
     const [selectedCarToView, setSelectedCarToView] = useState(null);
-    const [notifications, setNotifications] = useState([]);
     const [stockData, setStockData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -51,7 +52,7 @@ const Stock = () => {
 
     const handleCarAdded = (newCar) => {
         setStockData(prev => [...prev, newCar]);
-        showNotification("Car added successfully!");
+        toast.success("Car added successfully!");
     };
 
     const showNotification = (message) => {
@@ -77,10 +78,10 @@ const Stock = () => {
             if (!response.ok) throw new Error("Failed to delete car");
             setStockData(prev => prev.filter(car => car.id !== carId));
             setRemoveModal(null);
-            showNotification("Item successfully deleted!");
+            toast.success("Item successfully deleted!");
         } catch (err) {
             setRemoveModal(null);
-            showNotification("Failed to delete item!");
+            toast.error("Failed to delete item!");
         }
     };
 
@@ -98,6 +99,8 @@ const Stock = () => {
 
     return (
         <div className="stock-section">
+            <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick pauseOnFocusLoss draggable pauseOnHover />
+ 
             <h2>Stock</h2>
             <div className="stock-header-bar">
                 <input
@@ -192,17 +195,6 @@ const Stock = () => {
                     </tbody>
                 </table>
             )}
-            <div className="notification-container">
-                {notifications.map((n, index) => (
-                    <div
-                        key={n.id}
-                        className={`notification ${n.exiting ? "slide-out" : "slide-in"}`}
-                        style={{ top: `${index * 60}px` }}
-                    >
-                        {n.message}
-                    </div>
-                ))}
-            </div>
             {activeModal && activeModal.type === "add" && (
                 <AddCarModal
                     onClose={() => setActiveModal(null)}
@@ -218,7 +210,7 @@ const Stock = () => {
                         setStockData(prev =>
                             prev.map(car => car.id === updatedCar.id ? updatedCar : car)
                         );
-                        showNotification("Car updated successfully!");
+                         toast.success("Car updated successfully!");
                     }}
                     token={token}
                 />

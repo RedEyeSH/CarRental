@@ -116,6 +116,62 @@
     transform: translateY(-2px);
 }
 
+.payment-receipt {
+    /* background-color: #161B22; */
+    /* border: 1px solid #323c4c; */
+    border-radius: 16px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    /* box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); */
+}
+
+.success-message {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #0ff980;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.receipt-section {
+    border-top: 1px solid #323c4c;
+    padding-top: 1rem;
+}
+
+.receipt-section h3 {
+    color: #007bff;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.receipt-section p {
+    margin: 0.25rem 0;
+    color: #ccc;
+}
+
+.back-home-btn {
+    margin-top: 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 0.8rem 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.back-home-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
 
 /* Floating label wrapper */
 .floating-label {

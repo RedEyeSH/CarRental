@@ -51,6 +51,9 @@ const Login = ({ onClose, onSwitch, onLoginSuccess }) => {
                 setApiError(data.message || "Login failed.");
             } else {
                 localStorage.setItem("user", JSON.stringify(data.user));
+                if (data.token) {
+                    localStorage.setItem("token", data.token);
+                }
                 if (onLoginSuccess) {
                     onLoginSuccess(data.user)
                 }
@@ -70,7 +73,7 @@ const Login = ({ onClose, onSwitch, onLoginSuccess }) => {
                     <div className="login-header">
                         <FontAwesomeIcon icon={faXmark} onClick={onClose} />
                     </div>
-                    <h1 className="login-logo-title">App Name</h1>
+                    <h1 className="login-logo-title">Car Rental</h1>
                     <p className="login-title">Sign in to continue</p>
                     <form className="login-form" onSubmit={handleSubmit}>
                         {apiError && <div className="error api-error">{apiError}</div>}

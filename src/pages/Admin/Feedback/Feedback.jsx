@@ -201,7 +201,7 @@ const Feedbacks = () => {
                     <div className="modal delete-modal">
                         <h3>Delete Feedback</h3>
                         <p>Are you sure you want to delete this feedback?</p>
-                        <div style={{ margin: '12px 0', fontSize: '0.95em', color: '#555' }}>
+                        <div style={{ margin: '12px 0', fontSize: '0.95em', color: '#ffffff' }}>
                             <strong>User:</strong> {feedbackToDelete ? getUserName(feedbackToDelete.user_id) : ''}<br />
                             <strong>Car:</strong> {feedbackToDelete ? getCarInfo(feedbackToDelete.car_id) : ''}<br />
                             <strong>Comment:</strong> {feedbackToDelete ? feedbackToDelete.comment : ''}

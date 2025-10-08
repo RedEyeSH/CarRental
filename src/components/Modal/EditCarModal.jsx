@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Modal.css";
+import { toast } from "react-toastify";
 
 const EditCarModal = ({ carData, onClose, onCarEdited, token }) => {
     const [formData, setFormData] = useState({
@@ -113,11 +114,10 @@ const EditCarModal = ({ carData, onClose, onCarEdited, token }) => {
                 const updatedCar = await res.json();
                 onCarEdited(updatedCar);
             }
-
             onClose();
         } catch (err) {
             console.error(err);
-            alert("Error updating car");
+            toast.error("Error updating car");
         }
     };
 
