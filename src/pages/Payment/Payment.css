@@ -85,9 +85,8 @@
 }
 
 .payment-form select {
-    padding: 0.8rem 1rem;
-    border-radius: 12px;
-    background-color: #0D1117;
+    /* padding: 0.8rem 1rem; */
+    /* border-radius: 12px; */
     color: white;
     border: 1px solid #323c4c;
     transition: all 0.25s ease;
@@ -97,7 +96,11 @@
 .payment-form select:focus {
     border-color: #1f6feb;
     outline: none;
-    background-color: #0b1015;
+    /* background-color: #0b1015; */
+}
+
+.payment-form option {
+    background-color: #0D1117;
 }
 
 .payment-form button {

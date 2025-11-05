@@ -1,0 +1,183 @@
+{
+    "navbar": {
+        "loading": "読み込み中...",
+        "greeting": "こんにちは、{{name}}",
+        "profile": "プロフィール",
+        "logout": "ログアウト",
+        "signIn": "サインイン",
+        "register": "登録"
+    },
+    "register": {
+        "title": "アカウントを作成",
+        "subtitle": "このアプリに登録するにはメールアドレスを入力してください",
+        "email": "メールアドレス",
+        "firstname": "名前",
+        "phone": "電話番号",
+        "password": "パスワード",
+        "confirmPassword": "パスワード確認",
+        "signUp": "メールでサインアップ",
+        "registering": "登録中...",
+        "alreadyHaveAccount": "すでにアカウントをお持ちですか？",
+        "clickHere": "こちらをクリック！",
+        "termsIntro": "続行することで、以下に同意したことになります：",
+        "termsOfService": "利用規約",
+        "and": "および",
+        "privacyPolicy": "プライバシーポリシー",
+        "errors": {
+            "emailRequired": "メールアドレスは必須です。",
+            "emailInvalid": "有効なメールアドレスを入力してください。",
+            "firstnameRequired": "名前は必須です。",
+            "phoneRequired": "電話番号は必須です。",
+            "phoneInvalid": "有効な電話番号を入力してください。",
+            "passwordRequired": "パスワードは必須です。",
+            "passwordMin": "パスワードは6文字以上である必要があります。",
+            "confirmPasswordRequired": "パスワード確認は必須です。",
+            "passwordMismatch": "パスワードが一致しません。",
+            "registrationFailed": "登録に失敗しました。",
+            "networkError": "ネットワークエラー。後でもう一度お試しください。"
+        }
+    },
+    "login": {
+        "title": "続行するにはサインインしてください",
+        "email": "メールアドレス",
+        "password": "パスワード",
+        "signIn": "サインイン",
+        "signingIn": "サインイン中...",
+        "noAccount": "アカウントをお持ちでないですか？",
+        "clickHere": "こちらをクリック！",
+        "errors": {
+            "emailRequired": "メールアドレスは必須です。",
+            "emailInvalid": "メールアドレスが無効です。",
+            "passwordRequired": "パスワードは必須です。",
+            "passwordMin": "パスワードは6文字以上である必要があります。",
+            "loginFailed": "ログインに失敗しました。",
+            "networkError": "ネットワークエラー。後でもう一度お試しください。"
+        }
+    },
+    "home": {
+        "heading": "完璧なレンタカーを見つける",
+        "searchCar": "車を検索",
+        "searchPlaceholder": "車の名前を入力...",
+        "startDate": "開始日",
+        "endDate": "終了日",
+        "search": "検索",
+        "sort": {
+            "new": "新着",
+            "priceAsc": "価格の昇順",
+            "priceDesc": "価格の降順",
+            "rating": "評価"
+        },
+        "added": "追加日",
+        "bookNow": "今すぐ予約",
+        "noCars": "検索条件に一致する車はありません。",
+        "alert": {
+            "dateRequired": "開始日と終了日を選択してください。",
+            "invalidDate": "終了日は開始日より前にできません。"
+        }
+    },
+    "profile": {
+        "myProfile": "マイプロフィール",
+        "overview": "概要",
+        "rentalHistory": "レンタル履歴",
+        "settings": "設定",
+        "logout": "ログアウト",
+        "loading": "読み込み中...",
+        "roles": {
+            "customer": "顧客",
+            "admin": "管理者"
+        },
+        "overviewPage": {
+            "accountOverview": "アカウント概要",
+            "fullName": "氏名",
+            "email": "メールアドレス",
+            "phone": "電話番号",
+            "createdAt": "作成日",
+            "notProvided": "未登録"
+        },
+        "settingsPage": {
+            "title": "設定",
+            "selectLanguage": "言語を選択",
+            "updateYourInfo": "以下でプロフィール情報を更新してください:",
+            "fullName": "氏名",
+            "email": "メールアドレス",
+            "phone": "電話番号",
+            "saveChanges": "変更を保存",
+            "saveSuccess": "プロフィールが正常に更新されました！",
+            "saveError": "プロフィールの更新に失敗しました"
+        },
+        "rentalHistoryPage": {
+            "title": "レンタル履歴",
+            "searchPlaceholder": "予約を検索...",
+            "noRecords": "レンタル履歴が見つかりません。",
+            "table": {
+                "bookingId": "予約ID",
+                "car": "車",
+                "startDate": "開始日",
+                "endDate": "終了日",
+                "totalPrice": "合計金額",
+                "paymentStatus": "支払状況",
+                "createdAt": "作成日",
+                "action": "操作"
+            },
+            "view": "表示",
+            "feedback": "フィードバック",
+            "feedbackGiven": "フィードバック済み",
+            "feedbackModal": {
+                "title": "車へのフィードバックを送信",
+                "alreadySubmitted": "このレンタルにはすでにフィードバックを送信しています。",
+                "rating": "評価",
+                "comment": "コメント",
+                "submit": "フィードバックを送信",
+                "submitting": "送信中...",
+                "notAllowedYet": "レンタル開始後にのみフィードバックを送信できます。",
+                "close": "閉じる"
+            },
+            "viewModal": {
+                "title": "予約詳細",
+                "noData": "データがありません。"
+            }
+        }
+    },
+    "BookingModal": {
+        "title": "車を予約",
+        "pricePerDay": "1日あたりの料金",
+        "days": "日",
+        "daysPlural": "日間",
+        "from": "開始",
+        "to": "終了",
+        "totalPrice": "合計金額",
+        "cancel": "キャンセル",
+        "confirmBooking": "予約を確定"
+    },
+    "payment": {
+        "checkout": "チェックアウト",
+        "paymentDetails": "支払い詳細",
+        "startDate": "開始日",
+        "endDate": "終了日",
+        "rentalDuration": "レンタル期間",
+        "totalCost": "合計金額",
+        "paymentMethod": "支払い方法",
+        "methodCard": "カード",
+        "methodCash": "現金",
+        "methodOnline": "オンライン",
+        "confirmPayment": "支払いを確定",
+        "paymentSuccessful": "支払い完了！",
+        "paymentPending": "支払い保留中",
+        "bookingInfo": "予約情報",
+        "bookingId": "予約ID",
+        "car": "車",
+        "paymentInfo": "支払い情報",
+        "totalPaid": "支払い合計",
+        "method": "方法",
+        "status": "ステータス",
+        "rentalPeriod": "レンタル期間",
+        "duration": "期間",
+        "backHome": "ホームに戻る",
+        "alerts": {
+            "dateRequired": "開始日と終了日を選択してください。",
+            "invalidDate": "終了日は開始日より前にできません。",
+            "userNotLoggedIn": "ユーザーがログインしていません。ログインしてください。",
+            "paymentFailed": "支払いに失敗しました。もう一度お試しください。"
+        }
+    }
+}

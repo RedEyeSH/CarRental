@@ -5,7 +5,11 @@ import { faCreditCard, faCheckCircle, faInfoCircle } from "@fortawesome/free-sol
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 
+import { useTranslation } from "react-i18next";
+
 const Payment = () => {
+    const { t } = useTranslation();
+
     const location = useLocation();
     const navigate = useNavigate();
     const { user } = useContext(AuthContext);
@@ -40,26 +44,25 @@ const Payment = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!startDate || !endDate) return alert("Please select both start and end dates.");
-        if (!user || !user.id) return alert("User not logged in. Please log in to continue.");
+        if (!startDate || !endDate) return alert(t("payment.alerts.dateRequired"));
+        if (!user || !user.id) return alert(t("payment.alerts.userNotLoggedIn"));
 
         try {
             const token = localStorage.getItem("token");
 
             const methodMap = {
-                "Card": "CARD",
-                "Cash": "CASH",
-                "Online": "ONLINE"
+                [t("payment.methodCard")]: "CARD",
+                [t("payment.methodCash")]: "CASH",
+                [t("payment.methodOnline")]: "ONLINE",
             };
             const selectedMethod = methodMap[payment.method] || "CARD";
             const paymentStatus = selectedMethod === "CARD" ? "PAID" : "PENDING";
 
-            // Create booking
             const bookingResponse = await fetch("http://localhost:3000/api/v1/bookings", {
                 method: "POST",
                 headers: { 
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({
                     user_id: user.id,
@@ -67,19 +70,18 @@ const Payment = () => {
                     start_date: startDate,
                     end_date: endDate,
                     total_price: totalPrice,
-                    payment_status: paymentStatus
+                    payment_status: paymentStatus,
                 }),
             });
 
-            if (!bookingResponse.ok) throw new Error("Failed to create booking");
+            if (!bookingResponse.ok) throw new Error(t("payment.alerts.paymentFailed"));
             const bookingData = await bookingResponse.json();
 
-            // Process payment
             const paymentResponse = await fetch("http://localhost:3000/api/v1/payments", {
                 method: "POST",
                 headers: { 
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({
                     booking_id: bookingData.id,
@@ -88,10 +90,9 @@ const Payment = () => {
                 }),
             });
 
-            if (!paymentResponse.ok) throw new Error("Payment failed");
+            if (!paymentResponse.ok) throw new Error(t("payment.alerts.paymentFailed"));
             const paymentData = await paymentResponse.json();
 
-            // Show receipt instead of alert
             setReceipt({
                 bookingId: bookingData.id,
                 car: `${car.brand} ${car.model} (${car.year})`,
@@ -100,12 +101,12 @@ const Payment = () => {
                 totalDays,
                 totalPrice,
                 paymentMethod: payment.method,
-                paymentStatus
+                paymentStatus,
             });
 
         } catch (error) {
             console.error(error);
-            alert("Something went wrong. Please try again.");
+            alert(t("payment.alerts.paymentFailed"));
         }
     };
 
@@ -115,9 +116,10 @@ const Payment = () => {
         <section className="payment">
             <div className="payment-header">
                 <h1>
-                    <FontAwesomeIcon icon={faCreditCard} /> Checkout
+                    <FontAwesomeIcon icon={faCreditCard} /> {t("payment.checkout")}
                 </h1>
             </div>
+
             <div className="payment-content">
                 <div className="payment-car">
                     <img
@@ -128,15 +130,14 @@ const Payment = () => {
                     />
                     <div className="payment-car-details">
                         <h2>{car.brand} {car.model} ({car.year})</h2>
-                        <p>€{car.price_per_day}/day</p>
+                        <p>€{car.price_per_day} / {t("payment.rentalDuration")}</p>
                     </div>
                 </div>
 
-                {/* Payment / Receipt Section */}
                 <div className="payment-checkout">
                     {!receipt ? (
                         <>
-                            <h2>Payment Details</h2>
+                            <h2>{t("payment.paymentDetails")}</h2>
                             <form onSubmit={handleSubmit} className="payment-form">
                                 <div className="form-group">
                                     <input
@@ -151,7 +152,7 @@ const Payment = () => {
                                         }}
                                         required
                                     />
-                                    <label>Start Date</label>
+                                    <label>{t("payment.startDate")}</label>
                                 </div>
                                 <div className="form-group">
                                     <input
@@ -160,54 +161,54 @@ const Payment = () => {
                                         onChange={(e) => {
                                             const newEnd = e.target.value;
                                             if (startDate && new Date(newEnd) < new Date(startDate)) {
-                                                alert("End date cannot be before start date");
+                                                alert(t("payment.alerts.invalidDate"));
                                                 return;
                                             }
                                             setEndDate(newEnd);
                                         }}
                                         required
                                     />
-                                    <label>End Date</label>
+                                    <label>{t("payment.endDate")}</label>
                                 </div>
                                 <div className="form-group">
-                                    <input type="text" value={`${totalDays} day(s)`} readOnly />
-                                    <label>Rental Duration</label>
+                                    <input type="text" value={`${totalDays} ${t("payment.rentalDuration")}`} readOnly />
+                                    <label>{t("payment.rentalDuration")}</label>
                                 </div>
                                 <div className="form-group">
                                     <input type="text" value={`€${totalPrice}`} readOnly />
-                                    <label>Total Cost</label>
+                                    <label>{t("payment.totalCost")}</label>
                                 </div>
                                 <div className="form-group">
                                     <select name="method" value={payment.method} onChange={handleChange}>
-                                        <option>Card</option>
-                                        <option>Cash</option>
-                                        <option>Online</option>
+                                        <option>{t("payment.methodCard")}</option>
+                                        <option>{t("payment.methodCash")}</option>
+                                        <option>{t("payment.methodOnline")}</option>
                                     </select>
-                                    <label>Payment Method</label>
+                                    <label>{t("payment.paymentMethod")}</label>
                                 </div>
-                                <button type="submit">Confirm Payment</button>
+                                <button type="submit">{t("payment.confirmPayment")}</button>
                             </form>
                         </>
                     ) : (
                         <div className="payment-receipt">
                             <div className="success-message">
-                                <FontAwesomeIcon icon={faCheckCircle} /> Payment {receipt.paymentStatus === "PAID" ? "Successful!" : "Pending"}
+                                <FontAwesomeIcon icon={faCheckCircle} /> {receipt.paymentStatus === "PAID" ? t("payment.paymentSuccessful") : t("payment.paymentPending")}
                             </div>
                             <div className="receipt-section">
-                                <h3><FontAwesomeIcon icon={faInfoCircle} /> Booking Info</h3>
-                                <p><strong>Booking ID:</strong> {receipt.bookingId}</p>
-                                <p><strong>Car:</strong> {receipt.car}</p>
-                                <p><strong>Rental Period:</strong> {receipt.startDate} → {receipt.endDate}</p>
-                                <p><strong>Duration:</strong> {receipt.totalDays} day(s)</p>
+                                <h3><FontAwesomeIcon icon={faInfoCircle} /> {t("payment.bookingInfo")}</h3>
+                                <p><strong>{t("payment.bookingId")}:</strong> {receipt.bookingId}</p>
+                                <p><strong>{t("payment.car")}:</strong> {receipt.car}</p>
+                                <p><strong>{t("payment.rentalPeriod")}:</strong> {receipt.startDate} → {receipt.endDate}</p>
+                                <p><strong>{t("payment.duration")}:</strong> {receipt.totalDays} {t("payment.rentalDuration")}</p>
                             </div>
                             <div className="receipt-section">
-                                <h3><FontAwesomeIcon icon={faInfoCircle} /> Payment Info</h3>
-                                <p><strong>Total Paid:</strong> €{receipt.totalPrice}</p>
-                                <p><strong>Method:</strong> {receipt.paymentMethod}</p>
-                                <p><strong>Status:</strong> {receipt.paymentStatus}</p>
+                                <h3><FontAwesomeIcon icon={faInfoCircle} /> {t("payment.paymentInfo")}</h3>
+                                <p><strong>{t("payment.totalPaid")}:</strong> €{receipt.totalPrice}</p>
+                                <p><strong>{t("payment.method")}:</strong> {receipt.paymentMethod}</p>
+                                <p><strong>{t("payment.status")}:</strong> {receipt.paymentStatus === "PAID" ? t("payment.paymentSuccessful") : t("payment.paymentPending")}</p>
                             </div>
                             <button className="back-home-btn" onClick={() => navigate("/")}>
-                                Back to Home
+                                {t("payment.backHome")}
                             </button>
                         </div>
                     )}

@@ -6,7 +6,11 @@ import Register from "../Auth/Register.jsx";
 import viteLogo from "../../assets/vite.svg";
 import { useAuth } from "../../contexts/AuthContext.jsx";
 
+import { useTranslation } from "react-i18next";
+
 const Navbar = () => {
+    const { t } = useTranslation();
+
     const [authModal, setAuthModal] = useState(null);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const navigate = useNavigate();
@@ -44,21 +48,21 @@ const Navbar = () => {
                     <div className="navbar-links"></div>
                     <div className="navbar-buttons">
                         {loading ? (
-                            <span>Loading...</span>
+                            <span>{t("navbar.loading")}</span>
                         ) : user ? (
                             <div className="navbar-user" ref={dropdownRef}>
                                 <p
                                     className="navbar-username clickable"
                                     onClick={() => setDropdownOpen((prev) => !prev)}
                                 >
-                                    Hi, {user.name} <span className="dropdown-arrow">▾</span>
+                                    {t("navbar.greeting", { name: user.name })} <span className="dropdown-arrow"></span>
                                 </p>
 
                                 {dropdownOpen && (
                                     <div className="navbar-dropdown">
-                                        <p onClick={handleProfileClick}>Profile</p>
+                                        <p onClick={handleProfileClick}>{t("navbar.profile")}</p>
                                         <p className="logout-option" onClick={handleLogout}>
-                                            Logout
+                                            {t("navbar.logout")}
                                         </p>
                                     </div>
                                 )}
@@ -68,10 +72,10 @@ const Navbar = () => {
                         ) : (
                             <>
                                 <button className="navbar-btn navbar-login" onClick={() => setAuthModal("login")}>
-                                    Sign In
+                                    {t("navbar.signIn")}
                                 </button>
                                 <button className="navbar-btn navbar-register" onClick={() => setAuthModal("register")}>
-                                    Register
+                                    {t("navbar.register")}
                                 </button>
                             </>
                         )}

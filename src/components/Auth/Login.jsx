@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import "./Login.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
+import { useTranslation } from "react-i18next";
+
 const Login = ({ onClose, onSwitch, onLoginSuccess }) => {
+    const { t } = useTranslation();
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState({});
@@ -13,14 +17,14 @@ const Login = ({ onClose, onSwitch, onLoginSuccess }) => {
     const validate = () => {
         const newErrors = {};
         if (!email) {
-            newErrors.email = "Email is required.";
+            newErrors.email = t("login.errors.emailRequired");
         } else if (!/\S+@\S+\.\S+/.test(email)) {
-            newErrors.email = "Email is invalid.";
+            newErrors.email = t("login.errors.emailInvalid");
         }
         if (!password) {
-            newErrors.password = "Password is required.";
+            newErrors.password = t("login.errors.passwordRequired");
         } else if (password.length < 6) {
-            newErrors.password = "Password must be at least 6 characters.";
+            newErrors.password = t("login.errors.passwordMin");
         }
         return newErrors;
     };
@@ -48,7 +52,7 @@ const Login = ({ onClose, onSwitch, onLoginSuccess }) => {
             const data = await response.json();
 
             if (!response.ok) {
-                setApiError(data.message || "Login failed.");
+                setApiError(data.message || t("login.errors.loginFailed"));
             } else {
                 localStorage.setItem("user", JSON.stringify(data.user));
                 if (data.token) {
@@ -60,7 +64,7 @@ const Login = ({ onClose, onSwitch, onLoginSuccess }) => {
                 onClose();
             }
         } catch (error) {
-            setApiError("Network error. Please try again later.");
+            setApiError(t("login.errors.networkError"));
         } finally {
             setLoading(false);
         }
@@ -74,7 +78,7 @@ const Login = ({ onClose, onSwitch, onLoginSuccess }) => {
                         <FontAwesomeIcon icon={faXmark} onClick={onClose} />
                     </div>
                     <h1 className="login-logo-title">Car Rental</h1>
-                    <p className="login-title">Sign in to continue</p>
+                    <p className="login-title">{t("login.title")}</p>
                     <form className="login-form" onSubmit={handleSubmit}>
                         {apiError && <div className="error api-error">{apiError}</div>}
 
@@ -87,7 +91,7 @@ const Login = ({ onClose, onSwitch, onLoginSuccess }) => {
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
                             />
-                            <label htmlFor="login-email">Email address</label>
+                            <label htmlFor="login-email">{t("login.email")}</label>
                             {errors.email && <span className="error">{errors.email}</span>}
                         </div>
 
@@ -100,17 +104,20 @@ const Login = ({ onClose, onSwitch, onLoginSuccess }) => {
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                             />
-                            <label htmlFor="login-password">Password</label>
+                            <label htmlFor="login-password">{t("login.password")}</label>
                             {errors.password && <span className="error">{errors.password}</span>}
                         </div>
 
                         <button className="login-submit" type="submit" disabled={loading}>
-                            {loading ? "Signing in..." : "Sign in"}
+                            {loading ? t("login.signingIn") : t("login.signIn")}
                         </button>
                     </form>
 
                     <div className="login-option">
-                        <p>Don't have an account? <span onClick={onSwitch}>Click here!</span></p>
+                        <p>
+                            {t("login.noAccount")}{" "} 
+                            <span onClick={onSwitch}>{t("login.clickHere")}</span>
+                        </p>
                     </div>
                 </div>
             </div>

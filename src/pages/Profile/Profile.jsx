@@ -14,7 +14,11 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../../contexts/AuthContext.jsx";
 
+import { useTranslation } from "react-i18next";
+
 const Profile = () => {
+    const { t, i18n } = useTranslation();
+
     const [activeSection, setActiveSection] = useState("overview");
     const [bookings, setBookings] = useState([]);
     const [bookingsLoading, setBookingsLoading] = useState(false);
@@ -265,7 +269,7 @@ const Profile = () => {
             <div className="profile-container">
                 <div className="profile-sidebar">
                     <div className="profile-sidebar-header">
-                        <p>My Profile</p>
+                        <p>{t("profile.myProfile")}</p>
                     </div>
                     {user && (
                         <div className="profile-sidebar-user">
@@ -275,10 +279,7 @@ const Profile = () => {
                             <div className="profile-user-info">
                                 <h3>{user.name}</h3>
                                 <span className={`profile-role ${roleClassName}`}>
-                                    {user?.role
-                                        ? user.role.charAt(0).toUpperCase() +
-                                          user.role.slice(1).toLowerCase()
-                                        : "Customer"}
+                                    {t(`profile.roles.${user?.role?.toLowerCase() || "Customer"}`)}
                                 </span>
                             </div>
                         </div>
@@ -289,28 +290,28 @@ const Profile = () => {
                             onClick={() => setActiveSection("overview")}
                         >
                             <FontAwesomeIcon icon={faAddressCard} />
-                            <span>Overview</span>
+                            <span>{t("profile.overview")}</span>
                         </button>
                         <button
                             className={`profile-sidebar-item ${activeSection === "history" ? "active" : ""}`}
                             onClick={() => setActiveSection("history")}
                         >
                             <FontAwesomeIcon icon={faClockRotateLeft} />
-                            <span>Rental History</span>
+                            <span>{t("profile.rentalHistory")}</span>
                         </button>
                         <button
                             className={`profile-sidebar-item ${activeSection === "settings" ? "active" : ""}`}
                             onClick={() => setActiveSection("settings")}
                         >
                             <FontAwesomeIcon icon={faGear} />
-                            <span>Settings</span>
+                            <span>{t("profile.settings")}</span>
                         </button>
                         <button
                             className="profile-sidebar-item logout"
                             onClick={handleLogout}
                         >
                             <FontAwesomeIcon icon={faRightFromBracket} />
-                            <span>Logout</span>
+                            <span>{t("profile.logout")}</span>
                         </button>
                     </div>
                 </div>
@@ -325,7 +326,7 @@ const Profile = () => {
                         <>
                         {activeSection === "overview" && (
                             <div className="profile-section">
-                                <h2>Account Overview</h2>
+                                <h2>{t("profile.overviewPage.accountOverview")}</h2>
                                 {user ? (
                                     <div className="profile-overview">
                                         <div className="profile-summary-card">
@@ -336,10 +337,7 @@ const Profile = () => {
                                                 <div>
                                                     <h3>{user.name}</h3>
                                                     <span className={`profile-role ${roleClassName}`}>
-                                                        {user?.role
-                                                            ? user.role.charAt(0).toUpperCase() +
-                                                              user.role.slice(1).toLowerCase()
-                                                            : "Customer"}
+                                                        {t(`profile.roles.${user?.role?.toLowerCase() || "customer"}`)}
                                                     </span>
                                                 </div>
                                             </div>
@@ -348,50 +346,53 @@ const Profile = () => {
                                             <div className="info-card">
                                                 <FontAwesomeIcon icon={faAddressCard} className="info-icon" />
                                                 <div>
-                                                    <p className="info-label">Full Name</p>
+                                                    <p className="info-label">{t("profile.overviewPage.fullName")}</p>
                                                     <p className="info-value">{user.name}</p>
                                                 </div>
                                             </div>
                                             <div className="info-card">
                                                 <FontAwesomeIcon icon={faUser} className="info-icon" />
                                                 <div>
-                                                    <p className="info-label">Email Address</p>
+                                                    <p className="info-label">{t("profile.overviewPage.email")}</p>
                                                     <p className="info-value">{user.email}</p>
                                                 </div>
                                             </div>
                                             <div className="info-card">
                                                 <FontAwesomeIcon icon={faGear} className="info-icon" />
                                                 <div>
-                                                    <p className="info-label">Phone Number</p>
-                                                    <p className="info-value">{user.phone || "Not provided"}</p>
+                                                    <p className="info-label">{t("profile.overviewPage.phone")}</p>
+                                                    <p className="info-value">
+                                                        {user.phone || t("profile.overviewPage.notProvided")}
+                                                    </p>
                                                 </div>
                                             </div>
                                             <div className="info-card">
                                                 <FontAwesomeIcon icon={faClockRotateLeft} className="info-icon" />
                                                 <div>
-                                                    <p className="info-label">Created At</p>
+                                                    <p className="info-label">{t("profile.overviewPage.createdAt")}</p>
                                                     <p className="info-value">
                                                         {user.created_at
-                                                            ? new Date(user.created_at).toLocaleDateString('en-GB')
-                                                            : "Unknown"}
+                                                            ? new Date(user.created_at).toLocaleDateString(i18n.language)
+                                                            : t("profile.overviewPage.notProvided")}
                                                     </p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 ) : (
-                                    <p>Loading...</p>
+                                    <p>{t("profile.loading")}</p>
                                 )}
                             </div>
                         )}
 
+
                         {activeSection === "history" && (
                             <div className="profile-section">
-                                <h2>Rental History</h2>
+                                <h2>{t("profile.rentalHistoryPage.title")}</h2>
                                 <div style={{marginBottom:16}}>
                                     <input
                                         type="text"
-                                        placeholder="Search bookings..."
+                                        placeholder={t("profile.rentalHistoryPage.searchPlaceholder")}
                                         value={searchTerm}
                                         onChange={e => setSearchTerm(e.target.value)}
                                         style={{padding:8, borderRadius:4, border:'1px solid #444c56', width:260, background:'#0d1117', color:'#fff'}}
@@ -399,23 +400,23 @@ const Profile = () => {
                                 </div>
                                 <div className="profile-history">
                                     {bookingsLoading || carDetailsLoading ? (
-                                        <p>Loading...</p>
+                                        <p>{t("profile.rentalHistoryPage.noRecords")}</p>
                                     ) : bookingsError || carDetailsError ? (
                                         <p style={{ color: 'red' }}>{bookingsError || carDetailsError}</p>
                                     ) : filteredBookings.length === 0 ? (
-                                        <p>No rental history available.</p>
+                                        <p>{t("profile.rentalHistoryPage.noRecords")}</p>
                                     ) : (
                                         <table className="rental-history-table">
                                             <thead>
                                                 <tr>
-                                                    <th>Booking ID</th>
-                                                    <th>Car</th>
-                                                    <th>Start Date</th>
-                                                    <th>End Date</th>
-                                                    <th>Total Price</th>
-                                                    <th>Payment Status</th>
-                                                    <th>Created At</th>
-                                                    <th>Action</th>
+                                                    <th>{t("profile.rentalHistoryPage.table.bookingId")}</th>
+                                                    <th>{t("profile.rentalHistoryPage.table.car")}</th>
+                                                    <th>{t("profile.rentalHistoryPage.table.startDate")}</th>
+                                                    <th>{t("profile.rentalHistoryPage.table.endDate")}</th>
+                                                    <th>{t("profile.rentalHistoryPage.table.totalPrice")}</th>
+                                                    <th>{t("profile.rentalHistoryPage.table.paymentStatus")}</th>
+                                                    <th>{t("profile.rentalHistoryPage.table.createdAt")}</th>
+                                                    <th>{t("profile.rentalHistoryPage.table.action")}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -435,11 +436,33 @@ const Profile = () => {
                                                             <td>{booking.end_date}</td>
                                                             <td>{booking.total_price}</td>
                                                             <td>{booking.payment_status}</td>
-                                                            <td>{new Date(booking.created_at).toLocaleString()}</td>
+                                                            <td>{new Date(booking.created_at).toLocaleString(i18n.language)}</td>
                                                             <td style={{display:'flex',gap:6}}>
-                                                                <button onClick={() => openViewModal(booking.id)} style={{padding:'4px 10px',borderRadius:4,border:'none',background:'#58a6ff',color:'#fff',cursor:'pointer'}}>View</button>
-                                                                <button onClick={() => openFeedbackModal(booking)} disabled={feedbackGiven} style={{padding:'4px 10px',borderRadius:4,border:'none',background:feedbackGiven ? '#444c56' : '#2ea043',color:'#fff',cursor:feedbackGiven ? 'not-allowed' : 'pointer'}}>
-                                                                    {feedbackGiven ? 'Feedback given' : 'Feedback'}
+                                                                <button 
+                                                                    onClick={() => openViewModal(booking.id)} 
+                                                                    style={{
+                                                                        padding:'4px 10px',
+                                                                        borderRadius:4,
+                                                                        border:'none',
+                                                                        background:'#58a6ff',
+                                                                        color:'#fff',
+                                                                        cursor:'pointer'
+                                                                    }}
+                                                                >
+                                                                    {t("profile.rentalHistoryPage.view")}
+                                                                </button>
+                                                                <button 
+                                                                    onClick={() => openFeedbackModal(booking)} 
+                                                                    disabled={feedbackGiven} 
+                                                                    style={{
+                                                                        padding:'4px 10px',
+                                                                        borderRadius:4,
+                                                                        border:'none',
+                                                                        background: feedbackGiven ? '#444c56' : '#2ea043',
+                                                                        color:'#fff',
+                                                                        cursor: feedbackGiven ? 'not-allowed' : 'pointer'}}
+                                                                >
+                                                                    {feedbackGiven ? t("profile.rentalHistoryPage.feedbackGiven") : t("profile.rentalHistoryPage.feedback")}
                                                                 </button>
                                                             </td>
                                                         </tr>
@@ -469,7 +492,7 @@ const Profile = () => {
                                                 />
                                             )}
                                             <h3 style={{marginTop:0, marginBottom:8}}>
-                                                Give Feedback to the Car
+                                                {t("profile.rentalHistoryPage.feedbackModal.title")}
                                                 {carDetails[feedbackBooking.car_id] && (
                                                     <span style={{display:'block',fontWeight:'normal',fontSize:15,marginTop:4}}>
                                                         {carDetails[feedbackBooking.car_id].brand} {carDetails[feedbackBooking.car_id].model} ({carDetails[feedbackBooking.car_id].license_plate})
@@ -479,31 +502,33 @@ const Profile = () => {
                                             {getFeedbackForBooking(feedbackBooking) ? (
                                                 <div style={{marginBottom:12}}>
                                                     <div style={{color:'lightgreen',marginBottom:8}}>
-                                                        You have already submitted feedback for this rental.
+                                                        {t("profile.rentalHistoryPage.feedbackModal.alreadySubmitted")}
                                                     </div>
-                                                    <div><b>Rating:</b> {getFeedbackForBooking(feedbackBooking).rating}</div>
-                                                    <div><b>Comment:</b> {getFeedbackForBooking(feedbackBooking).comment}</div>
+                                                    <div><b>{t("profile.rentalHistoryPage.feedbackModal.rating")}:</b> {getFeedbackForBooking(feedbackBooking).rating}</div>
+                                                    <div><b>{t("profile.rentalHistoryPage.feedbackModal.comment")}:</b> {getFeedbackForBooking(feedbackBooking).comment}</div>
                                                 </div>
                                             ) : (
                                                 <form onSubmit={handleFeedbackSubmit} style={{display:'flex',flexDirection:'column',gap:12}}>
                                                     <div>
-                                                        <label>Rating: </label>
+                                                        <label>{t("profile.rentalHistoryPage.feedbackModal.rating")}: </label>
                                                         <select value={feedbackRating} onChange={e => setFeedbackRating(Number(e.target.value))} style={{marginLeft:8}} required>
                                                             {[1,2,3,4,5].map(r => <option key={r} value={r}>{r}</option>)}
                                                         </select>
                                                     </div>
                                                     <div>
-                                                        <label>Comment:</label>
+                                                        <label>{t("profile.rentalHistoryPage.feedbackModal.comment")}:</label>
                                                         <textarea value={feedbackComment} onChange={e => setFeedbackComment(e.target.value)} rows={3} style={{width:'100%',marginTop:4}} required />
                                                     </div>
                                                     {!canSubmitFeedback && (
                                                         <div style={{color:'orange'}}>
-                                                            You can only submit feedback after your rental has started ({feedbackBooking.start_date}).
+                                                            {t("profile.rentalHistoryPage.feedbackModal.notAllowedYet")}
+                                                            {/* You can only submit feedback after your rental has started ({feedbackBooking.start_date}). */}
                                                         </div>
                                                     )}
                                                     {feedbackError && <div style={{color:'red'}}>{feedbackError}</div>}
                                                     <button type="submit" disabled={feedbackLoading || !canSubmitFeedback} style={{padding:'6px 0',borderRadius:4,border:'none',background:'#2ea043',color:'#fff',cursor: canSubmitFeedback && !feedbackLoading ? 'pointer' : 'not-allowed',marginTop:8}}>
-                                                        {feedbackLoading ? 'Submitting...' : 'Submit Feedback'}
+                                                        {/* {feedbackLoading ? 'Submitting...' : 'Submit Feedback'} */}
+                                                        {feedbackLoading ? t("profile.rentalHistoryPage.feedbackModal.submitting") : t("profile.rentalHistoryPage.feedbackModal.submit")}
                                                     </button>
                                                 </form>
                                             )}
@@ -515,9 +540,9 @@ const Profile = () => {
                                     <div style={{position:'fixed',top:0,left:0,width:'100vw',height:'100vh',background:'rgba(0,0,0,0.5)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:1000}}>
                                         <div style={{background:'#161b22',padding:32,borderRadius:10,minWidth:320,maxWidth:400,color:'#fff',position:'relative'}}>
                                             <button onClick={closeViewModal} style={{position:'absolute',top:10,right:10,background:'none',border:'none',color:'#fff',fontSize:20,cursor:'pointer'}}>&times;</button>
-                                            <h3 style={{marginTop:0}}>Booking Details</h3>
+                                            <h3 style={{marginTop:0}}>{t("profile.rentalHistoryPage.viewModal.title")}</h3>
                                             {selectedBookingLoading ? (
-                                                <p>Loading...</p>
+                                                <p>{t("profile.loading")}</p>
                                             ) : selectedBookingError ? (
                                                 <p style={{color:'red'}}>{selectedBookingError}</p>
                                             ) : selectedBooking ? (
@@ -536,16 +561,16 @@ const Profile = () => {
                                                             }}
                                                         />
                                                     )}
-                                                    <div><b>Booking ID:</b> {selectedBooking.id}</div>
-                                                    <div><b>Car:</b> {carDetails[selectedBooking.car_id] ? `${carDetails[selectedBooking.car_id].brand} ${carDetails[selectedBooking.car_id].model} (${carDetails[selectedBooking.car_id].license_plate})` : selectedBooking.car_id}</div>
-                                                    <div><b>Start Date:</b> {selectedBooking.start_date}</div>
-                                                    <div><b>End Date:</b> {selectedBooking.end_date}</div>
-                                                    <div><b>Total Price:</b> {selectedBooking.total_price}</div>
-                                                    <div><b>Payment Status:</b> {selectedBooking.payment_status}</div>
-                                                    <div><b>Created At:</b> {new Date(selectedBooking.created_at).toLocaleString()}</div>
+                                                    <div><b>{t("profile.rentalHistoryPage.table.bookingId")}:</b> {selectedBooking.id}</div>
+                                                    <div><b>{t("profile.rentalHistoryPage.table.car")}:</b> {carDetails[selectedBooking.car_id] ? `${carDetails[selectedBooking.car_id].brand} ${carDetails[selectedBooking.car_id].model} (${carDetails[selectedBooking.car_id].license_plate})` : selectedBooking.car_id}</div>
+                                                    <div><b>{t("profile.rentalHistoryPage.table.startDate")}:</b> {selectedBooking.start_date}</div>
+                                                    <div><b>{t("profile.rentalHistoryPage.table.endDate")}:</b> {selectedBooking.end_date}</div>
+                                                    <div><b>{t("profile.rentalHistoryPage.table.totalPrice")}:</b> {selectedBooking.total_price}</div>
+                                                    <div><b>{t("profile.rentalHistoryPage.table.paymentStatus")}:</b> {selectedBooking.payment_status}</div>
+                                                    <div><b>{t("profile.rentalHistoryPage.table.createdAt")}:</b> {new Date(selectedBooking.created_at).toLocaleString(i18n.language)}</div>
                                                 </div>
                                             ) : (
-                                                <p>No data.</p>
+                                                <p>{t("profile.rentalHistoryPage.viewModal.noData")}</p>
                                             )}
                                         </div>
                                     </div>
@@ -555,8 +580,24 @@ const Profile = () => {
 
                         {activeSection === "settings" && (
                             <div className="profile-section">
-                                <h2>Settings</h2>
-                                <p>Update your profile information below:</p>
+                                <h2>{t("profile.settingsPage.title")}</h2>
+                                <div className="profile-language-selector">
+                                    <label style={{ marginRight: "10px" }}>
+                                        {t("profile.settingsPage.selectLanguage")}
+                                    </label>
+                                    <select
+                                        className="profile-language-dropdown"
+                                        onChange={(e) => i18n.changeLanguage(e.target.value)}
+                                        defaultValue={i18n.language}
+                                    >
+                                        <option value="en">English</option>
+                                        <option value="ja">Japanese</option>
+                                        <option value="ru">Russian</option>
+                                    </select>
+                                </div>
+
+                                <p>{t("profile.settingsPage.updateYourInfo")}</p>
+
                                 {user ? (
                                     <form
                                         onSubmit={async (e) => {
@@ -581,9 +622,11 @@ const Profile = () => {
                                                 if (!res.ok) throw new Error("Failed to update profile");
                                                 const updatedUser = await res.json();
                                                 setUser(updatedUser);
-                                                toast.success("Profile updated successfully!");
+                                                toast.success(t("profile.settingsPage.saveSuccess") || "Profile updated successfully!");
+                                                // toast.success("Profile updated successfully!");
                                             } catch (err) {
-                                                setSettingsError("Failed to update profile");
+                                                setSettingsError(t("profile.settingsPage.saveError") || "Failed to update profile");
+                                                // setSettingsError("Failed to update profile");
                                             } finally {
                                                 setSettingsLoading(false);
                                             }
@@ -591,7 +634,7 @@ const Profile = () => {
                                         style={{display:'flex',flexDirection:'column',gap:16,maxWidth:400}}
                                     >
                                         <div>
-                                            <label>Name:</label>
+                                            <label>{t("profile.settingsPage.fullName")}</label>
                                             <input
                                                 type="text"
                                                 value={settingsName}
@@ -601,7 +644,7 @@ const Profile = () => {
                                             />
                                         </div>
                                         <div>
-                                            <label>Email:</label>
+                                            <label>{t("profile.settingsPage.email")}</label>
                                             <input
                                                 type="email"
                                                 value={settingsEmail}
@@ -611,7 +654,7 @@ const Profile = () => {
                                             />
                                         </div>
                                         <div>
-                                            <label>Phone:</label>
+                                            <label>{t("profile.settingsPage.phone")}</label>
                                             <input
                                                 type="text"
                                                 value={settingsPhone}
@@ -621,11 +664,13 @@ const Profile = () => {
                                         </div>
                                         {settingsError && <div style={{color:'red'}}>{settingsError}</div>}
                                         <button type="submit" disabled={settingsLoading} style={{padding:'8px 0',borderRadius:4,border:'none',background:'#2ea043',color:'#fff',cursor: settingsLoading ? 'not-allowed' : 'pointer'}}>
-                                            {settingsLoading ? 'Saving...' : 'Save Changes'}
+                                            {/* {settingsLoading ? 'Saving...' : 'Save Changes'} */}
+                                            {settingsLoading ? t("profile.settingsPage.saving") || "Saving..." : t("profile.settingsPage.saveChanges")}
                                         </button>
                                     </form>
                                 ) : (
-                                    <p>Loading...</p>
+                                    t("profile.loading")
+                                    // <p>Loading...</p>
                                 )}
                             </div>
                         )}

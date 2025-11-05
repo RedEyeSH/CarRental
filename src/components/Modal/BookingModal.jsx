@@ -1,8 +1,11 @@
 import React, { useMemo } from "react";
 import "./Modal.css";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const BookingModal = ({ car, startDate, endDate, onClose }) => {
+    const { t } = useTranslation();
+
     const navigate = useNavigate();
 
     const totalDays = useMemo(() => {
@@ -31,7 +34,7 @@ const BookingModal = ({ car, startDate, endDate, onClose }) => {
     return (
         <div className="booking-modal-overlay" onClick={onClose}>
             <div className="booking-modal" onClick={(e) => e.stopPropagation()}>
-                <h2 className="booking-modal-title">Book Your Car</h2>
+                <h2 className="booking-modal-title">{t("BookingModal.title")}</h2>
 
                 <div className="booking-details-card">
                     <div className="booking-details-header">
@@ -46,23 +49,23 @@ const BookingModal = ({ car, startDate, endDate, onClose }) => {
                         <div className="booking-main-info">
                             <h3>{car.brand} {car.model}</h3>
                             <p className="booking-label">
-                                <strong>Price per day:</strong> <span>€{car.price_per_day}</span>
+                                <strong>{t("BookingModal.pricePerDay")}:</strong> <span>€{car.price_per_day}</span>
                             </p>
                             <p className="booking-label">
-                                <strong>Days:</strong> <span>{totalDays} day{totalDays > 1 ? "s" : ""}</span>
+                                <strong>{t("BookingModal.days")}:</strong> <span>{totalDays} {totalDays > 1 ? t("BookingModal.daysPlural") : t("BookingModal.days")}</span>
                             </p>
                         </div>
                     </div>
 
                     <div className="booking-details-body">
                         <p className="booking-label">
-                            <strong>From:</strong> <span>{startDate}</span>
+                            <strong>{t("BookingModal.from")}:</strong> <span>{startDate}</span>
                         </p>
                         <p className="booking-label">
-                            <strong>To:</strong> <span>{endDate}</span>
+                            <strong>{t("BookingModal.to")}:</strong> <span>{endDate}</span>
                         </p>
                         <div className="booking-total">
-                            <p className="total-label">Total Price</p>
+                            <p className="total-label">{t("BookingModal.totalPrice")}:</p>
                             <p className="total-amount">€{totalPrice.toFixed(2)}</p>
                         </div>
                     </div>
@@ -70,10 +73,10 @@ const BookingModal = ({ car, startDate, endDate, onClose }) => {
 
                 <div className="modal-actions">
                     <button className="booking-cancel-btn" onClick={onClose}>
-                        Cancel
+                        {t("BookingModal.cancel")}
                     </button>
                     <button className="booking-confirm-btn" onClick={handleBooking}>
-                        Confirm Booking
+                        {t("BookingModal.confirmBooking")}
                     </button>
                 </div>
             </div>
