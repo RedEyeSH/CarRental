@@ -73,30 +73,20 @@ export const kpiData = [
         icon: faBook,
         label: "New Bookings",
         value: 12361,
-        change: "+10%",
         color: '#00d1b2',
     },
     {
-        icon: faBoxOpen,
-        label: "Available Units",
+        icon: faCarSide, // car icon
+        label: "Total Cars", // changed from 'Cars'
         value: 431225,
-        change: "+20%",
         color: '#00ffab',
     },
     {
         icon: faMoneyBill,
         label: "Total Revenue",
         value: 32441,
-        change: "+50%",
         color: '#a78bfa',
-    },
-    {
-        icon: faCarSide,
-        label: "Rented Cars",
-        value: 1325134,
-        change: '+5%',
-        color: "#38bdf8",
-    },
+    }
 ];
 
 // api/mockApi.js

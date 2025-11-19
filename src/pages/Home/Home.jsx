@@ -9,8 +9,13 @@ import {
     faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import BookingModal from "../../components/Modal/BookingModal.jsx";
+
+import { useTranslation } from "react-i18next";
 
 const Home = () => {
+    const { t } = useTranslation();
+
     const [cars, setCars] = useState([]);
     const [toggle, setToggle] = useState("New");
     const [searchText, setSearchText] = useState("");
@@ -18,21 +23,22 @@ const Home = () => {
     const [endDate, setEndDate] = useState("");
     const [searched, setSearched] = useState(false);
     const [searchResults, setSearchResults] = useState([]);
+    const [bookingCar, setBookingCar] = useState(null);
 
     const navigate = useNavigate();
 
     const options = [
-        { label: "New", icon: faCheck },
-        { label: "Price ascending", icon: faCaretDown },
-        { label: "Price descending", icon: faCaretUp },
-        { label: "Rating", icon: faStar },
+        { label: t("home.sort.new"), icon: faCheck, value: "new" },
+        { label: t("home.sort.priceAsc"), icon: faCaretDown, value: "priceAsc" },
+        { label: t("home.sort.priceDesc"), icon: faCaretUp, value: "priceDesc" },
+        { label: t("home.sort.rating"), icon: faStar, value: "rating" },
     ];
 
-    // Fetch cars from the API
     useEffect(() => {
         const fetchCars = async () => {
+            if (!startDate || !endDate) return;
             try {
-                const res = await fetch("http://localhost:3000/api/v1/cars/");
+                const res = await fetch(`http://localhost:3000/api/v1/cars/available?start_date=${startDate}&end_date=${endDate}`);
                 if (!res.ok) throw new Error("Failed to fetch cars");
                 const data = await res.json();
                 setCars(data);
@@ -40,8 +46,23 @@ const Home = () => {
                 console.error(err);
             }
         };
-
         fetchCars();
+    }, [startDate, endDate]);
+
+    // Restore search from localStorage
+    useEffect(() => {
+        const storedSearch = JSON.parse(localStorage.getItem("homeSearch"));
+        if (storedSearch) {
+            const today = new Date().toISOString().split("T")[0];
+            if (storedSearch.startDate >= today) {
+                setSearchText(storedSearch.searchText);
+                setStartDate(storedSearch.startDate);
+                setEndDate(storedSearch.endDate);
+                setSearched(true);
+            } else {
+                localStorage.removeItem("homeSearch");
+            }
+        }
     }, []);
 
     const handleSearch = (e) => {
@@ -63,30 +84,36 @@ const Home = () => {
 
         setSearchResults(results);
         setSearched(true);
+
+        localStorage.setItem(
+            "homeSearch",
+            JSON.stringify({ searchText, startDate, endDate })
+        );
     };
 
     const sortedCars = [...searchResults].sort((a, b) => {
-        if (toggle === "Price ascending") return parseFloat(a.price_per_day) - parseFloat(b.price_per_day);
-        if (toggle === "Price descending") return parseFloat(b.price_per_day) - parseFloat(a.price_per_day);
-        if (toggle === "New") return new Date(b.created_at) - new Date(a.created_at);
+        if (toggle === "priceAsc") return a.price_per_day - b.price_per_day;
+        if (toggle === "priceDesc") return b.price_per_day - a.price_per_day;
+        if (toggle === "new") return new Date(b.created_at) - new Date(a.created_at);
         return 0;
     });
 
     return (
         <section className="home">
             <div className="home-main-centered">
+                <h1 className="home-heading">{t("home.heading")}</h1>
                 <form className="home-search-box" onSubmit={handleSearch}>
                     <div className="search-text-input">
-                        <label>Search Car</label>
+                        <label>{t("home.searchCar")}</label>
                         <input
                             type="text"
-                            placeholder="Enter car name..."
+                            placeholder={t("home.searchPlaceholder")}
                             value={searchText}
                             onChange={(e) => setSearchText(e.target.value)}
                         />
                     </div>
                     <div className="date-input">
-                        <label>Start Date</label>
+                        <label>{t("home.startDate")}</label>
                         <input
                             type="date"
                             value={startDate}
@@ -101,7 +128,7 @@ const Home = () => {
                         />
                     </div>
                     <div className="date-input">
-                        <label>End Date</label>
+                        <label>{t("home.endDate")}</label>
                         <input
                             type="date"
                             value={endDate}
@@ -117,7 +144,7 @@ const Home = () => {
                         />
                     </div>
                     <button type="submit" className="search-btn">
-                        <FontAwesomeIcon icon={faMagnifyingGlass} /> Search
+                        <FontAwesomeIcon icon={faMagnifyingGlass} /> {t("home.search")}
                     </button>
                 </form>
 
@@ -125,9 +152,9 @@ const Home = () => {
                     <div className="home-navbar-options">
                         {options.map((option) => (
                             <div
-                                key={option.label}
-                                className={`home-navbar-option ${toggle === option.label ? "active" : ""}`}
-                                onClick={() => setToggle(option.label)}
+                                key={option.value}
+                                className={`home-navbar-option ${toggle === option.value ? "active" : ""}`}
+                                onClick={() => setToggle(option.value)}
                             >
                                 <p>{option.label}</p>
                                 <FontAwesomeIcon icon={option.icon} />
@@ -137,14 +164,10 @@ const Home = () => {
                 )}
 
                 {searched && (
-                    <div className="home-list">
+                    <div className={`home-list ${sortedCars.length === 0 ? "no-cars" : ""}`}>
                         {sortedCars.length > 0 ? (
                             sortedCars.map((car) => (
-                                <div
-                                    key={car.id}
-                                    className="home-card"
-                                    onClick={() => navigate("/payment", { state: { car, startDate, endDate } })}
-                                >
+                                <div key={car.id} className="home-card">
                                     <div className="home-card-image">
                                         <img
                                             src={`http://localhost:3000/public/uploads/${car.image}`}
@@ -155,18 +178,32 @@ const Home = () => {
                                     <div className="home-card-content">
                                         <h2>{car.brand} {car.model} ({car.year})</h2>
                                         <p>€{car.price_per_day}/day</p>
-                                        <p>Added: {new Date(car.created_at).toLocaleDateString()}</p>
+                                        <p>{t("home.added")}: {new Date(car.created_at).toLocaleDateString()}</p>
+                                        <button className="book-btn" onClick={() => setBookingCar(car)}>
+                                            {t("home.bookNow")}
+                                        </button>
                                     </div>
                                 </div>
                             ))
                         ) : (
-                            <p className="no-cars-message">No cars found for your search.</p>
+                            <p className="no-cars-message">{t("home.noCars")}</p>
                         )}
                     </div>
                 )}
+
+                {bookingCar && (
+                    <BookingModal
+                        car={bookingCar}
+                        startDate={startDate}
+                        endDate={endDate}
+                        onClose={() => setBookingCar(null)}
+                    />
+                )}
+
             </div>
         </section>
     );
 };
 
 export default Home;
+

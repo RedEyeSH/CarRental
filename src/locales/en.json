@@ -1,0 +1,214 @@
+{
+    "navbar": {
+        "loading": "Loading...",
+        "greeting": "Hi, {{name}}",
+        "profile": "Profile",
+        "logout": "Logout",
+        "signIn": "Sign In",
+        "register": "Register"
+    },
+
+    "register": {
+        "title": "Create an account",
+        "subtitle": "Enter your email to sign up for this app",
+        "email": "Email address",
+        "firstname": "First name",
+        "phone": "Phone number",
+        "password": "Password",
+        "confirmPassword": "Confirm password",
+        "signUp": "Sign up with email",
+        "registering": "Registering...",
+        "alreadyHaveAccount": "Already have an account?",
+        "clickHere": "Click here!",
+        "termsIntro": "By clicking continue, you agree to our",
+        "termsOfService": "Terms of service",
+        "and": "and",
+        "privacyPolicy": "Privacy Policy",
+        "errors": {
+            "emailRequired": "Email is required.",
+            "emailInvalid": "Email is invalid.",
+            "firstnameRequired": "First name is required.",
+            "phoneRequired": "Phone number is required.",
+            "phoneInvalid": "Phone number is invalid.",
+            "passwordRequired": "Password is required.",
+            "passwordMin": "Password must be at least 6 characters.",
+            "confirmPasswordRequired": "Confirm password is required.",
+            "passwordMismatch": "Passwords do not match.",
+            "registrationFailed": "Registration failed.",
+            "networkError": "Network error. Please try again later."
+        }
+    },
+
+    "login": {
+        "title": "Sign in to continue",
+        "email": "Email address",
+        "password": "Password",
+        "signIn": "Sign in",
+        "signingIn": "Signing in...",
+        "noAccount": "Don't have an account?",
+        "clickHere": "Click here!",
+        "errors": {
+            "emailRequired": "Email is required.",
+            "emailInvalid": "Email is invalid.",
+            "passwordRequired": "Password is required.",
+            "passwordMin": "Password must be at least 6 characters.",
+            "loginFailed": "Login failed.",
+            "networkError": "Network error. Please try again later."
+        }
+    },
+
+    "home": {
+        "heading": "Find Your Perfect Rental Car",
+        "searchCar": "Search Car",
+        "searchPlaceholder": "Enter car name...",
+        "startDate": "Start Date",
+        "endDate": "End Date",
+        "search": "Search",
+        "sort": {
+            "new": "New",
+            "priceAsc": "Price ascending",
+            "priceDesc": "Price descending",
+            "rating": "Rating"
+        },
+        "added": "Added",
+        "bookNow": "Book Now",
+        "noCars": "No cars found for your search.",
+        "alert": {
+            "dateRequired": "Please select both start and end dates.",
+            "invalidDate": "End date cannot be before start date."
+        }
+    },
+
+    "profile": {
+        "myProfile": "My Profile",
+        "overview": "Overview",
+        "rentalHistory": "Rental History",
+        "settings": "Settings",
+        "logout": "Logout",
+
+        "loading": "Loading...",
+
+        "roles": {
+            "customer": "Customer",
+            "admin": "Admin"
+        },
+
+        "overviewPage": {
+            "accountOverview": "Account Overview",
+            "fullName": "Full Name",
+            "email": "Email Address",
+            "phone": "Phone Number",
+            "createdAt": "Created At",
+            "notProvided": "Not provided"
+        },
+
+        "settingsPage": {
+            "title": "Settings",
+            "selectLanguage": "Select Language",
+            "updateYourInfo": "Update your profile information below:",
+            "fullName": "Full Name",
+            "email": "Email Address",
+            "phone": "Phone Number",
+            "saveChanges": "Save Changes",
+
+            "saveSuccess": "Profile updated successfully!",
+            "saveError": "Failed to update profile"
+        },
+
+        "rentalHistoryPage": {
+            "title": "Rental History",
+            "searchPlaceholder": "Search bookings...",
+            "noRecords": "No rental history found.",
+
+            "table": {
+                "bookingId": "Booking ID",
+                "car": "Car",
+                "startDate": "Start Date",
+                "endDate": "End Date",
+                "totalPrice": "Total Price",
+                "paymentStatus": "Payment Status",
+                "createdAt": "Created At",
+                "action": "Action"
+            },
+
+            "view": "View",
+            "feedback": "Feedback",
+            "feedbackGiven": "Feedback given",
+
+            "feedbackModal": {
+                "title": "Give Feedback to the Car",
+                "alreadySubmitted": "You have already submitted feedback for this rental.",
+                "rating": "Rating",
+                "comment": "Comment",
+                "submit": "Submit Feedback",
+                "submitting": "Submitting...",
+                "notAllowedYet": "You can only submit feedback after your rental has started.",
+                "close": "Close"
+            },
+
+            "viewModal": {
+                "title": "Booking Details",
+                "noData": "No data."
+            }
+        }
+    },
+
+    "BookingModal": {
+        "title": "Book Your Car",
+        "pricePerDay": "Price per day",
+        "days": "Day",
+        "daysPlural": "Days",
+        "from": "From",
+        "to": "To",
+        "totalPrice": "Total Price",
+        "cancel": "Cancel",
+        "confirmBooking": "Confirm Booking"
+    },
+
+    "payment": {
+        "checkout": "Checkout",
+        "paymentDetails": "Payment Details",
+        "startDate": "Start Date",
+        "endDate": "End Date",
+        "rentalDuration": "Rental Duration",
+        "totalCost": "Total Cost",
+        "paymentMethod": "Payment Method",
+        "methodCard": "Card",
+        "methodCash": "Cash",
+        "methodOnline": "Online",
+        "confirmPayment": "Confirm Payment",
+        "paymentSuccessful": "Payment Successful!",
+        "paymentPending": "Payment Pending",
+        "bookingInfo": "Booking Info",
+        "bookingId": "Booking ID",
+        "car": "Car",
+        "paymentInfo": "Payment Info",
+        "totalPaid": "Total Paid",
+        "method": "Method",
+        "status": "Status",
+        "rentalPeriod": "Rental Period",
+        "duration": "Duration",
+        "backHome": "Back to Home",
+        "alerts": {
+            "dateRequired": "Please select both start and end dates.",
+            "invalidDate": "End date cannot be before start date.",
+            "userNotLoggedIn": "User not logged in. Please log in to continue.",
+            "paymentFailed": "Payment failed. Please try again."
+        }
+    },
+
+    "footer": {
+        "tagline": "Fast, reliable car rentals",
+        "company": "Company",
+        "about": "About",
+        "careers": "Careers",
+        "terms": "Terms",
+        "resources": "Resources",
+        "help": "Help Center",
+        "docs": "Docs",
+        "blog": "Blog",
+        "contact": "Contact",
+        "address": "123 Main St, City",
+        "rights": "All rights reserved."
+    }
+}

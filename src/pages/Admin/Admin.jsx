@@ -2,21 +2,55 @@ import React, { useState } from "react";
 import "./Admin.css";
 // import { Outlet, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faTruckFast, faGear, faCircleUser, faHome, faSquarePollVertical, faBook, faCreditCard } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faTruckFast, faGear, faCircleUser, faHome, faSquarePollVertical, faBook, faCreditCard, faComment } from "@fortawesome/free-solid-svg-icons";
 // import KPICard from "../../components/KPICard/KPICard.jsx";
 // import LineChart from "../../components/LineChart/LineChart.jsx";
 // import { kpiData, LineChartData } from "../../data/mockData.js";
 import Dashboard from "./Dashboard/Dashboard.jsx";
 import Stock from "./Stock/Stock.jsx";
 import Rental from "./ActiveRentals/ActiveRentals.jsx";
-import Booking from "../Booking/Booking.jsx";
+import Booking from "./Booking/Booking.jsx";
+import Users from "./Users/Users.jsx";
+import Feedback from "./Feedback/Feedback.jsx"
 import { Link } from "react-router-dom";
+import LoginModal from "../../components/Modal/LoginModal.jsx";
+import Payment from "./Payment/Payment.jsx";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Admin = () => {
     const [activeSection, setActiveSection] = useState("dashboard");
-    
+    const [user, setUser] = useState(() => {
+        const stored = localStorage.getItem("user");
+        try {
+            return stored ? JSON.parse(stored) : null;
+        } catch {
+            return null;
+        }
+    });
+    const [showLogin, setShowLogin] = useState(!user || user.role !== "ADMIN");
+
+    const handleLogin = (userData) => {
+        setUser(userData);
+        setShowLogin(false);
+        toast.success("Login successful!");
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        setUser(null);
+        setShowLogin(true);
+        toast.success("Logout successful!");
+    };
+
+    if (showLogin) {
+        return <LoginModal isOpen={true} onLogin={handleLogin} />;
+    }
+
     return (
         <section className="admin">
+            <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick pauseOnFocusLoss draggable pauseOnHover />
             <div className="admin-container">
                 <div className="admin-sidebar">
                     <div className="admin-sidebar-header">
@@ -26,12 +60,12 @@ const Admin = () => {
                     <div className="admin-sidebar-profile">
                         <FontAwesomeIcon icon={faCircleUser} />
                         <div className="admin-sidebar-profile-name">
-                            <h2>Username</h2>
-                            <p>Admin</p>
+                            <h2>{user?.name || "Username"}</h2>
+                            <p>{user?.role || "Admin"}</p>
                         </div>
                     </div>
                     <div className="admin-sidebar-items">
-                        <Link 
+                        <Link
                             to="/"
                             className="admin-sidebar-data"
                         >
@@ -40,7 +74,7 @@ const Admin = () => {
                             </div>
                             <span>Home</span>
                         </Link>
-                        <button 
+                        <button
                             className={`admin-sidebar-data ${activeSection === "dashboard" ? "active" : ""}`}
                             onClick={() => setActiveSection("dashboard")}
                         >
@@ -63,7 +97,7 @@ const Admin = () => {
                                 </div>
                                 <span>Current Stock</span>
                             </Link> */}
-                            <button 
+                            <button
                                 className={`admin-sidebar-data ${activeSection === "rental" ? "active" : ""}`}
                                 onClick={() => setActiveSection("rental")}
                             >
@@ -72,7 +106,7 @@ const Admin = () => {
                                 </div>
                                 <span>Active rentals</span>
                             </button>
-                            <button 
+                            <button
                                 className={`admin-sidebar-data ${activeSection === "stock" ? "active" : ""}`}
                                 onClick={() => setActiveSection("stock")}
                             >
@@ -81,7 +115,7 @@ const Admin = () => {
                                 </div>
                                 <span>Current Stock</span>
                             </button>
-                            <button 
+                            <button
                                 className={`admin-sidebar-data ${activeSection === "booking" ? "active" : ""}`}
                                 onClick={() => setActiveSection("booking")}
                             >
@@ -91,13 +125,31 @@ const Admin = () => {
                                 <span>Booking</span>
                             </button>
                             <button
-                                className={`admin-sidebar-data ${activeSection === "transaction" ? "active" : ""}`}
-                                onClick={() => setActiveSection("transaction")}
+                                className={`admin-sidebar-data ${activeSection === "payment" ? "active" : ""}`}
+                                onClick={() => setActiveSection("payment")}
                             >
                                 <div className="admin-icon-wrapper">
                                     <FontAwesomeIcon icon={faCreditCard} />
                                 </div>
-                                <span>Transaction</span>
+                                <span>Payment</span>
+                            </button>
+                            <button
+                                className={`admin-sidebar-data ${activeSection === "users" ? "active" : ""}`}
+                                onClick={() => setActiveSection("users")}
+                            >
+                                <div className="admin-icon-wrapper">
+                                    <FontAwesomeIcon icon={faCircleUser} />
+                                </div>
+                                <span>Users</span>
+                            </button>
+                            <button
+                                className={`admin-sidebar-data ${activeSection === "feedback" ? "active" : ""}`}
+                                onClick={() => setActiveSection("feedback")}
+                            >
+                                <div className="admin-icon-wrapper">
+                                    <FontAwesomeIcon icon={faComment} />
+                                </div>
+                                <span>Feedback</span>
                             </button>
                         </div>
                     </div>
@@ -111,6 +163,9 @@ const Admin = () => {
                             <div className="admin-navbar-link">
                                 <FontAwesomeIcon icon={faCircleUser} />
                             </div>
+                            <button className="admin-navbar-link" onClick={handleLogout} title="Logout">
+                                Logout
+                            </button>
                         </div>
                     </div>
                     {/* Maybe switch content on clicking sidebar item, primarily it's on dashboard*/}
@@ -143,6 +198,15 @@ const Admin = () => {
                     )}
                     {activeSection === "booking" && (
                         <Booking />
+                    )}
+                    {activeSection === "users" && (
+                        <Users />
+                    )}
+                    {activeSection === "payment" && (
+                        <Payment />
+                    )}
+                    {activeSection === "feedback" && (
+                        <Feedback />
                     )}
                 </div>
             </div>

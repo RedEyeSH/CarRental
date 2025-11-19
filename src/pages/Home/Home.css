@@ -16,7 +16,15 @@
   max-width: 1000px;
   padding: 20px;
 }
-
+.home-heading {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-top: -100px;
+    margin-bottom: 10px;
+    color: #1f6feb;
+    text-align: center;
+    letter-spacing: 1px;
+}
 /* Search box styles */
 .home-search-box {
   display: flex;
@@ -187,11 +195,32 @@
     background-color: #0056b3;
 }
 
-.no-cars-message {
+.book-btn {
+    background-color: #1f6feb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: 0.2s;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.book-btn:hover {
+    background-color: #4ea0ff;
+}
+
+
+/* Center no-cars message properly */
+.home-list.no-cars {
     display: flex;
-    justify-content: center; /* horizontal center */
-    align-items: center;     /* vertical center */
-    height: 200px;           /* adjust based on your list container height */
+    justify-content: center;
+    align-items: center;
+    min-height: 200px; /* or adjust to fit your layout */
+}
+
+.no-cars-message {
     font-size: 1.2rem;
     color: #555;
     font-weight: 500;

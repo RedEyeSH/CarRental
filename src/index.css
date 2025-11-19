@@ -69,3 +69,23 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1);
     cursor: pointer;
 }
+
+
+/* non-Latin language (e.g. Arabic) read texts from right to left */
+body[dir="rtl"] {
+    text-align: right;
+    direction: rtl;
+}
+
+body[dir="rtl"] .navbar {
+    flex-direction: row-reverse;
+}
+
+body[dir="rtl"] .navbar .navbar-right {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+body[dir="rtl"] .modal, body[dir="rtl"] .login, body[dir="rtl"] .register {
+    direction: rtl;
+}

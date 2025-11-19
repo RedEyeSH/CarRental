@@ -3,7 +3,11 @@ import "./Register.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
+import { useTranslation } from "react-i18next";
+
 const Register = ({ onClose, onSwitch }) => {
+    const { t } = useTranslation();
+
     const [email, setEmail] = useState("");
     const [firstname, setFirstname] = useState("");
     const [phonenumber, setPhonenumber] = useState("");
@@ -16,27 +20,27 @@ const Register = ({ onClose, onSwitch }) => {
     const validate = () => {
         const newErrors = {};
         if (!email) {
-            newErrors.email = "Email is required.";
+            newErrors.email = t("register.errors.emailRequired");
         } else if (!/\S+@\S+\.\S+/.test(email)) {
-            newErrors.email = "Email is invalid.";
+            newErrors.email = t("register.errors.emailInvalid");
         }
         if (!firstname) {
-            newErrors.firstname = "First name is required.";
+            newErrors.firstname = t("register.errors.firstnameRequired");
         }
         if (!phonenumber) {
-            newErrors.phonenumber = "Phone number is required.";
+            newErrors.phonenumber = t("register.errors.phoneRequired");
         } else if (!/^\d{7,15}$/.test(phonenumber)) {
-            newErrors.phonenumber = "Phone number is invalid.";
+            newErrors.phonenumber = t("register.errors.phoneInvalid");
         }
         if (!password) {
-            newErrors.password = "Password is required.";
+            newErrors.password = t("register.errors.passwordRequired");
         } else if (password.length < 6) {
-            newErrors.password = "Password must be at least 6 characters.";
+            newErrors.password = t("register.errors.passwordMin");
         }
         if (!confirmPassword) {
-            newErrors.confirmPassword = "Confirm password is required.";
+            newErrors.confirmPassword = t("register.errors.confirmPasswordRequired");
         } else if (password !== confirmPassword) {
-            newErrors.confirmPassword = "Passwords do not match.";
+            newErrors.confirmPassword = t("register.errors.passwordMismatch");
         }
         return newErrors;
     };
@@ -67,13 +71,13 @@ const Register = ({ onClose, onSwitch }) => {
             });
             const data = await response.json();
             if (!response.ok) {
-                setApiError(data.message || "Registration failed.");
+                setApiError(data.message || t("register.errors.registrationFailed"));
             } else {
                 // Registration successful, close modal or show success
                 onClose();
             }
         } catch (error) {
-            setApiError("Network error. Please try again later.");
+            setApiError(t("register.errors.networkError"));
         } finally {
             setLoading(false);
         }
@@ -87,9 +91,9 @@ const Register = ({ onClose, onSwitch }) => {
                     <div className="register-header">
                         <FontAwesomeIcon icon={faXmark} onClick={onClose} />
                     </div>
-                    <h1 className="register-logo-title">App Name</h1>
-                    <p className="register-title">Create an account</p>
-                    <p className="register-subtitle">Enter your email to sign up for this app</p>
+                    <h1 className="register-logo-title">Car Rental</h1>
+                    <p className="register-title">{t("register.title")}</p>
+                    <p className="register-subtitle">{t("register.subtitle")}</p>
                     <form className="register-form" onSubmit={handleSubmit}>
                         {apiError && <div className="error api-error">{apiError}</div>}
                         <div className="form-group">
@@ -101,7 +105,7 @@ const Register = ({ onClose, onSwitch }) => {
                                 onChange={e => setEmail(e.target.value)}
                                 required
                             />
-                            <label htmlFor="email">Email address</label>
+                            <label htmlFor="email">{t("register.email")}</label>
                             {errors.email && <span className="error">{errors.email}</span>}
                         </div>
 
@@ -115,7 +119,7 @@ const Register = ({ onClose, onSwitch }) => {
                                     onChange={e => setFirstname(e.target.value)}
                                     required
                                 />
-                                <label htmlFor="firstname">First name</label>
+                                <label htmlFor="firstname">{t("register.firstname")}</label>
                                 {errors.firstname && <span className="error">{errors.firstname}</span>}
                             </div>
                         </div>
@@ -129,7 +133,7 @@ const Register = ({ onClose, onSwitch }) => {
                                 onChange={e => setPhonenumber(e.target.value)}
                                 required
                             />
-                            <label htmlFor="phonenumber">Phone number</label>
+                            <label htmlFor="phonenumber">{t("register.phone")}</label>
                             {errors.phonenumber && <span className="error">{errors.phonenumber}</span>}
                         </div>
 
@@ -143,7 +147,7 @@ const Register = ({ onClose, onSwitch }) => {
                                 onChange={e => setPassword(e.target.value)}
                                 required
                             />
-                            <label htmlFor="register-password">Password</label>
+                            <label htmlFor="register-password">{t("register.password")}</label>
                             {errors.password && <span className="error">{errors.password}</span>}
                         </div>
 
@@ -156,20 +160,25 @@ const Register = ({ onClose, onSwitch }) => {
                                 onChange={e => setConfirmPassword(e.target.value)}
                                 required
                             />
-                            <label htmlFor="register-confirm-password">Confirm password</label>
+                            <label htmlFor="register-confirm-password">{t("register.confirmPassword")}</label>
                             {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
                         </div>
 
                         <button className="register-submit" type="submit" disabled={loading}>
-                            {loading ? "Registering..." : "Sign up with email"}
+                            {loading ? t("register.registering") : t("register.signUp")}
                         </button>
                     </form>
 
                     <div className="login-option">
-                        <p>Already have an account? <span onClick={onSwitch}>Click here!</span></p>
+                        <p>
+                            {t("register.alreadyHaveAccount")}{" "} 
+                            <span onClick={onSwitch}>{t("register.clickHere")}</span>
+                        </p>
                     </div>
                     <div className="register-terms">
-                        <p>By clicking continue, you agree to our <span>Terms of service</span> and <span>Privacy Policy</span></p>
+                        <p>
+                            {t("register.termsIntro")} <span>{t("register.termsOfService")}</span> {t("register.and")} <span>{t("register.privacyPolicy")}</span>
+                        </p>
                     </div>
                 </div>
             </div>

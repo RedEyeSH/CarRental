@@ -1,0 +1,197 @@
+{
+    "navbar": {
+        "loading": "Загрузка...",
+        "greeting": "Привет, {{name}}",
+        "profile": "Профиль",
+        "logout": "Выйти",
+        "signIn": "Войти",
+        "register": "Регистрация"
+    },
+    "register": {
+        "title": "Создать аккаунт",
+        "subtitle": "Введите вашу почту, чтобы зарегистрироваться",
+        "email": "Электронная почта",
+        "firstname": "Имя",
+        "phone": "Телефон",
+        "password": "Пароль",
+        "confirmPassword": "Подтвердите пароль",
+        "signUp": "Зарегистрироваться",
+        "registering": "Регистрация...",
+        "alreadyHaveAccount": "Уже есть аккаунт?",
+        "clickHere": "Нажмите здесь!",
+        "termsIntro": "Продолжая, вы соглашаетесь с нашими",
+        "termsOfService": "Условиями использования",
+        "and": "и",
+        "privacyPolicy": "Политикой конфиденциальности",
+        "errors": {
+            "emailRequired": "Требуется электронная почта.",
+            "emailInvalid": "Некорректный адрес электронной почты.",
+            "firstnameRequired": "Требуется имя.",
+            "phoneRequired": "Требуется номер телефона.",
+            "phoneInvalid": "Некорректный номер телефона.",
+            "passwordRequired": "Требуется пароль.",
+            "passwordMin": "Пароль должен быть не менее 6 символов.",
+            "confirmPasswordRequired": "Требуется подтверждение пароля.",
+            "passwordMismatch": "Пароли не совпадают.",
+            "registrationFailed": "Регистрация не удалась.",
+            "networkError": "Ошибка сети. Пожалуйста, попробуйте позже."
+        }
+    },
+    "login": {
+        "title": "Войдите, чтобы продолжить",
+        "email": "Адрес электронной почты",
+        "password": "Пароль",
+        "signIn": "Войти",
+        "signingIn": "Вход...",
+        "noAccount": "Нет аккаунта?",
+        "clickHere": "Нажмите здесь!",
+        "errors": {
+            "emailRequired": "Требуется email.",
+            "emailInvalid": "Неверный email.",
+            "passwordRequired": "Требуется пароль.",
+            "passwordMin": "Пароль должен быть не менее 6 символов.",
+            "loginFailed": "Не удалось войти.",
+            "networkError": "Сетевая ошибка. Пожалуйста, попробуйте позже."
+        }
+    },
+    "home": {
+        "heading": "Найдите идеальный автомобиль для аренды",
+        "searchCar": "Поиск автомобиля",
+        "searchPlaceholder": "Введите название автомобиля...",
+        "startDate": "Дата начала",
+        "endDate": "Дата окончания",
+        "search": "Поиск",
+        "sort": {
+            "new": "Новый",
+            "priceAsc": "Цена по возрастанию",
+            "priceDesc": "Цена по убыванию",
+            "rating": "Рейтинг"
+        },
+        "added": "Добавлено",
+        "bookNow": "Забронировать",
+        "noCars": "Автомобили по вашему запросу не найдены.",
+        "alert": {
+            "dateRequired": "Пожалуйста, выберите дату начала и окончания.",
+            "invalidDate": "Дата окончания не может быть раньше даты начала."
+        }
+    },
+    "profile": {
+        "myProfile": "Мой профиль",
+        "overview": "Обзор",
+        "rentalHistory": "История аренды",
+        "settings": "Настройки",
+        "logout": "Выйти",
+        "loading": "Загрузка...",
+        "roles": {
+            "customer": "Клиент",
+            "admin": "Администратор"
+        },
+        "overviewPage": {
+            "accountOverview": "Обзор аккаунта",
+            "fullName": "Полное имя",
+            "email": "Электронная почта",
+            "phone": "Телефон",
+            "createdAt": "Создан",
+            "notProvided": "Не указано"
+        },
+        "settingsPage": {
+            "title": "Настройки",
+            "selectLanguage": "Выберите язык",
+            "updateYourInfo": "Обновите информацию профиля ниже:",
+            "fullName": "Полное имя",
+            "email": "Электронная почта",
+            "phone": "Телефон",
+            "saveChanges": "Сохранить изменения",
+            "saveSuccess": "Профиль успешно обновлен!",
+            "saveError": "Не удалось обновить профиль"
+        },
+        "rentalHistoryPage": {
+            "title": "История аренды",
+            "searchPlaceholder": "Поиск бронирований...",
+            "noRecords": "История аренды не найдена.",
+            "table": {
+                "bookingId": "ID бронирования",
+                "car": "Автомобиль",
+                "startDate": "Дата начала",
+                "endDate": "Дата окончания",
+                "totalPrice": "Общая стоимость",
+                "paymentStatus": "Статус оплаты",
+                "createdAt": "Создан",
+                "action": "Действие"
+            },
+            "view": "Просмотр",
+            "feedback": "Отзыв",
+            "feedbackGiven": "Отзыв оставлен",
+            "feedbackModal": {
+                "title": "Оставить отзыв на автомобиль",
+                "alreadySubmitted": "Вы уже оставили отзыв на эту аренду.",
+                "rating": "Рейтинг",
+                "comment": "Комментарий",
+                "submit": "Отправить отзыв",
+                "submitting": "Отправка...",
+                "notAllowedYet": "Вы можете оставить отзыв только после начала аренды.",
+                "close": "Закрыть"
+            },
+            "viewModal": {
+                "title": "Детали бронирования",
+                "noData": "Нет данных."
+            }
+        }
+    },
+    "BookingModal": {
+        "title": "Забронировать автомобиль",
+        "pricePerDay": "Цена за день",
+        "days": "День",
+        "daysPlural": "Дней",
+        "from": "С",
+        "to": "По",
+        "totalPrice": "Общая стоимость",
+        "cancel": "Отмена",
+        "confirmBooking": "Подтвердить бронирование"
+    },
+    "payment": {
+        "checkout": "Оформление",
+        "paymentDetails": "Детали оплаты",
+        "startDate": "Дата начала",
+        "endDate": "Дата окончания",
+        "rentalDuration": "Продолжительность аренды",
+        "totalCost": "Общая стоимость",
+        "paymentMethod": "Способ оплаты",
+        "methodCard": "Карта",
+        "methodCash": "Наличные",
+        "methodOnline": "Онлайн",
+        "confirmPayment": "Подтвердить оплату",
+        "paymentSuccessful": "Оплата успешна!",
+        "paymentPending": "Ожидание оплаты",
+        "bookingInfo": "Информация о бронировании",
+        "bookingId": "ID бронирования",
+        "car": "Автомобиль",
+        "paymentInfo": "Информация об оплате",
+        "totalPaid": "Всего оплачено",
+        "method": "Метод",
+        "status": "Статус",
+        "rentalPeriod": "Период аренды",
+        "duration": "Продолжительность",
+        "backHome": "Вернуться на главную",
+        "alerts": {
+            "dateRequired": "Пожалуйста, выберите дату начала и окончания.",
+            "invalidDate": "Дата окончания не может быть раньше даты начала.",
+            "userNotLoggedIn": "Пользователь не вошел в систему. Пожалуйста, войдите.",
+            "paymentFailed": "Не удалось провести оплату. Пожалуйста, попробуйте снова."
+        }
+    },
+    "footer": {
+        "tagline": "Быстрая и надёжная аренда автомобилей",
+        "company": "Компания",
+        "about": "О нас",
+        "careers": "Карьера",
+        "terms": "Условия",
+        "resources": "Ресурсы",
+        "help": "Справочный центр",
+        "docs": "Документация",
+        "blog": "Блог",
+        "contact": "Контакты",
+        "address": "ул. Главная 123, Город",
+        "rights": "Все права защищены."
+    }
+}
