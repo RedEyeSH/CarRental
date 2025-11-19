@@ -27,6 +27,11 @@
     z-index: 100;
 }
 
+[dir="rtl"] .profile-sidebar {
+    left: unset;
+    right: 0;
+}
+
 /* Header title */
 .profile-sidebar-header p {
     font-weight: bold;
@@ -133,11 +138,16 @@
 /* Main content section */
 .profile-main {
     flex: 1;
-    margin-left: 260px; /* space for sidebar */
+    margin-left: 260px;
     padding: 40px 50px;
     background-color: #0d1117;
     /* min-height: 100vh; */
     overflow-y: auto;
+}
+
+[dir="rtl"] .profile-main {
+    margin-left: 0;
+    margin-right: 260px;
 }
 
 /* Section title */

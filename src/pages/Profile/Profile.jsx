@@ -22,14 +22,6 @@ import LanguageSelector from "../../components/LanguageSelector/LanguageSelector
 const Profile = () => {
     const { t, i18n } = useTranslation();
 
-    const languages = [
-        { code: "en", label: "English" },
-        { code: "fi", label: "Finnish" },
-        { code: "ru", label: "Russian" },
-        { code: "ja", label: "Japanese" },
-        { code: "ar", label: "Arabic" }
-    ];
-
     const [activeSection, setActiveSection] = useState("overview");
     const [bookings, setBookings] = useState([]);
     const [bookingsLoading, setBookingsLoading] = useState(false);
