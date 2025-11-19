@@ -2,7 +2,7 @@
 .profile-page {
     display: flex;
     background-color: #0d1117;
-    min-height: 100vh;
+    /* min-height: 100vh; */
     color: white;
 }
 
@@ -136,7 +136,7 @@
     margin-left: 260px; /* space for sidebar */
     padding: 40px 50px;
     background-color: #0d1117;
-    min-height: 100vh;
+    /* min-height: 100vh; */
     overflow-y: auto;
 }
 
@@ -147,6 +147,13 @@
     border-left: 3px solid #58a6ff;
     padding-left: 10px;
     color: #ffffff;
+}
+
+[dir="rtl"] .profile-section h2 {
+    padding-left: 0;
+    padding-right: 10px;
+    border-left: 0;
+    border-right: 3px solid #58a6ff;
 }
 
 /* Overview details */
@@ -351,6 +358,7 @@
 .rental-history-table {
     width: 100%;
     border-collapse: collapse;
+    white-space: nowrap;
     margin-top: 20px;
     background-color: #161b22;
     color: #c9d1d9;
@@ -378,6 +386,49 @@
 
 .rental-history-table tr:hover {
     background-color: #21262d;
+}
+
+/* Profile Settings */
+.profile-account-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 400px;
+}
+
+.profile-account-form button {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 8px 0;
+    border-radius: 4px;
+    transition: 0.25s;
+}
+
+.profile-account-form button:hover {
+    background-color: #0056b3;
+}
+
+/* Profile Rental form */
+.profile-feedback-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.profile-feedback-form button {
+    font-weight: bold;
+    margin-top: 8px;
+    padding: 6px 0;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    transition: 0.25s;
+}
+
+.profile-feedback-form button:hover {
+    background-color: #0056b3;
 }
 
 /* Language selector */
@@ -408,6 +459,63 @@
   box-shadow: 0 0 4px rgba(88, 166, 255, 0.6);
 }
 
+.profile-language-dropdown,
+.profile-section textarea,
+.profile-feedback-form textarea,
+.profile-account-form textarea {
+    background: #0d1117;
+    color: #e6edf3;
+    border: 1px solid #30363d;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    box-sizing: border-box;
+    min-height: 88px;
+    resize: vertical;
+    outline: none;
+    transition: border-color .12s ease, box-shadow .12s ease, background .12s ease;
+}
+
+.profile-language-dropdown:focus,
+.profile-section textarea:focus,
+.profile-feedback-form textarea:focus,
+.profile-account-form textarea:focus {
+    border-color: #58a6ff;
+    box-shadow: 0 0 0 4px rgba(88,166,255,0.06);
+}
+
+.profile-feedback-form textarea {
+    min-height: 72px;
+    max-height: 240px;
+}
+
+.profile-feedback-modal {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.profile-feedback-container {
+    background: rgb(22, 27, 34);
+    padding: 32px;
+    border-radius: 10px;
+    min-width: 320px;
+    /* max-width: 400px; */
+    color: rgb(255, 255, 255);
+    position: relative;
+}
+
+/* html[dir="rtl"] .profile-section textarea,
+html[dir="rtl"] .profile-feedback-form textarea {
+    text-align: right;
+} */
 
 /* Responsive web design */
 @media (max-width: 768px) {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 // import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -20,7 +20,16 @@ import Profile from "./pages/Profile/Profile.jsx";
 
 import { AuthProvider } from "./contexts/AuthContext.jsx";
 
+import { useTranslation } from "react-i18next";
+
 function App() {
+  const { i18n } = useTranslation();
+
+  useEffect(() => {
+    document.documentElement.lang = i18n.language;
+    document.documentElement.dir = i18n.language === "ar" ? "rtl" : "ltr";
+  }, [i18n.language]);
+
   return (
     <AuthProvider>
       <Router>

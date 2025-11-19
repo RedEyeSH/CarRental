@@ -195,5 +195,20 @@
             "userNotLoggedIn": "User not logged in. Please log in to continue.",
             "paymentFailed": "Payment failed. Please try again."
         }
+    },
+
+    "footer": {
+        "tagline": "Fast, reliable car rentals",
+        "company": "Company",
+        "about": "About",
+        "careers": "Careers",
+        "terms": "Terms",
+        "resources": "Resources",
+        "help": "Help Center",
+        "docs": "Docs",
+        "blog": "Blog",
+        "contact": "Contact",
+        "address": "123 Main St, City",
+        "rights": "All rights reserved."
     }
 }

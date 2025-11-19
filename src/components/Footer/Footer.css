@@ -1,0 +1,121 @@
+.footer {
+    background: #0d1117;
+    color: #e6edf3;
+    padding: 36px 20px;
+    font-family: inherit;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.footer-container {
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+    justify-content: space-between;
+    max-width: 1180px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.footer-brand {
+    flex: 1 1 220px;
+    min-width: 180px;
+}
+
+.brand-title {
+    margin: 0 0 6px;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.brand-desc {
+    margin: 0;
+    color: rgba(230, 237, 243, 0.8);
+    font-size: 13px;
+}
+
+.footer-col {
+    flex: 0 1 160px;
+    min-width: 140px;
+}
+
+.footer-col h4 {
+    margin: 0 0 10px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-col li {
+    margin: 6px 0;
+}
+
+.footer-col a {
+    color: rgba(230, 237, 243, 0.9);
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.footer-contact p {
+    display: inline-block;
+    color: rgba(230, 237, 243, 0.95);
+    text-decoration: none;
+    margin-bottom: 6px;
+}
+
+.footer-bottom {
+    max-width: 1180px;
+    margin: 24px auto 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.footer-social a {
+    margin-left: 12px;
+    color: rgba(230, 237, 243, 0.9);
+    text-decoration: none;
+    font-size: 13px;
+}
+
+html[dir="rtl"] .footer-container {
+    direction: rtl;
+}
+
+html[dir="rtl"] .footer-col,
+html[dir="rtl"] .footer-brand {
+    text-align: right;
+}
+
+/* Responsive */
+@media (max-width: 800px) {
+    .footer-container {
+        gap: 20px;
+    }
+
+    .footer-col {
+        flex: 1 1 45%;
+    }
+
+    .footer-brand {
+        flex-basis: 100%;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    html[dir="rtl"] .footer-bottom {
+        align-items: flex-end;
+    }
+}

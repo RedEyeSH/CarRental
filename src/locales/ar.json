@@ -1,0 +1,220 @@
+{
+    "navbar": {
+        "loading": "جاري التحميل...",
+        "greeting": "مرحباً، {{name}}",
+        "profile": "الملف الشخصي",
+        "logout": "تسجيل الخروج",
+        "signIn": "تسجيل الدخول",
+        "register": "إنشاء حساب"
+    },
+
+    "register": {
+        "title": "إنشاء حساب",
+        "subtitle": "أدخل بريدك الإلكتروني للتسجيل في هذا التطبيق",
+        "email": "البريد الإلكتروني",
+        "firstname": "الاسم الأول",
+        "phone": "رقم الهاتف",
+        "password": "كلمة المرور",
+        "confirmPassword": "تأكيد كلمة المرور",
+        "signUp": "التسجيل عبر البريد الإلكتروني",
+        "registering": "جاري التسجيل...",
+        "alreadyHaveAccount": "هل لديك حساب بالفعل؟",
+        "clickHere": "اضغط هنا!",
+        "termsIntro": "بالنقر على متابعة، فإنك توافق على",
+        "termsOfService": "شروط الخدمة",
+        "and": "و",
+        "privacyPolicy": "سياسة الخصوصية",
+
+        "errors": {
+            "emailRequired": "البريد الإلكتروني مطلوب.",
+            "emailInvalid": "البريد الإلكتروني غير صالح.",
+            "firstnameRequired": "الاسم الأول مطلوب.",
+            "phoneRequired": "رقم الهاتف مطلوب.",
+            "phoneInvalid": "رقم الهاتف غير صالح.",
+            "passwordRequired": "كلمة المرور مطلوبة.",
+            "passwordMin": "يجب أن تكون كلمة المرور 6 أحرف على الأقل.",
+            "confirmPasswordRequired": "تأكيد كلمة المرور مطلوب.",
+            "passwordMismatch": "كلمتا المرور غير متطابقتين.",
+            "registrationFailed": "فشل في التسجيل.",
+            "networkError": "خطأ في الشبكة. الرجاء المحاولة لاحقاً."
+        }
+    },
+
+    "login": {
+        "title": "تسجيل الدخول للمتابعة",
+        "email": "البريد الإلكتروني",
+        "password": "كلمة المرور",
+        "signIn": "تسجيل الدخول",
+        "signingIn": "جاري تسجيل الدخول...",
+        "noAccount": "ليس لديك حساب؟",
+        "clickHere": "اضغط هنا!",
+        
+        "errors": {
+            "emailRequired": "البريد الإلكتروني مطلوب.",
+            "emailInvalid": "البريد الإلكتروني غير صالح.",
+            "passwordRequired": "كلمة المرور مطلوبة.",
+            "passwordMin": "يجب أن تكون كلمة المرور 6 أحرف على الأقل.",
+            "loginFailed": "فشل تسجيل الدخول.",
+            "networkError": "خطأ في الشبكة. الرجاء المحاولة لاحقاً."
+        }
+    },
+
+    "home": {
+        "heading": "اعثر على سيارة الإيجار المثالية",
+        "searchCar": "بحث عن سيارة",
+        "searchPlaceholder": "أدخل اسم السيارة...",
+        "startDate": "تاريخ البدء",
+        "endDate": "تاريخ الانتهاء",
+        "search": "بحث",
+
+        "sort": {
+            "new": "الأحدث",
+            "priceAsc": "السعر (تصاعدي)",
+            "priceDesc": "السعر (تنازلي)",
+            "rating": "التقييم"
+        },
+
+        "added": "تمت الإضافة",
+        "bookNow": "احجز الآن",
+        "noCars": "لا توجد سيارات مطابقة لبحثك.",
+
+        "alert": {
+            "dateRequired": "يرجى تحديد تاريخ البداية والنهاية.",
+            "invalidDate": "لا يمكن أن يكون تاريخ الانتهاء قبل تاريخ البداية."
+        }
+    },
+
+    "profile": {
+        "myProfile": "ملفي الشخصي",
+        "overview": "نظرة عامة",
+        "rentalHistory": "سجل الإيجارات",
+        "settings": "الإعدادات",
+        "logout": "تسجيل الخروج",
+
+        "loading": "جاري التحميل...",
+
+        "roles": {
+            "customer": "عميل",
+            "admin": "مسؤول"
+        },
+
+        "overviewPage": {
+            "accountOverview": "نظرة عامة على الحساب",
+            "fullName": "الاسم الكامل",
+            "email": "البريد الإلكتروني",
+            "phone": "رقم الهاتف",
+            "createdAt": "تاريخ الإنشاء",
+            "notProvided": "غير متوفر"
+        },
+
+        "settingsPage": {
+            "title": "الإعدادات",
+            "selectLanguage": "اختر اللغة",
+            "updateYourInfo": "قم بتحديث معلومات ملفك الشخصي أدناه:",
+            "fullName": "الاسم الكامل",
+            "email": "البريد الإلكتروني",
+            "phone": "رقم الهاتف",
+            "saveChanges": "حفظ التغييرات",
+
+            "saveSuccess": "تم تحديث الملف الشخصي بنجاح!",
+            "saveError": "فشل في تحديث الملف الشخصي"
+        },
+
+        "rentalHistoryPage": {
+            "title": "سجل الإيجارات",
+            "searchPlaceholder": "بحث في الحجوزات...",
+            "noRecords": "لا يوجد سجل إيجارات.",
+
+            "table": {
+                "bookingId": "رقم الحجز",
+                "car": "السيارة",
+                "startDate": "تاريخ البدء",
+                "endDate": "تاريخ الانتهاء",
+                "totalPrice": "السعر الإجمالي",
+                "paymentStatus": "حالة الدفع",
+                "createdAt": "تاريخ الإنشاء",
+                "action": "إجراء"
+            },
+
+            "view": "عرض",
+            "feedback": "تقييم",
+            "feedbackGiven": "تم تقديم التقييم",
+
+            "feedbackModal": {
+                "title": "إرسال تقييم للسيارة",
+                "alreadySubmitted": "لقد قدمت تقييماً لهذا الإيجار مسبقاً.",
+                "rating": "التقييم",
+                "comment": "التعليق",
+                "submit": "إرسال التقييم",
+                "submitting": "جاري الإرسال...",
+                "notAllowedYet": "يمكن إرسال التقييم بعد بدء فترة الإيجار.",
+                "close": "إغلاق"
+            },
+
+            "viewModal": {
+                "title": "تفاصيل الحجز",
+                "noData": "لا توجد بيانات."
+            }
+        }
+    },
+
+    "BookingModal": {
+        "title": "احجز سيارتك",
+        "pricePerDay": "السعر لليوم",
+        "days": "يوم",
+        "daysPlural": "أيام",
+        "from": "من",
+        "to": "إلى",
+        "totalPrice": "السعر الإجمالي",
+        "cancel": "إلغاء",
+        "confirmBooking": "تأكيد الحجز"
+    },
+
+    "payment": {
+        "checkout": "الدفع",
+        "paymentDetails": "تفاصيل الدفع",
+        "startDate": "تاريخ البدء",
+        "endDate": "تاريخ الانتهاء",
+        "rentalDuration": "مدة الإيجار",
+        "totalCost": "التكلفة الإجمالية",
+        "paymentMethod": "طريقة الدفع",
+        "methodCard": "بطاقة",
+        "methodCash": "نقداً",
+        "methodOnline": "دفع إلكتروني",
+        "confirmPayment": "تأكيد الدفع",
+        "paymentSuccessful": "تم الدفع بنجاح!",
+        "paymentPending": "الدفع معلق",
+        "bookingInfo": "معلومات الحجز",
+        "bookingId": "رقم الحجز",
+        "car": "السيارة",
+        "paymentInfo": "معلومات الدفع",
+        "totalPaid": "إجمالي المدفوع",
+        "method": "الطريقة",
+        "status": "الحالة",
+        "rentalPeriod": "فترة الإيجار",
+        "duration": "المدة",
+        "backHome": "العودة إلى الصفحة الرئيسية",
+
+        "alerts": {
+            "dateRequired": "يرجى تحديد تاريخ البداية والنهاية.",
+            "invalidDate": "لا يمكن أن يكون تاريخ الانتهاء قبل تاريخ البداية.",
+            "userNotLoggedIn": "المستخدم غير مسجل الدخول. يرجى تسجيل الدخول للمتابعة.",
+            "paymentFailed": "فشل الدفع. يرجى المحاولة مرة أخرى."
+        }
+    },
+
+    "footer": {
+        "tagline": "تأجير سيارات سريع وموثوق",
+        "company": "الشركة",
+        "about": "حول",
+        "careers": "وظائف",
+        "terms": "الشروط",
+        "resources": "الموارد",
+        "help": "مركز المساعدة",
+        "docs": "الوثائق",
+        "blog": "المدوّنة",
+        "contact": "اتصل بنا",
+        "address": "123 الشارع الرئيسي، المدينة",
+        "rights": "كل الحقوق محفوظة."
+    }
+}

@@ -16,8 +16,19 @@ import { useAuth } from "../../contexts/AuthContext.jsx";
 
 import { useTranslation } from "react-i18next";
 
+import LanguageSelector from "../../components/LanguageSelector/LanguageSelector";
+
+
 const Profile = () => {
     const { t, i18n } = useTranslation();
+
+    const languages = [
+        { code: "en", label: "English" },
+        { code: "fi", label: "Finnish" },
+        { code: "ru", label: "Russian" },
+        { code: "ja", label: "Japanese" },
+        { code: "ar", label: "Arabic" }
+    ];
 
     const [activeSection, setActiveSection] = useState("overview");
     const [bookings, setBookings] = useState([]);
@@ -324,356 +335,347 @@ const Profile = () => {
                         <p style={{ color: 'red' }}>{error}</p>
                     ) : (
                         <>
-                        {activeSection === "overview" && (
-                            <div className="profile-section">
-                                <h2>{t("profile.overviewPage.accountOverview")}</h2>
-                                {user ? (
-                                    <div className="profile-overview">
-                                        <div className="profile-summary-card">
-                                            <div className="profile-summary-left">
-                                                <div className="profile-avatar large">
-                                                    <FontAwesomeIcon icon={faUser} />
+                            {activeSection === "overview" && (
+                                <div className="profile-section">
+                                    <h2>{t("profile.overviewPage.accountOverview")}</h2>
+                                    {user ? (
+                                        <div className="profile-overview">
+                                            <div className="profile-summary-card">
+                                                <div className="profile-summary-left">
+                                                    <div className="profile-avatar large">
+                                                        <FontAwesomeIcon icon={faUser} />
+                                                    </div>
+                                                    <div>
+                                                        <h3>{user.name}</h3>
+                                                        <span className={`profile-role ${roleClassName}`}>
+                                                            {t(`profile.roles.${user?.role?.toLowerCase() || "customer"}`)}
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <h3>{user.name}</h3>
-                                                    <span className={`profile-role ${roleClassName}`}>
-                                                        {t(`profile.roles.${user?.role?.toLowerCase() || "customer"}`)}
-                                                    </span>
+                                            </div>
+                                            <div className="profile-info-grid">
+                                                <div className="info-card">
+                                                    <FontAwesomeIcon icon={faAddressCard} className="info-icon" />
+                                                    <div>
+                                                        <p className="info-label">{t("profile.overviewPage.fullName")}</p>
+                                                        <p className="info-value">{user.name}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="info-card">
+                                                    <FontAwesomeIcon icon={faUser} className="info-icon" />
+                                                    <div>
+                                                        <p className="info-label">{t("profile.overviewPage.email")}</p>
+                                                        <p className="info-value">{user.email}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="info-card">
+                                                    <FontAwesomeIcon icon={faGear} className="info-icon" />
+                                                    <div>
+                                                        <p className="info-label">{t("profile.overviewPage.phone")}</p>
+                                                        <p className="info-value">
+                                                            {user.phone || t("profile.overviewPage.notProvided")}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className="info-card">
+                                                    <FontAwesomeIcon icon={faClockRotateLeft} className="info-icon" />
+                                                    <div>
+                                                        <p className="info-label">{t("profile.overviewPage.createdAt")}</p>
+                                                        <p className="info-value">
+                                                            {user.created_at
+                                                                ? new Date(user.created_at).toLocaleDateString(i18n.language)
+                                                                : t("profile.overviewPage.notProvided")}
+                                                        </p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="profile-info-grid">
-                                            <div className="info-card">
-                                                <FontAwesomeIcon icon={faAddressCard} className="info-icon" />
-                                                <div>
-                                                    <p className="info-label">{t("profile.overviewPage.fullName")}</p>
-                                                    <p className="info-value">{user.name}</p>
-                                                </div>
-                                            </div>
-                                            <div className="info-card">
-                                                <FontAwesomeIcon icon={faUser} className="info-icon" />
-                                                <div>
-                                                    <p className="info-label">{t("profile.overviewPage.email")}</p>
-                                                    <p className="info-value">{user.email}</p>
-                                                </div>
-                                            </div>
-                                            <div className="info-card">
-                                                <FontAwesomeIcon icon={faGear} className="info-icon" />
-                                                <div>
-                                                    <p className="info-label">{t("profile.overviewPage.phone")}</p>
-                                                    <p className="info-value">
-                                                        {user.phone || t("profile.overviewPage.notProvided")}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div className="info-card">
-                                                <FontAwesomeIcon icon={faClockRotateLeft} className="info-icon" />
-                                                <div>
-                                                    <p className="info-label">{t("profile.overviewPage.createdAt")}</p>
-                                                    <p className="info-value">
-                                                        {user.created_at
-                                                            ? new Date(user.created_at).toLocaleDateString(i18n.language)
-                                                            : t("profile.overviewPage.notProvided")}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <p>{t("profile.loading")}</p>
-                                )}
-                            </div>
-                        )}
-
-
-                        {activeSection === "history" && (
-                            <div className="profile-section">
-                                <h2>{t("profile.rentalHistoryPage.title")}</h2>
-                                <div style={{marginBottom:16}}>
-                                    <input
-                                        type="text"
-                                        placeholder={t("profile.rentalHistoryPage.searchPlaceholder")}
-                                        value={searchTerm}
-                                        onChange={e => setSearchTerm(e.target.value)}
-                                        style={{padding:8, borderRadius:4, border:'1px solid #444c56', width:260, background:'#0d1117', color:'#fff'}}
-                                    />
-                                </div>
-                                <div className="profile-history">
-                                    {bookingsLoading || carDetailsLoading ? (
-                                        <p>{t("profile.rentalHistoryPage.noRecords")}</p>
-                                    ) : bookingsError || carDetailsError ? (
-                                        <p style={{ color: 'red' }}>{bookingsError || carDetailsError}</p>
-                                    ) : filteredBookings.length === 0 ? (
-                                        <p>{t("profile.rentalHistoryPage.noRecords")}</p>
                                     ) : (
-                                        <table className="rental-history-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>{t("profile.rentalHistoryPage.table.bookingId")}</th>
-                                                    <th>{t("profile.rentalHistoryPage.table.car")}</th>
-                                                    <th>{t("profile.rentalHistoryPage.table.startDate")}</th>
-                                                    <th>{t("profile.rentalHistoryPage.table.endDate")}</th>
-                                                    <th>{t("profile.rentalHistoryPage.table.totalPrice")}</th>
-                                                    <th>{t("profile.rentalHistoryPage.table.paymentStatus")}</th>
-                                                    <th>{t("profile.rentalHistoryPage.table.createdAt")}</th>
-                                                    <th>{t("profile.rentalHistoryPage.table.action")}</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {filteredBookings.map((booking) => {
-                                                    const car = carDetails[booking.car_id];
-                                                    const feedbackGiven = hasFeedbackForBooking(booking);
-                                                    return (
-                                                        <tr key={booking.id}>
-                                                            <td>{booking.id}</td>
-                                                            <td>
-                                                                {car
-                                                                    ? `${car.brand} ${car.model} (${car.license_plate})`
-                                                                    : <span style={{color:'#8b949e'}}>Loading...</span>
-                                                                }
-                                                            </td>
-                                                            <td>{booking.start_date}</td>
-                                                            <td>{booking.end_date}</td>
-                                                            <td>{booking.total_price}</td>
-                                                            <td>{booking.payment_status}</td>
-                                                            <td>{new Date(booking.created_at).toLocaleString(i18n.language)}</td>
-                                                            <td style={{display:'flex',gap:6}}>
-                                                                <button 
-                                                                    onClick={() => openViewModal(booking.id)} 
-                                                                    style={{
-                                                                        padding:'4px 10px',
-                                                                        borderRadius:4,
-                                                                        border:'none',
-                                                                        background:'#58a6ff',
-                                                                        color:'#fff',
-                                                                        cursor:'pointer'
-                                                                    }}
-                                                                >
-                                                                    {t("profile.rentalHistoryPage.view")}
-                                                                </button>
-                                                                <button 
-                                                                    onClick={() => openFeedbackModal(booking)} 
-                                                                    disabled={feedbackGiven} 
-                                                                    style={{
-                                                                        padding:'4px 10px',
-                                                                        borderRadius:4,
-                                                                        border:'none',
-                                                                        background: feedbackGiven ? '#444c56' : '#2ea043',
-                                                                        color:'#fff',
-                                                                        cursor: feedbackGiven ? 'not-allowed' : 'pointer'}}
-                                                                >
-                                                                    {feedbackGiven ? t("profile.rentalHistoryPage.feedbackGiven") : t("profile.rentalHistoryPage.feedback")}
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                    );
-                                                })}
-                                            </tbody>
-                                        </table>
+                                        <p>{t("profile.loading")}</p>
                                     )}
                                 </div>
-                                {/* Feedback Modal */}
-                                {feedbackModalOpen && feedbackBooking && (
-                                    <div style={{position:'fixed',top:0,left:0,width:'100vw',height:'100vh',background:'rgba(0,0,0,0.5)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:1000}}>
-                                        <div style={{background:'#161b22',padding:32,borderRadius:10,minWidth:320,maxWidth:400,color:'#fff',position:'relative'}}>
-                                            <button onClick={closeFeedbackModal} style={{position:'absolute',top:10,right:10,background:'none',border:'none',color:'#fff',fontSize:20,cursor:'pointer'}}>&times;</button>
-                                            {/* Car image and info */}
-                                            {carDetails[feedbackBooking.car_id] && carDetails[feedbackBooking.car_id].image && (
-                                                <img
-                                                    src={`http://localhost:3000/public/uploads/${carDetails[feedbackBooking.car_id].image}`}
-                                                    alt="Car"
-                                                    style={{
-                                                        width: '100%',
-                                                        maxHeight: 180,
-                                                        objectFit: 'cover',
-                                                        borderRadius: 8,
-                                                        marginBottom: 12,
-                                                    }}
-                                                />
-                                            )}
-                                            <h3 style={{marginTop:0, marginBottom:8}}>
-                                                {t("profile.rentalHistoryPage.feedbackModal.title")}
-                                                {carDetails[feedbackBooking.car_id] && (
-                                                    <span style={{display:'block',fontWeight:'normal',fontSize:15,marginTop:4}}>
-                                                        {carDetails[feedbackBooking.car_id].brand} {carDetails[feedbackBooking.car_id].model} ({carDetails[feedbackBooking.car_id].license_plate})
-                                                    </span>
+                            )}
+
+
+                            {activeSection === "history" && (
+                                <div className="profile-section">
+                                    <h2>{t("profile.rentalHistoryPage.title")}</h2>
+                                    <div style={{ marginBottom: 16 }}>
+                                        <input
+                                            type="text"
+                                            placeholder={t("profile.rentalHistoryPage.searchPlaceholder")}
+                                            value={searchTerm}
+                                            onChange={e => setSearchTerm(e.target.value)}
+                                            style={{ padding: 8, borderRadius: 4, border: '1px solid #444c56', width: 260, background: '#0d1117', color: '#fff' }}
+                                        />
+                                    </div>
+                                    <div className="profile-history">
+                                        {bookingsLoading || carDetailsLoading ? (
+                                            <p>{t("profile.rentalHistoryPage.noRecords")}</p>
+                                        ) : bookingsError || carDetailsError ? (
+                                            <p style={{ color: 'red' }}>{bookingsError || carDetailsError}</p>
+                                        ) : filteredBookings.length === 0 ? (
+                                            <p>{t("profile.rentalHistoryPage.noRecords")}</p>
+                                        ) : (
+                                            <table className="rental-history-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>{t("profile.rentalHistoryPage.table.bookingId")}</th>
+                                                        <th>{t("profile.rentalHistoryPage.table.car")}</th>
+                                                        <th>{t("profile.rentalHistoryPage.table.startDate")}</th>
+                                                        <th>{t("profile.rentalHistoryPage.table.endDate")}</th>
+                                                        <th>{t("profile.rentalHistoryPage.table.totalPrice")}</th>
+                                                        <th>{t("profile.rentalHistoryPage.table.paymentStatus")}</th>
+                                                        <th>{t("profile.rentalHistoryPage.table.createdAt")}</th>
+                                                        <th>{t("profile.rentalHistoryPage.table.action")}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {filteredBookings.map((booking) => {
+                                                        const car = carDetails[booking.car_id];
+                                                        const feedbackGiven = hasFeedbackForBooking(booking);
+                                                        return (
+                                                            <tr key={booking.id}>
+                                                                <td>{booking.id}</td>
+                                                                <td>
+                                                                    {car
+                                                                        ? `${car.brand} ${car.model} (${car.license_plate})`
+                                                                        : <span style={{ color: '#8b949e' }}>Loading...</span>
+                                                                    }
+                                                                </td>
+                                                                <td>{booking.start_date}</td>
+                                                                <td>{booking.end_date}</td>
+                                                                <td>{booking.total_price}</td>
+                                                                <td>{booking.payment_status}</td>
+                                                                <td>{new Date(booking.created_at).toLocaleString(i18n.language)}</td>
+                                                                <td style={{ display: 'flex', gap: 6 }}>
+                                                                    <button
+                                                                        onClick={() => openViewModal(booking.id)}
+                                                                        style={{
+                                                                            padding: '4px 10px',
+                                                                            borderRadius: 4,
+                                                                            border: 'none',
+                                                                            background: '#58a6ff',
+                                                                            color: '#fff',
+                                                                            cursor: 'pointer'
+                                                                        }}
+                                                                    >
+                                                                        {t("profile.rentalHistoryPage.view")}
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => openFeedbackModal(booking)}
+                                                                        disabled={feedbackGiven}
+                                                                        style={{
+                                                                            padding: '4px 10px',
+                                                                            borderRadius: 4,
+                                                                            border: 'none',
+                                                                            background: feedbackGiven ? '#444c56' : '#2ea043',
+                                                                            color: '#fff',
+                                                                            cursor: feedbackGiven ? 'not-allowed' : 'pointer'
+                                                                        }}
+                                                                    >
+                                                                        {feedbackGiven ? t("profile.rentalHistoryPage.feedbackGiven") : t("profile.rentalHistoryPage.feedback")}
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        );
+                                                    })}
+                                                </tbody>
+                                            </table>
+                                        )}
+                                    </div>
+                                    {/* Feedback Modal */}
+                                    {feedbackModalOpen && feedbackBooking && (
+                                        <div className="profile-feedback-modal">
+                                            <div className="profile-feedback-container">
+                                                <button onClick={closeFeedbackModal} style={{ position: 'absolute', top: 10, right: 10, background: 'none', border: 'none', color: '#fff', fontSize: 20, cursor: 'pointer' }}>&times;</button>
+                                                {/* Car image and info */}
+                                                {carDetails[feedbackBooking.car_id] && carDetails[feedbackBooking.car_id].image && (
+                                                    <img
+                                                        src={`http://localhost:3000/public/uploads/${carDetails[feedbackBooking.car_id].image}`}
+                                                        alt="Car"
+                                                        style={{
+                                                            width: '100%',
+                                                            maxHeight: 180,
+                                                            objectFit: 'cover',
+                                                            borderRadius: 8,
+                                                            marginBottom: 12,
+                                                        }}
+                                                    />
                                                 )}
-                                            </h3>
-                                            {getFeedbackForBooking(feedbackBooking) ? (
-                                                <div style={{marginBottom:12}}>
-                                                    <div style={{color:'lightgreen',marginBottom:8}}>
-                                                        {t("profile.rentalHistoryPage.feedbackModal.alreadySubmitted")}
-                                                    </div>
-                                                    <div><b>{t("profile.rentalHistoryPage.feedbackModal.rating")}:</b> {getFeedbackForBooking(feedbackBooking).rating}</div>
-                                                    <div><b>{t("profile.rentalHistoryPage.feedbackModal.comment")}:</b> {getFeedbackForBooking(feedbackBooking).comment}</div>
-                                                </div>
-                                            ) : (
-                                                <form onSubmit={handleFeedbackSubmit} style={{display:'flex',flexDirection:'column',gap:12}}>
-                                                    <div>
-                                                        <label>{t("profile.rentalHistoryPage.feedbackModal.rating")}: </label>
-                                                        <select value={feedbackRating} onChange={e => setFeedbackRating(Number(e.target.value))} style={{marginLeft:8}} required>
-                                                            {[1,2,3,4,5].map(r => <option key={r} value={r}>{r}</option>)}
-                                                        </select>
-                                                    </div>
-                                                    <div>
-                                                        <label>{t("profile.rentalHistoryPage.feedbackModal.comment")}:</label>
-                                                        <textarea value={feedbackComment} onChange={e => setFeedbackComment(e.target.value)} rows={3} style={{width:'100%',marginTop:4}} required />
-                                                    </div>
-                                                    {!canSubmitFeedback && (
-                                                        <div style={{color:'orange'}}>
-                                                            {t("profile.rentalHistoryPage.feedbackModal.notAllowedYet")}
-                                                            {/* You can only submit feedback after your rental has started ({feedbackBooking.start_date}). */}
+                                                <h3 style={{ marginTop: 0, marginBottom: 8 }}>
+                                                    {t("profile.rentalHistoryPage.feedbackModal.title")}
+                                                    {carDetails[feedbackBooking.car_id] && (
+                                                        <span style={{ display: 'block', fontWeight: 'normal', fontSize: 15, marginTop: 4 }}>
+                                                            {carDetails[feedbackBooking.car_id].brand} {carDetails[feedbackBooking.car_id].model} ({carDetails[feedbackBooking.car_id].license_plate})
+                                                        </span>
+                                                    )}
+                                                </h3>
+                                                {getFeedbackForBooking(feedbackBooking) ? (
+                                                    <div style={{ marginBottom: 12 }}>
+                                                        <div style={{ color: 'lightgreen', marginBottom: 8 }}>
+                                                            {t("profile.rentalHistoryPage.feedbackModal.alreadySubmitted")}
                                                         </div>
-                                                    )}
-                                                    {feedbackError && <div style={{color:'red'}}>{feedbackError}</div>}
-                                                    <button type="submit" disabled={feedbackLoading || !canSubmitFeedback} style={{padding:'6px 0',borderRadius:4,border:'none',background:'#2ea043',color:'#fff',cursor: canSubmitFeedback && !feedbackLoading ? 'pointer' : 'not-allowed',marginTop:8}}>
-                                                        {/* {feedbackLoading ? 'Submitting...' : 'Submit Feedback'} */}
-                                                        {feedbackLoading ? t("profile.rentalHistoryPage.feedbackModal.submitting") : t("profile.rentalHistoryPage.feedbackModal.submit")}
-                                                    </button>
-                                                </form>
-                                            )}
+                                                        <div><b>{t("profile.rentalHistoryPage.feedbackModal.rating")}:</b> {getFeedbackForBooking(feedbackBooking).rating}</div>
+                                                        <div><b>{t("profile.rentalHistoryPage.feedbackModal.comment")}:</b> {getFeedbackForBooking(feedbackBooking).comment}</div>
+                                                    </div>
+                                                ) : (
+                                                    <form className="profile-feedback-form" onSubmit={handleFeedbackSubmit}>
+                                                        <div>
+                                                            <label>{t("profile.rentalHistoryPage.feedbackModal.rating")}: </label>
+                                                            <select value={feedbackRating} onChange={e => setFeedbackRating(Number(e.target.value))} style={{ marginLeft: 8 }} required>
+                                                                {[1, 2, 3, 4, 5].map(r => <option key={r} value={r}>{r}</option>)}
+                                                            </select>
+                                                        </div>
+                                                        <div>
+                                                            <label>{t("profile.rentalHistoryPage.feedbackModal.comment")}:</label>
+                                                            <textarea value={feedbackComment} onChange={e => setFeedbackComment(e.target.value)} rows={3} style={{ width: '100%', marginTop: 4 }} required />
+                                                        </div>
+                                                        {!canSubmitFeedback && (
+                                                            <div style={{ color: 'orange', whiteSpace: "nowrap" }}>
+                                                                {t("profile.rentalHistoryPage.feedbackModal.notAllowedYet")}
+                                                            </div>
+                                                        )}
+                                                        {feedbackError && <div style={{ color: 'red' }}>{feedbackError}</div>}
+                                                        <button type="submit" disabled={feedbackLoading || !canSubmitFeedback} style={{ cursor: canSubmitFeedback && !feedbackLoading ? 'pointer' : 'not-allowed' }}>
+                                                            {feedbackLoading ? t("profile.rentalHistoryPage.feedbackModal.submitting") : t("profile.rentalHistoryPage.feedbackModal.submit")}
+                                                        </button>
+                                                    </form>
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
-                                {/* View Booking Modal */}
-                                {viewModalOpen && (
-                                    <div style={{position:'fixed',top:0,left:0,width:'100vw',height:'100vh',background:'rgba(0,0,0,0.5)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:1000}}>
-                                        <div style={{background:'#161b22',padding:32,borderRadius:10,minWidth:320,maxWidth:400,color:'#fff',position:'relative'}}>
-                                            <button onClick={closeViewModal} style={{position:'absolute',top:10,right:10,background:'none',border:'none',color:'#fff',fontSize:20,cursor:'pointer'}}>&times;</button>
-                                            <h3 style={{marginTop:0}}>{t("profile.rentalHistoryPage.viewModal.title")}</h3>
-                                            {selectedBookingLoading ? (
-                                                <p>{t("profile.loading")}</p>
-                                            ) : selectedBookingError ? (
-                                                <p style={{color:'red'}}>{selectedBookingError}</p>
-                                            ) : selectedBooking ? (
-                                                <div style={{display:'flex',flexDirection:'column',gap:8}}>
-                                                    {/* Car image section */}
-                                                    {carDetails[selectedBooking.car_id] && carDetails[selectedBooking.car_id].image && (
-                                                        <img
-                                                            src={`http://localhost:3000/public/uploads/${carDetails[selectedBooking.car_id].image}`}
-                                                            alt="Car"
-                                                            style={{
-                                                                width: '100%',
-                                                                maxHeight: 180,
-                                                                objectFit: 'cover',
-                                                                borderRadius: 8,
-                                                                marginBottom: 12,
-                                                            }}
-                                                        />
-                                                    )}
-                                                    <div><b>{t("profile.rentalHistoryPage.table.bookingId")}:</b> {selectedBooking.id}</div>
-                                                    <div><b>{t("profile.rentalHistoryPage.table.car")}:</b> {carDetails[selectedBooking.car_id] ? `${carDetails[selectedBooking.car_id].brand} ${carDetails[selectedBooking.car_id].model} (${carDetails[selectedBooking.car_id].license_plate})` : selectedBooking.car_id}</div>
-                                                    <div><b>{t("profile.rentalHistoryPage.table.startDate")}:</b> {selectedBooking.start_date}</div>
-                                                    <div><b>{t("profile.rentalHistoryPage.table.endDate")}:</b> {selectedBooking.end_date}</div>
-                                                    <div><b>{t("profile.rentalHistoryPage.table.totalPrice")}:</b> {selectedBooking.total_price}</div>
-                                                    <div><b>{t("profile.rentalHistoryPage.table.paymentStatus")}:</b> {selectedBooking.payment_status}</div>
-                                                    <div><b>{t("profile.rentalHistoryPage.table.createdAt")}:</b> {new Date(selectedBooking.created_at).toLocaleString(i18n.language)}</div>
-                                                </div>
-                                            ) : (
-                                                <p>{t("profile.rentalHistoryPage.viewModal.noData")}</p>
-                                            )}
+                                    )}
+                                    {/* View Booking Modal */}
+                                    {viewModalOpen && (
+                                        <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+                                            <div style={{ background: '#161b22', padding: 32, borderRadius: 10, minWidth: 320, maxWidth: 400, color: '#fff', position: 'relative' }}>
+                                                <button onClick={closeViewModal} style={{ position: 'absolute', top: 10, right: 10, background: 'none', border: 'none', color: '#fff', fontSize: 20, cursor: 'pointer' }}>&times;</button>
+                                                <h3 style={{ marginTop: 0 }}>{t("profile.rentalHistoryPage.viewModal.title")}</h3>
+                                                {selectedBookingLoading ? (
+                                                    <p>{t("profile.loading")}</p>
+                                                ) : selectedBookingError ? (
+                                                    <p style={{ color: 'red' }}>{selectedBookingError}</p>
+                                                ) : selectedBooking ? (
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                                        {/* Car image section */}
+                                                        {carDetails[selectedBooking.car_id] && carDetails[selectedBooking.car_id].image && (
+                                                            <img
+                                                                src={`http://localhost:3000/public/uploads/${carDetails[selectedBooking.car_id].image}`}
+                                                                alt="Car"
+                                                                style={{
+                                                                    width: '100%',
+                                                                    maxHeight: 180,
+                                                                    objectFit: 'cover',
+                                                                    borderRadius: 8,
+                                                                    marginBottom: 12,
+                                                                }}
+                                                            />
+                                                        )}
+                                                        <div><b>{t("profile.rentalHistoryPage.table.bookingId")}:</b> {selectedBooking.id}</div>
+                                                        <div><b>{t("profile.rentalHistoryPage.table.car")}:</b> {carDetails[selectedBooking.car_id] ? `${carDetails[selectedBooking.car_id].brand} ${carDetails[selectedBooking.car_id].model} (${carDetails[selectedBooking.car_id].license_plate})` : selectedBooking.car_id}</div>
+                                                        <div><b>{t("profile.rentalHistoryPage.table.startDate")}:</b> {selectedBooking.start_date}</div>
+                                                        <div><b>{t("profile.rentalHistoryPage.table.endDate")}:</b> {selectedBooking.end_date}</div>
+                                                        <div><b>{t("profile.rentalHistoryPage.table.totalPrice")}:</b> {selectedBooking.total_price}</div>
+                                                        <div><b>{t("profile.rentalHistoryPage.table.paymentStatus")}:</b> {selectedBooking.payment_status}</div>
+                                                        <div><b>{t("profile.rentalHistoryPage.table.createdAt")}:</b> {new Date(selectedBooking.created_at).toLocaleString(i18n.language)}</div>
+                                                    </div>
+                                                ) : (
+                                                    <p>{t("profile.rentalHistoryPage.viewModal.noData")}</p>
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-
-                        {activeSection === "settings" && (
-                            <div className="profile-section">
-                                <h2>{t("profile.settingsPage.title")}</h2>
-                                <div className="profile-language-selector">
-                                    <label style={{ marginRight: "10px" }}>
-                                        {t("profile.settingsPage.selectLanguage")}
-                                    </label>
-                                    <select
-                                        className="profile-language-dropdown"
-                                        onChange={(e) => i18n.changeLanguage(e.target.value)}
-                                        defaultValue={i18n.language}
-                                    >
-                                        <option value="en">English</option>
-                                        <option value="ja">Japanese</option>
-                                        <option value="ru">Russian</option>
-                                    </select>
+                                    )}
                                 </div>
+                            )}
 
-                                <p>{t("profile.settingsPage.updateYourInfo")}</p>
+                            {activeSection === "settings" && (
+                                <div className="profile-section">
+                                    <h2>{t("profile.settingsPage.title")}</h2>
+                                    <div className="profile-language-selector">
+                                        <label style={{ marginRight: "10px" }}>
+                                            {t("profile.settingsPage.selectLanguage")}
+                                        </label>
+                                        <LanguageSelector className="profile-language-dropdown" />
+                                    </div>
 
-                                {user ? (
-                                    <form
-                                        onSubmit={async (e) => {
-                                            e.preventDefault();
-                                            setSettingsLoading(true);
-                                            setSettingsError(null);
-                                            setSettingsSuccess(null);
-                                            const token = localStorage.getItem("token");
-                                            try {
-                                                const res = await fetch("http://localhost:3000/api/v1/auth/me", {
-                                                    method: "PUT",
-                                                    headers: {
-                                                        "Authorization": `Bearer ${token}`,
-                                                        "Content-Type": "application/json"
-                                                    },
-                                                    body: JSON.stringify({
-                                                        name: settingsName,
-                                                        email: settingsEmail,
-                                                        phone: settingsPhone
-                                                    })
-                                                });
-                                                if (!res.ok) throw new Error("Failed to update profile");
-                                                const updatedUser = await res.json();
-                                                setUser(updatedUser);
-                                                toast.success(t("profile.settingsPage.saveSuccess") || "Profile updated successfully!");
-                                                // toast.success("Profile updated successfully!");
-                                            } catch (err) {
-                                                setSettingsError(t("profile.settingsPage.saveError") || "Failed to update profile");
-                                                // setSettingsError("Failed to update profile");
-                                            } finally {
-                                                setSettingsLoading(false);
-                                            }
-                                        }}
-                                        style={{display:'flex',flexDirection:'column',gap:16,maxWidth:400}}
-                                    >
-                                        <div>
-                                            <label>{t("profile.settingsPage.fullName")}</label>
-                                            <input
-                                                type="text"
-                                                value={settingsName}
-                                                onChange={e => setSettingsName(e.target.value)}
-                                                required
-                                                style={{width:'100%',padding:8,borderRadius:4,border:'1px solid #444c56',background:'#0d1117',color:'#fff'}}
-                                            />
-                                        </div>
-                                        <div>
-                                            <label>{t("profile.settingsPage.email")}</label>
-                                            <input
-                                                type="email"
-                                                value={settingsEmail}
-                                                onChange={e => setSettingsEmail(e.target.value)}
-                                                required
-                                                style={{width:'100%',padding:8,borderRadius:4,border:'1px solid #444c56',background:'#0d1117',color:'#fff'}}
-                                            />
-                                        </div>
-                                        <div>
-                                            <label>{t("profile.settingsPage.phone")}</label>
-                                            <input
-                                                type="text"
-                                                value={settingsPhone}
-                                                onChange={e => setSettingsPhone(e.target.value)}
-                                                style={{width:'100%',padding:8,borderRadius:4,border:'1px solid #444c56',background:'#0d1117',color:'#fff'}}
-                                            />
-                                        </div>
-                                        {settingsError && <div style={{color:'red'}}>{settingsError}</div>}
-                                        <button type="submit" disabled={settingsLoading} style={{padding:'8px 0',borderRadius:4,border:'none',background:'#2ea043',color:'#fff',cursor: settingsLoading ? 'not-allowed' : 'pointer'}}>
-                                            {/* {settingsLoading ? 'Saving...' : 'Save Changes'} */}
-                                            {settingsLoading ? t("profile.settingsPage.saving") || "Saving..." : t("profile.settingsPage.saveChanges")}
-                                        </button>
-                                    </form>
-                                ) : (
-                                    t("profile.loading")
-                                    // <p>Loading...</p>
-                                )}
-                            </div>
-                        )}
+                                    <p style={{ fontWeight: "bold", margin: "12px 0" }}>{t("profile.settingsPage.updateYourInfo")}</p>
+
+                                    {user ? (
+                                        <form
+                                            className="profile-account-form"
+                                            onSubmit={async (e) => {
+                                                e.preventDefault();
+                                                setSettingsLoading(true);
+                                                setSettingsError(null);
+                                                setSettingsSuccess(null);
+                                                const token = localStorage.getItem("token");
+                                                try {
+                                                    const res = await fetch("http://localhost:3000/api/v1/auth/me", {
+                                                        method: "PUT",
+                                                        headers: {
+                                                            "Authorization": `Bearer ${token}`,
+                                                            "Content-Type": "application/json"
+                                                        },
+                                                        body: JSON.stringify({
+                                                            name: settingsName,
+                                                            email: settingsEmail,
+                                                            phone: settingsPhone
+                                                        })
+                                                    });
+                                                    if (!res.ok) throw new Error("Failed to update profile");
+                                                    const updatedUser = await res.json();
+                                                    setUser(updatedUser);
+                                                    toast.success(t("profile.settingsPage.saveSuccess") || "Profile updated successfully!");
+                                                    // toast.success("Profile updated successfully!");
+                                                } catch (err) {
+                                                    setSettingsError(t("profile.settingsPage.saveError") || "Failed to update profile");
+                                                    // setSettingsError("Failed to update profile");
+                                                } finally {
+                                                    setSettingsLoading(false);
+                                                }
+                                            }}
+                                        >
+                                            <div>
+                                                <label>{t("profile.settingsPage.fullName")}</label>
+                                                <input
+                                                    type="text"
+                                                    value={settingsName}
+                                                    onChange={e => setSettingsName(e.target.value)}
+                                                    required
+                                                    style={{ width: '100%', padding: 8, borderRadius: 4, border: '1px solid #444c56', background: '#0d1117', color: '#fff' }}
+                                                />
+                                            </div>
+                                            <div>
+                                                <label>{t("profile.settingsPage.email")}</label>
+                                                <input
+                                                    type="email"
+                                                    value={settingsEmail}
+                                                    onChange={e => setSettingsEmail(e.target.value)}
+                                                    required
+                                                    style={{ width: '100%', padding: 8, borderRadius: 4, border: '1px solid #444c56', background: '#0d1117', color: '#fff' }}
+                                                />
+                                            </div>
+                                            <div>
+                                                <label>{t("profile.settingsPage.phone")}</label>
+                                                <input
+                                                    type="text"
+                                                    value={settingsPhone}
+                                                    onChange={e => setSettingsPhone(e.target.value)}
+                                                    style={{ width: '100%', padding: 8, borderRadius: 4, border: '1px solid #444c56', background: '#0d1117', color: '#fff' }}
+                                                />
+                                            </div>
+                                            {settingsError && <div style={{ color: 'red' }}>{settingsError}</div>}
+                                            <button type="submit" disabled={settingsLoading} style={{ cursor: settingsLoading ? 'not-allowed' : 'pointer' }}>
+                                                {/* {settingsLoading ? 'Saving...' : 'Save Changes'} */}
+                                                {settingsLoading ? t("profile.settingsPage.saving") || "Saving..." : t("profile.settingsPage.saveChanges")}
+                                            </button>
+                                        </form>
+                                    ) : (
+                                        t("profile.loading")
+                                        // <p>Loading...</p>
+                                    )}
+                                </div>
+                            )}
                         </>
                     )}
                 </div>
