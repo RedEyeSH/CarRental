@@ -73,6 +73,39 @@ Invalid points can cause SVG `transform` errors in the console.
 - Create `src/i18n.js` and load resources or use `i18next-http-backend` with `public/locales/{lng}/{ns}.json`.
 - Use `useTranslation()` and `t('key')` in components. Persist language with the detector (localStorage).
 
+### RTL support (Arabic)
+This project supports right-to-left layout when Arabic is selected. Add the following behaviors:
+
+1. Set document direction when language changes (example in `src/i18n.js`):
+```js
+// after i18n.init(...)
+const RTL_LANGS = ['ar','he','fa','ur'];
+
+i18n.on('languageChanged', (lng) => {
+  document.documentElement.lang = lng;
+  document.documentElement.dir = RTL_LANGS.includes(lng) ? 'rtl' : 'ltr';
+});
+```
+
+2. Use logical CSS properties where possible (padding-inline, margin-inline, text-align) and add small RTL overrides:
+```css
+/* example */
+.navbar-links { padding-inline-start: 12px; }
+html[dir="rtl"] .navbar-links { text-align: right; }
+
+/* explicit overrides */
+html[dir="rtl"] .footer-container { direction: rtl; }
+html[dir="rtl"] .some-icon { transform: scaleX(-1); } /* flip arrows/icons if needed */
+```
+
+3. Fonts and UI details
+- Use an Arabic-capable font for Arabic locale (add via Google Fonts or @font-face).
+- Some third-party components (charts, maps) may not auto-flip — handle alignment programmatically when dir === 'rtl'.
+
+4. Fallback & translation checks
+- Keep `fallbackLng: "en"` so missing keys show English.
+- Optionally show English text as tooltip: `t('key', { lng: 'en' })` for clarification.
+
 ## Auth & user state
 - Pass an `onLogin(user)` callback from Navbar to Login so Navbar can store user state (and persist to `localStorage`) and display user name / logout button.
 
@@ -88,7 +121,6 @@ Invalid points can cause SVG `transform` errors in the console.
 
 ## License
 MIT
-
 ```// filepath: c:\Users\quang\OneDrive\Tiedostot\Otp1\CarRental\README.md
 # Car Rental — Frontend
 
@@ -164,6 +196,39 @@ Invalid points can cause SVG `transform` errors in the console.
 - Install: `npm install i18next react-i18next i18next-browser-languagedetector`
 - Create `src/i18n.js` and load resources or use `i18next-http-backend` with `public/locales/{lng}/{ns}.json`.
 - Use `useTranslation()` and `t('key')` in components. Persist language with the detector (localStorage).
+
+### RTL support (Arabic)
+This project supports right-to-left layout when Arabic is selected. Add the following behaviors:
+
+1. Set document direction when language changes (example in `src/i18n.js`):
+```js
+// after i18n.init(...)
+const RTL_LANGS = ['ar','he','fa','ur'];
+
+i18n.on('languageChanged', (lng) => {
+  document.documentElement.lang = lng;
+  document.documentElement.dir = RTL_LANGS.includes(lng) ? 'rtl' : 'ltr';
+});
+```
+
+2. Use logical CSS properties where possible (padding-inline, margin-inline, text-align) and add small RTL overrides:
+```css
+/* example */
+.navbar-links { padding-inline-start: 12px; }
+html[dir="rtl"] .navbar-links { text-align: right; }
+
+/* explicit overrides */
+html[dir="rtl"] .footer-container { direction: rtl; }
+html[dir="rtl"] .some-icon { transform: scaleX(-1); } /* flip arrows/icons if needed */
+```
+
+3. Fonts and UI details
+- Use an Arabic-capable font for Arabic locale (add via Google Fonts or @font-face).
+- Some third-party components (charts, maps) may not auto-flip — handle alignment programmatically when dir === 'rtl'.
+
+4. Fallback & translation checks
+- Keep `fallbackLng: "en"` so missing keys show English.
+- Optionally show English text as tooltip: `t('key', { lng: 'en' })` for clarification.
 
 ## Auth & user state
 - Pass an `onLogin(user)` callback from Navbar to Login so Navbar can store user state (and persist to `localStorage`) and display user name / logout button.
