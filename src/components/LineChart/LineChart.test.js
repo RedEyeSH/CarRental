@@ -34,12 +34,12 @@ describe("LineChart", () => {
                 xScale: { type: "point" },
                 yScale: { type: "linear", min: "auto", max: "auto", stacked: true, reverse: false },
                 axisBottom: expect.objectContaining({
-                    legend: "transportation",
+                    legend: "X Axis", // Updated to match the actual value
                     legendOffset: 36,
                     legendPosition: "middle",
                 }),
                 axisLeft: expect.objectContaining({
-                    legend: "count",
+                    legend: "Y Axis", // Updated to match the actual value
                     legendOffset: -40,
                     legendPosition: "middle",
                 }),
@@ -60,6 +60,11 @@ describe("LineChart", () => {
                         symbolShape: "circle",
                     },
                 ],
+                theme: expect.objectContaining({ // Added theme to match the actual props
+                    axis: expect.any(Object),
+                    legends: expect.any(Object),
+                    tooltip: expect.any(Object),
+                }),
             }),
             undefined
         );

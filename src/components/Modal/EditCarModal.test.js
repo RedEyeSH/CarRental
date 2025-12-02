@@ -1,6 +1,13 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import EditCarModal from "./EditCarModal";
+import { toast } from "react-toastify";
+
+jest.mock("react-toastify", () => ({
+    toast: {
+        error: jest.fn(),
+    },
+}));
 
 global.URL.createObjectURL = jest.fn(() => "mocked-image-url");
 global.alert = jest.fn();
@@ -114,13 +121,17 @@ describe("EditCarModal", () => {
         });
     });
 
-    test("handles fetch failure and shows alert", async () => {
+    test("handles fetch failure and shows toast error", async () => {
+        // Mock fetch to simulate a failure
         global.fetch.mockResolvedValueOnce({ ok: false });
 
+        // Trigger the form submission
         fireEvent.click(screen.getByText(/Save Changes/i));
 
+        // Verify that the toast error is called with the correct message
         await waitFor(() => {
-            expect(global.alert).toHaveBeenCalledWith("Error updating car");
+            expect(toast.error).toHaveBeenCalledTimes(1);
+            expect(toast.error).toHaveBeenCalledWith("Error updating car");
         });
     });
 });

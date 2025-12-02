@@ -8,27 +8,23 @@ jest.mock("react-router-dom", () => ({
     useNavigate: jest.fn(),
 }));
 
+// Mock react-i18next
+jest.mock("react-i18next", () => ({
+    useTranslation: () => ({
+        t: (key) => {
+            const translations = {
+                "home.searchPlaceholder": "Enter car name...",
+            };
+            return translations[key] || key;
+        },
+        i18n: {
+            changeLanguage: jest.fn(),
+        },
+    }),
+}));
+
 describe("Home component", () => {
     const navigateMock = jest.fn();
-    const alertMock = jest.spyOn(window, "alert").mockImplementation(() => {});
-
-    beforeAll(() => {
-        // Mock the fetch API with expected data
-        global.fetch = jest.fn(() =>
-            Promise.resolve({
-                json: () => Promise.resolve([
-                    { id: 1, name: "Tesla Model S" },
-                    { id: 2, name: "Ford Mustang" },
-                ]), // Mocked response data
-            })
-        );
-    });
-
-    afterAll(() => {
-        // Clean up the fetch mock
-        global.fetch.mockClear();
-        delete global.fetch;
-    });
 
     beforeEach(() => {
         useNavigate.mockReturnValue(navigateMock);

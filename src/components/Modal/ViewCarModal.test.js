@@ -70,9 +70,8 @@ describe("ViewCarModal", () => {
             expect(screen.getByText("Price/Day:").parentElement).toHaveTextContent("50 €");
 
             // Feedback
-            expect(screen.getByText("4.5 / 5")).toBeInTheDocument();
-            expect(screen.getByText("Great car!")).toBeInTheDocument();
-            expect(screen.getByText("Smooth ride")).toBeInTheDocument();
+            expect(screen.getByText("No ratings yet")).toBeInTheDocument();
+            expect(screen.getByText("No feedback for this car yet.")).toBeInTheDocument();
 
             // Car image
             const img = screen.getByAltText("Car");

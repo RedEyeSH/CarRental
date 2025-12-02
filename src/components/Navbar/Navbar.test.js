@@ -15,6 +15,15 @@ jest.mock("../Auth/Login", () =>
 jest.mock("../Auth/Register", () => jest.fn(() => <div>Register Modal</div>));
 jest.mock("../../assets/vite.svg", () => "mocked-svg");
 
+jest.mock("react-i18next", () => ({
+    useTranslation: () => ({
+        t: (key) => key, // Mock translation function
+        i18n: {
+            changeLanguage: jest.fn(),
+        },
+    }),
+}));
+
 describe("Navbar Component", () => {
     beforeEach(() => {
         localStorage.clear();

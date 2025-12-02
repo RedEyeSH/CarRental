@@ -2,6 +2,13 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Register from './Register';
 
+// Mock react-i18next to handle translations in tests
+jest.mock('react-i18next', () => ({
+    useTranslation: () => ({
+        t: (key) => key, // Mock translation function
+    }),
+}));
+
 describe('Register Component', () => {
     const mockOnClose = jest.fn();
     const mockOnSwitch = jest.fn();
@@ -14,27 +21,25 @@ describe('Register Component', () => {
     test('renders the Register component with correct elements', () => {
         render(<Register onClose={mockOnClose} onSwitch={mockOnSwitch} />);
 
-        const headerElement = screen.getByRole('heading', { name: 'App Name' });
+        const headerElement = screen.getByRole('heading', { name: /car rental/i });
         expect(headerElement).toBeInTheDocument();
 
-        const emailInput = screen.getByLabelText('Email address');
+        const emailInput = screen.getByLabelText(/register.email/i);
         expect(emailInput).toBeInTheDocument();
 
-        const firstNameInput = screen.getByLabelText('First name');
+        const firstNameInput = screen.getByLabelText(/register.firstname/i);
         expect(firstNameInput).toBeInTheDocument();
 
-        // Removed the assertion for "Last name" since it doesn't exist in the HTML
-
-        const phoneInput = screen.getByLabelText('Phone number');
+        const phoneInput = screen.getByLabelText(/register.phone/i);
         expect(phoneInput).toBeInTheDocument();
 
-        const passwordInput = screen.getByLabelText('Password');
+        const passwordInput = screen.getByLabelText(/register.password/i);
         expect(passwordInput).toBeInTheDocument();
 
-        const confirmPasswordInput = screen.getByLabelText('Confirm password');
+        const confirmPasswordInput = screen.getByLabelText(/register.confirmPassword/i);
         expect(confirmPasswordInput).toBeInTheDocument();
 
-        const submitButton = screen.getByRole('button', { name: 'Sign up with email' });
+        const submitButton = screen.getByRole('button', { name: /register.signUp/i });
         expect(submitButton).toBeInTheDocument();
     });
 
@@ -59,7 +64,7 @@ describe('Register Component', () => {
     test('calls onSwitch when "Click here!" is clicked', () => {
         render(<Register onClose={mockOnClose} onSwitch={mockOnSwitch} />);
 
-        const switchLink = screen.getByText('Click here!');
+        const switchLink = screen.getByText(/register.clickHere/i);
         fireEvent.click(switchLink);
 
         expect(mockOnSwitch).toHaveBeenCalledTimes(1);

@@ -3,6 +3,12 @@ import { render, screen } from "@testing-library/react";
 import KPICard from "./KPICard";
 import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
 
+jest.mock('react-i18next', () => ({
+    useTranslation: () => ({
+        t: (key) => key, // Mock translation function
+    }),
+}));
+
 describe("KPICard Component", () => {
     test("renders the KPICard component with correct props", () => {
         render(
