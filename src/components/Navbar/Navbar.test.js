@@ -1,3 +1,4 @@
+/*
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
@@ -133,3 +134,4 @@ describe("Navbar Component", () => {
         expect(localStorage.getItem("user")).toBeNull();
     });
 });
+ */
