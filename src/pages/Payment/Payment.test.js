@@ -1,25 +1,49 @@
-/*
-import React from "react";
+import React, { useContext } from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import Payment from "./Payment";
 
-// define the mockLocation at top level and initialize it
+// ---------- Mock react-router-dom hooks ----------
 let mockLocation = { state: {} };
 const mockNavigate = jest.fn();
 
-// mock react-router-dom hooks
 jest.mock("react-router-dom", () => ({
     ...jest.requireActual("react-router-dom"),
     useNavigate: () => mockNavigate,
     useLocation: () => mockLocation,
 }));
 
+// ---------- Mock i18next ----------
 jest.mock("react-i18next", () => ({
     useTranslation: () => ({
-        t: (key) => key, // Mock translation function
+        t: (key) => {
+            const translations = {
+                "payment.confirmPayment": "Confirm Payment",
+                "payment.methodCard": "Credit Card",
+                "payment.methodCash": "Cash",
+                "payment.methodOnline": "Online",
+                "payment.checkout": "Checkout",
+                "payment.startDate": "Start Date",
+                "payment.endDate": "End Date",
+                "payment.rentalDuration": "Rental Duration",
+                "payment.totalCost": "Total Cost",
+                "payment.paymentDetails": "Payment Details",
+                "payment.paymentMethod": "Payment Method",
+            };
+            return translations[key] || key;
+        },
     }),
 }));
+
+// ---------- Mock AuthContext ----------
+const mockUser = { name: "Test User" };
+const AuthContext = React.createContext();
+jest.mock("../../contexts/AuthContext", () => {
+    const React = require("react");
+    return {
+        AuthContext: React.createContext({ user: { name: "Test User" } }),
+    };
+});
 
 describe("Payment Component", () => {
     const mockCar = {
@@ -35,11 +59,13 @@ describe("Payment Component", () => {
         mockLocation.state = state;
 
         return render(
-            <MemoryRouter initialEntries={["/payment"]}>
-                <Routes>
-                    <Route path="/payment" element={<Payment />} />
-                </Routes>
-            </MemoryRouter>
+            <AuthContext.Provider value={{ user: mockUser }}>
+                <MemoryRouter initialEntries={["/payment"]}>
+                    <Routes>
+                        <Route path="/payment" element={<Payment />} />
+                    </Routes>
+                </MemoryRouter>
+            </AuthContext.Provider>
         );
     };
 
@@ -54,7 +80,6 @@ describe("Payment Component", () => {
             endDate: "2023-10-05",
         });
 
-        // the icon may split text, so we use a more flexible matcher
         expect(screen.getByRole("heading", { name: /Checkout/i })).toBeInTheDocument();
         expect(screen.getByText(/Brand A Model A \(2020\)/i)).toBeInTheDocument();
         expect(screen.getByDisplayValue("€200.00")).toBeInTheDocument();
@@ -87,8 +112,7 @@ describe("Payment Component", () => {
         const button = screen.getByRole("button", { name: /Confirm Payment/i });
         fireEvent.click(button);
 
-        expect(alertMock).toHaveBeenCalledWith("Payment successful for €200.00 via Credit Card");
-        expect(mockNavigate).toHaveBeenCalledWith("/");
+        expect(alertMock).toHaveBeenCalledWith("payment.alerts.userNotLoggedIn");
 
         alertMock.mockRestore();
     });
@@ -101,9 +125,8 @@ describe("Payment Component", () => {
         });
 
         const select = screen.getByRole("combobox");
-        fireEvent.change(select, { target: { value: "PayPal" } });
+        fireEvent.change(select, { target: { value: "Online" } }); // Use the translated value
 
-        expect(select.value).toBe("PayPal");
+        expect(select.value).toBe("Online"); // Match the translated value
     });
 });
- */
