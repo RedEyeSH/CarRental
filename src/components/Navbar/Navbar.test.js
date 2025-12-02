@@ -1,10 +1,11 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
+
 jest.mock("../../assets/vite.svg", () => "mocked-svg");
+
 import Navbar from "./Navbar.jsx";
 import * as AuthContext from "../../contexts/AuthContext";
-
 
 // Mock Login and Register modals
 jest.mock("../Auth/Login", () =>
