@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import ActiveRentals from './ActiveRentals';
 
 jest.mock('@fortawesome/react-fontawesome', () => ({
@@ -44,14 +44,19 @@ describe('ActiveRentals Component', () => {
     });
 
     test('renders the component header and search input', async () => {
-        render(<ActiveRentals />);
+        await act(async () => {
+            render(<ActiveRentals />);
+        });
+
         expect(screen.getByText('Active Rentals')).toBeInTheDocument();
         const searchInput = screen.getByPlaceholderText('Search by car, user, or booking ID...');
         expect(searchInput).toBeInTheDocument();
     });
 
     test('renders the table with mocked rentals data', async () => {
-        render(<ActiveRentals />);
+        await act(async () => {
+            render(<ActiveRentals />);
+        });
 
         await screen.findByText(/HEL-1/);
 
@@ -62,7 +67,10 @@ describe('ActiveRentals Component', () => {
     });
 
     test('handles search input change', async () => {
-        render(<ActiveRentals />);
+        await act(async () => {
+            render(<ActiveRentals />);
+        });
+
         await screen.findByText(/HEL-1/);
 
         const searchInput = screen.getByPlaceholderText('Search by car, user, or booking ID...');
@@ -84,7 +92,10 @@ describe('ActiveRentals Component', () => {
             return Promise.resolve({ ok: true, json: () => Promise.resolve([]) });
         });
 
-        render(<ActiveRentals />);
+        await act(async () => {
+            render(<ActiveRentals />);
+        });
+
         await screen.findByText('No active rentals found.');
         expect(screen.getByText('No active rentals found.')).toBeInTheDocument();
     });

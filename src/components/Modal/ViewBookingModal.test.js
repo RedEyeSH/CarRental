@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import { render, screen, waitFor, fireEvent, act } from "@testing-library/react";
 import ViewBookingModal from "./ViewBookingModal";
 
 // Mock localStorage
@@ -42,19 +42,24 @@ describe("ViewBookingModal", () => {
         );
 
         render(<ViewBookingModal isOpen={true} bookingId={bookingId} onClose={() => {}} />);
-        expect(screen.getByText("Loading booking data...")).toBeInTheDocument();
+
+        // Use waitFor to ensure the loading state is rendered
+        await waitFor(() => {
+            expect(screen.getByText((content) => content.includes("Loading booking data"))).toBeInTheDocument();
+        });
     });
 
     test("renders error if booking fetch fails", async () => {
         global.fetch = jest.fn(() => Promise.resolve({ ok: false }));
 
-        render(<ViewBookingModal isOpen={true} bookingId={bookingId} onClose={() => {}} />);
+        await act(async () => {
+            render(<ViewBookingModal isOpen={true} bookingId={bookingId} onClose={() => {}} />);
+        });
 
         await waitFor(() => {
             expect(screen.getByText(/Failed to fetch booking data/i)).toBeInTheDocument();
         });
     });
-
 
     test("calls onClose when Close button is clicked", async () => {
         global.fetch = jest
@@ -65,7 +70,9 @@ describe("ViewBookingModal", () => {
 
         const handleClose = jest.fn();
 
-        render(<ViewBookingModal isOpen={true} bookingId={bookingId} onClose={handleClose} />);
+        await act(async () => {
+            render(<ViewBookingModal isOpen={true} bookingId={bookingId} onClose={handleClose} />);
+        });
 
         await waitFor(() => screen.getByText("Close"));
 

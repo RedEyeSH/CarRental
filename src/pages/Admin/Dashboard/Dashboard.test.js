@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, act } from "@testing-library/react";
 import Dashboard from "./Dashboard";
 
 // Mock KPI cards and LineChart
@@ -43,20 +43,29 @@ describe("Dashboard Component", () => {
         jest.restoreAllMocks();
     });
 
-    test("renders the dashboard header", () => {
-        render(<Dashboard />);
+    test("renders the dashboard header", async () => {
+        await act(async () => {
+            render(<Dashboard />);
+        });
+
         expect(screen.getByText("DASHBOARD")).toBeInTheDocument();
         expect(screen.getByText("Welcome to your dashboard")).toBeInTheDocument();
     });
 
-    test("renders KPI cards", () => {
-        render(<Dashboard />);
+    test("renders KPI cards", async () => {
+        await act(async () => {
+            render(<Dashboard />);
+        });
+
         const kpiCards = screen.getAllByTestId("kpi-card");
         expect(kpiCards.length).toBeGreaterThan(0);
     });
 
     test("renders the revenue chart section with total revenue", async () => {
-        render(<Dashboard />);
+        await act(async () => {
+            render(<Dashboard />);
+        });
+
         expect(screen.getByText("Revenue Generated")).toBeInTheDocument();
 
         await waitFor(() => {
@@ -69,7 +78,10 @@ describe("Dashboard Component", () => {
     });
 
     test("renders the car rental count chart section", async () => {
-        render(<Dashboard />);
+        await act(async () => {
+            render(<Dashboard />);
+        });
+
         await waitFor(() => {
             expect(screen.getByText("Car Rental Count")).toBeInTheDocument();
         });
