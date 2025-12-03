@@ -127,10 +127,6 @@ describe("Payment Component", () => {
         const select = screen.getByRole("combobox");
         fireEvent.change(select, { target: { value: "Online" } }); // Use the translated value
 
-<<<<<<< HEAD
-        expect(select.value).toBe("Online"); // Match the translated value
-=======
         expect(select.value).toBe("Online"); // Match the translated value #2
->>>>>>> 50f3b5d03b72b10b96b47b167873696c86b73a98
     });
 });

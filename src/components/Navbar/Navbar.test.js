@@ -163,8 +163,4 @@ describe("Navbar Component", () => {
 
         expect(mockLogout).toHaveBeenCalled();
     });
-<<<<<<< HEAD
 });
-=======
-});
->>>>>>> 50f3b5d03b72b10b96b47b167873696c86b73a98
