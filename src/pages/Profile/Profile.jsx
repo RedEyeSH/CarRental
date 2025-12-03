@@ -3,7 +3,6 @@ import "./Profile.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faUser,
-    faCar,
     faGear,
     faRightFromBracket,
     faClockRotateLeft,
