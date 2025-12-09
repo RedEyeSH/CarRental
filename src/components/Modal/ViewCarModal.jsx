@@ -74,14 +74,33 @@ const ViewCarModal = ({ isOpen, onClose, carId }) => {
                         />
                     </div>
                 )}
-                {/* Car Details Grid */}
-                {car && (
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18, padding: '0 32px 0 32px', marginTop: 8, marginBottom: 8 }}>
-                        <div><span role="img" aria-label="type"></span> <strong>Type:</strong> {car.type}</div>
-                        <div><span role="img" aria-label="plate"></span> <strong>License Plate:</strong> {car.license_plate}</div>
-                        <div><span role="img" aria-label="status"></span> <strong>Status:</strong> {car.status}</div>
-                        <div><span role="img" aria-label="price"></span> <strong>Price/Day:</strong> {car.price_per_day} €</div>
+
+                {/* Show loading or error messages when fetching car */}
+                {loading && (
+                    <div style={{ padding: '20px 32px', textAlign: 'center', color: '#cbd5e1' }}>Loading car details...</div>
+                )}
+                {error && (
+                    <div style={{ padding: '20px 32px', textAlign: 'center', color: '#ff9aa2' }}>
+                        <strong>Error loading car:</strong> {error}
                     </div>
+                )}
+
+                {/* Car Details Grid + Description */}
+                {car && (
+                    <>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18, padding: '0 32px 0 32px', marginTop: 8, marginBottom: 8 }}>
+                            <div><span role="img" aria-label="type"></span> <strong>Type:</strong> {car.type}</div>
+                            <div><span role="img" aria-label="plate"></span> <strong>License Plate:</strong> {car.license_plate}</div>
+                            <div><span role="img" aria-label="status"></span> <strong>Status:</strong> {car.status}</div>
+                            <div><span role="img" aria-label="price"></span> <strong>Price/Day:</strong> {car.price_per_day} €</div>
+                        </div>
+
+                        {/* Description - full width */}
+                        <div style={{ padding: '0 32px 0 32px', marginTop: 4, marginBottom: 8 }}>
+                            <h4 style={{ margin: '6px 0', fontSize: 15, color: '#cbd5e1' }}>Description</h4>
+                            <div style={{ color: '#e6eef8', lineHeight: 1.4 }}>{car.description ? car.description : <span style={{ color: '#9aa2ad' }}>No description provided.</span>}</div>
+                        </div>
+                    </>
                 )}
                 {/* Feedback Section */}
                 <div style={{ background: '#181c24', borderRadius: 12, margin: '24px 32px 0 32px', padding: 20, boxShadow: '0 1px 6px rgba(0,0,0,0.10)' }}>

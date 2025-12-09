@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./Stock.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faEye, faEdit, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEdit, faTrashAlt, faPlus, faLanguage } from '@fortawesome/free-solid-svg-icons';
 import AddCarModal from "../../../components/Modal/AddCarModal.jsx";
 import EditCarModal from "../../../components/Modal/EditCarModal.jsx";
 import RemoveCarModal from "../../../components/Modal/RemoveCarModal.jsx";
 import ViewCarModal from "../../../components/Modal/ViewCarModal.jsx";
+import AddCarTranslationModal from "../../../components/Modal/AddCarTranslationModal.jsx";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -18,6 +19,7 @@ const Stock = () => {
     const [stockData, setStockData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [translationModalCar, setTranslationModalCar] = useState(null);
 
     useEffect(() => {
         const fetchCars = async () => {
@@ -53,17 +55,6 @@ const Stock = () => {
     const handleCarAdded = (newCar) => {
         setStockData(prev => [...prev, newCar]);
         toast.success("Car added successfully!");
-    };
-
-    const showNotification = (message) => {
-        const id = Date.now();
-        setNotifications(prev => [...prev, { id, message, exiting: false }]);
-        setTimeout(() => {
-            setNotifications(prev => prev.map(n => n.id === id ? { ...n, exiting: true } : n));
-        }, 2500);
-        setTimeout(() => {
-            setNotifications(prev => prev.filter(n => n.id !== id));
-        }, 3000);
     };
 
     const handleDeleteConfirm = async (carId) => {
@@ -188,6 +179,9 @@ const Stock = () => {
                                         <button className="stock-icon-btn" title="Delete" onClick={() => setRemoveModal(car)}>
                                             <FontAwesomeIcon icon={faTrashAlt} />
                                         </button>
+                                        <button className="stock-icon-btn" title="Add Translation" onClick={() => setTranslationModalCar(car.id)}>
+                                            <FontAwesomeIcon icon={faLanguage} />
+                                        </button>
                                     </td>
                                 </tr>
                             ))
@@ -227,6 +221,16 @@ const Stock = () => {
                 onClose={handleViewModalClose}
                 carId={selectedCarToView}
             />
+            {translationModalCar && (
+                <AddCarTranslationModal
+                    onClose={() => setTranslationModalCar(null)}
+                    carId={translationModalCar}
+                    token={token}
+                    onTranslationAdded={(created) => {
+                        setTranslationModalCar(null);
+                    }}
+                />
+            )}
         </div>
     );
 };

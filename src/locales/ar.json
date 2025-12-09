@@ -66,6 +66,7 @@
         "startDate": "تاريخ البدء",
         "endDate": "تاريخ الانتهاء",
         "search": "بحث",
+        "reviews": "تقييمات",
 
         "sort": {
             "new": "الأحدث",
@@ -81,10 +82,19 @@
         "alert": {
             "dateRequired": "يرجى تحديد تاريخ البداية والنهاية.",
             "invalidDate": "لا يمكن أن يكون تاريخ الانتهاء قبل تاريخ البداية."
+        },
+
+        "feedbackModal": {
+            "title": "تقييمات العملاء",
+            "noFeedbacks": "لا توجد تقييمات حتى الآن لهذه السيارة",
+            "filterByRating": "تصفية حسب التقييم",
+            "all": "الكل",
+            "noFeedbacksForRating": "لا توجد تقييمات لهذا التقييم"
         }
     },
 
     "profile": {
+        "backToHome": "العودة إلى الصفحة الرئيسية",
         "myProfile": "ملفي الشخصي",
         "overview": "نظرة عامة",
         "rentalHistory": "سجل الإيجارات",
@@ -160,14 +170,16 @@
 
     "BookingModal": {
         "title": "احجز سيارتك",
-        "pricePerDay": "السعر لليوم",
+        "pricePerDay": "السعر لليوم الواحد",
         "days": "يوم",
         "daysPlural": "أيام",
         "from": "من",
         "to": "إلى",
         "totalPrice": "السعر الإجمالي",
         "cancel": "إلغاء",
-        "confirmBooking": "تأكيد الحجز"
+        "confirmBooking": "تأكيد الحجز",
+        "description": "الوصف",
+        "noReviews": "لا توجد تقييمات بعد"
     },
 
     "payment": {
@@ -216,5 +228,12 @@
         "contact": "اتصل بنا",
         "address": "123 الشارع الرئيسي، المدينة",
         "rights": "كل الحقوق محفوظة."
+    },
+
+    "confirmLogout": {
+        "title": "تأكيد تسجيل الخروج",
+        "message": "هل أنت متأكد من أنك تريد تسجيل الخروج؟ سيتعين عليك تسجيل الدخول مرة أخرى للوصول إلى حسابك.",
+        "cancel": "إلغاء",
+        "confirm": "تسجيل الخروج"
     }
 }

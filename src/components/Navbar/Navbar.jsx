@@ -5,7 +5,10 @@ import Login from "../Auth/Login.jsx";
 import Register from "../Auth/Register.jsx";
 import viteLogo from "../../assets/vite.svg";
 import { useAuth } from "../../contexts/AuthContext.jsx";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import LanguageSelector from "../LanguageSelector/LanguageSelector.jsx";
+import ConfirmLogoutModal from "../Modal/ConfirmLogoutModal.jsx";
 import { useTranslation } from "react-i18next";
 
 const Navbar = () => {
@@ -13,6 +16,7 @@ const Navbar = () => {
 
     const [authModal, setAuthModal] = useState(null);
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false);
     const navigate = useNavigate();
     const dropdownRef = useRef(null);
     const { user, loading, error, logout } = useAuth();
@@ -28,8 +32,17 @@ const Navbar = () => {
     }, []);
 
     const handleLogout = () => {
+        setLogoutConfirmOpen(true);
+    };
+
+    const confirmLogout = () => {
+        setLogoutConfirmOpen(false);
         logout();
         navigate("/");
+    };
+
+    const cancelLogout = () => {
+        setLogoutConfirmOpen(false);
     };
 
     const handleProfileClick = () => {
@@ -45,6 +58,7 @@ const Navbar = () => {
                     <p>Car Rental</p>
                 </Link>
                 <div className="navbar-right">
+                    <LanguageSelector />
                     <div className="navbar-links"></div>
                     <div className="navbar-buttons">
                         {loading ? (
@@ -97,6 +111,12 @@ const Navbar = () => {
                     onSwitch={() => setAuthModal("login")}
                 />
             )}
+
+            <ConfirmLogoutModal 
+                isOpen={logoutConfirmOpen}
+                onConfirm={confirmLogout}
+                onCancel={cancelLogout}
+            />
         </>
     );
 };

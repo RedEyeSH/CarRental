@@ -7,7 +7,10 @@ import {
     faRightFromBracket,
     faClockRotateLeft,
     faAddressCard,
+    faHouse,
+    faStar
 } from "@fortawesome/free-solid-svg-icons";
+import { faStar as farStar } from '@fortawesome/free-regular-svg-icons';
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,10 +19,13 @@ import { useAuth } from "../../contexts/AuthContext.jsx";
 import { useTranslation } from "react-i18next";
 
 import LanguageSelector from "../../components/LanguageSelector/LanguageSelector";
+import ConfirmLogoutModal from "../../components/Modal/ConfirmLogoutModal.jsx";
 
 
 const Profile = () => {
     const { t, i18n } = useTranslation();
+    const { user, loading, error, logout } = useAuth();
+    const navigate = useNavigate();
 
     const [activeSection, setActiveSection] = useState("overview");
     const [bookings, setBookings] = useState([]);
@@ -36,6 +42,7 @@ const Profile = () => {
     const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
     const [feedbackBooking, setFeedbackBooking] = useState(null);
     const [feedbackRating, setFeedbackRating] = useState(5);
+    const [hoverRating, setHoverRating] = useState(0);
     const [feedbackComment, setFeedbackComment] = useState("");
     const [feedbackLoading, setFeedbackLoading] = useState(false);
     const [feedbackError, setFeedbackError] = useState(null);
@@ -49,8 +56,7 @@ const Profile = () => {
     const [settingsLoading, setSettingsLoading] = useState(false);
     const [settingsError, setSettingsError] = useState(null);
     const [settingsSuccess, setSettingsSuccess] = useState(null);
-    const { user, loading, error, logout } = useAuth();
-    const navigate = useNavigate();
+    const [logoutConfirmOpen, setLogoutConfirmOpen] = useState(false); // Add this state
 
     useEffect(() => {
         if (user) {
@@ -128,7 +134,8 @@ const Profile = () => {
         setSelectedBookingLoading(true);
         setSelectedBookingError(null);
         fetch(`http://localhost:3000/api/v1/bookings/customer/${selectedBookingId}`, {
-            headers: {
+            headers:
+            {
                 "Authorization": `Bearer ${token}`,
                 "Content-Type": "application/json",
             },
@@ -165,8 +172,17 @@ const Profile = () => {
 
     // Replace handleLogout
     const handleLogout = () => {
+        setLogoutConfirmOpen(true);
+    };
+
+    const confirmLogout = () => {
+        setLogoutConfirmOpen(false);
         logout();
         navigate("/");
+    };
+
+    const cancelLogout = () => {
+        setLogoutConfirmOpen(false);
     };
 
     const openViewModal = (id) => {
@@ -270,6 +286,10 @@ const Profile = () => {
             <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick pauseOnFocusLoss draggable pauseOnHover theme="dark" />
             <div className="profile-container">
                 <div className="profile-sidebar">
+                    <button className="profile-sidebar-back" onClick={() => navigate("/")}>
+                        <FontAwesomeIcon icon={faHouse} />
+                        {t("profile.backToHome")}
+                    </button>
                     <div className="profile-sidebar-header">
                         <p>{t("profile.myProfile")}</p>
                     </div>
@@ -477,9 +497,11 @@ const Profile = () => {
                                     </div>
                                     {/* Feedback Modal */}
                                     {feedbackModalOpen && feedbackBooking && (
-                                        <div className="profile-feedback-modal">
-                                            <div className="profile-feedback-container">
-                                                <button onClick={closeFeedbackModal} style={{ position: 'absolute', top: 10, right: 10, background: 'none', border: 'none', color: '#fff', fontSize: 20, cursor: 'pointer' }}>&times;</button>
+                                        <div className="profile-feedback-modal" onClick={closeFeedbackModal}>
+                                            <div className="profile-feedback-container" onClick={(e) => e.stopPropagation()}>
+                                                <button className="feedback-modal-close" onClick={closeFeedbackModal}>&times;</button>
+                                                <h3 className="feedback-modal-title">{t("profile.rentalHistoryPage.feedbackModal.title")}</h3>
+
                                                 {/* Car image and info */}
                                                 {carDetails[feedbackBooking.car_id] && carDetails[feedbackBooking.car_id].image && (
                                                     <img
@@ -495,7 +517,7 @@ const Profile = () => {
                                                     />
                                                 )}
                                                 <h3 style={{ marginTop: 0, marginBottom: 8 }}>
-                                                    {t("profile.rentalHistoryPage.feedbackModal.title")}
+                                                    {/* {t("profile.rentalHistoryPage.feedbackModal.title")} */}
                                                     {carDetails[feedbackBooking.car_id] && (
                                                         <span style={{ display: 'block', fontWeight: 'normal', fontSize: 15, marginTop: 4 }}>
                                                             {carDetails[feedbackBooking.car_id].brand} {carDetails[feedbackBooking.car_id].model} ({carDetails[feedbackBooking.car_id].license_plate})
@@ -513,14 +535,43 @@ const Profile = () => {
                                                 ) : (
                                                     <form className="profile-feedback-form" onSubmit={handleFeedbackSubmit}>
                                                         <div>
-                                                            <label>{t("profile.rentalHistoryPage.feedbackModal.rating")}: </label>
-                                                            <select value={feedbackRating} onChange={e => setFeedbackRating(Number(e.target.value))} style={{ marginLeft: 8 }} required>
-                                                                {[1, 2, 3, 4, 5].map(r => <option key={r} value={r}>{r}</option>)}
-                                                            </select>
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                                                                <label style={{ margin: 0 }}>{t("profile.rentalHistoryPage.feedbackModal.rating")}:</label>
+                                                                <div style={{ display: 'flex', gap: 8 }}>
+                                                                    {[1, 2, 3, 4, 5].map((star) => (
+                                                                        <FontAwesomeIcon
+                                                                            key={star}
+                                                                            icon={star <= (hoverRating || feedbackRating) ? faStar : farStar}
+                                                                            onClick={() => canSubmitFeedback && setFeedbackRating(star)}
+                                                                            onMouseEnter={() => canSubmitFeedback && setHoverRating(star)}
+                                                                            onMouseLeave={() => setHoverRating(0)}
+                                                                            style={{
+                                                                                fontSize: 28,
+                                                                                color: star <= (hoverRating || feedbackRating) ? '#ffc107' : '#444c56',
+                                                                                cursor: canSubmitFeedback ? 'pointer' : 'not-allowed',
+                                                                                opacity: canSubmitFeedback ? 1 : 0.5,
+                                                                                transition: 'all 0.2s ease'
+                                                                            }}
+                                                                        />
+                                                                    ))}
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                         <div>
                                                             <label>{t("profile.rentalHistoryPage.feedbackModal.comment")}:</label>
-                                                            <textarea value={feedbackComment} onChange={e => setFeedbackComment(e.target.value)} rows={3} style={{ width: '100%', marginTop: 4 }} required />
+                                                            <textarea 
+                                                                value={feedbackComment} 
+                                                                onChange={e => setFeedbackComment(e.target.value)} 
+                                                                rows={3} 
+                                                                style={{ 
+                                                                    width: '100%', 
+                                                                    marginTop: 4,
+                                                                    opacity: canSubmitFeedback ? 1 : 0.5,
+                                                                    cursor: canSubmitFeedback ? 'text' : 'not-allowed'
+                                                                }}
+                                                                disabled={!canSubmitFeedback}
+                                                                required 
+                                                            />
                                                         </div>
                                                         {!canSubmitFeedback && (
                                                             <div style={{ color: 'orange', whiteSpace: "nowrap" }}>
@@ -538,38 +589,54 @@ const Profile = () => {
                                     )}
                                     {/* View Booking Modal */}
                                     {viewModalOpen && (
-                                        <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-                                            <div style={{ background: '#161b22', padding: 32, borderRadius: 10, minWidth: 320, maxWidth: 400, color: '#fff', position: 'relative' }}>
-                                                <button onClick={closeViewModal} style={{ position: 'absolute', top: 10, right: 10, background: 'none', border: 'none', color: '#fff', fontSize: 20, cursor: 'pointer' }}>&times;</button>
-                                                <h3 style={{ marginTop: 0 }}>{t("profile.rentalHistoryPage.viewModal.title")}</h3>
+                                        <div className="view-modal-overlay" onClick={closeViewModal}>
+                                            <div className="view-modal-content" onClick={(e) => e.stopPropagation()}>
+                                                <button className="view-modal-close" onClick={closeViewModal}>&times;</button>
+                                                <h3 className="view-modal-title">{t("profile.rentalHistoryPage.viewModal.title")}</h3>
                                                 {selectedBookingLoading ? (
                                                     <p>{t("profile.loading")}</p>
                                                 ) : selectedBookingError ? (
                                                     <p style={{ color: 'red' }}>{selectedBookingError}</p>
                                                 ) : selectedBooking ? (
-                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                                                        {/* Car image section */}
+                                                    <>
                                                         {carDetails[selectedBooking.car_id] && carDetails[selectedBooking.car_id].image && (
                                                             <img
+                                                                className="view-modal-image"
                                                                 src={`http://localhost:3000/public/uploads/${carDetails[selectedBooking.car_id].image}`}
                                                                 alt="Car"
-                                                                style={{
-                                                                    width: '100%',
-                                                                    maxHeight: 180,
-                                                                    objectFit: 'cover',
-                                                                    borderRadius: 8,
-                                                                    marginBottom: 12,
-                                                                }}
                                                             />
                                                         )}
-                                                        <div><b>{t("profile.rentalHistoryPage.table.bookingId")}:</b> {selectedBooking.id}</div>
-                                                        <div><b>{t("profile.rentalHistoryPage.table.car")}:</b> {carDetails[selectedBooking.car_id] ? `${carDetails[selectedBooking.car_id].brand} ${carDetails[selectedBooking.car_id].model} (${carDetails[selectedBooking.car_id].license_plate})` : selectedBooking.car_id}</div>
-                                                        <div><b>{t("profile.rentalHistoryPage.table.startDate")}:</b> {selectedBooking.start_date}</div>
-                                                        <div><b>{t("profile.rentalHistoryPage.table.endDate")}:</b> {selectedBooking.end_date}</div>
-                                                        <div><b>{t("profile.rentalHistoryPage.table.totalPrice")}:</b> {selectedBooking.total_price}</div>
-                                                        <div><b>{t("profile.rentalHistoryPage.table.paymentStatus")}:</b> {selectedBooking.payment_status}</div>
-                                                        <div><b>{t("profile.rentalHistoryPage.table.createdAt")}:</b> {new Date(selectedBooking.created_at).toLocaleString(i18n.language)}</div>
-                                                    </div>
+                                                        <div className="view-modal-details">
+                                                            <div className="view-modal-row">
+                                                                <span className="view-modal-label">{t("profile.rentalHistoryPage.table.bookingId")}</span>
+                                                                <span className="view-modal-value highlight">{selectedBooking.id}</span>
+                                                            </div>
+                                                            <div className="view-modal-row">
+                                                                <span className="view-modal-label">{t("profile.rentalHistoryPage.table.car")}</span>
+                                                                <span className="view-modal-value">{carDetails[selectedBooking.car_id] ? `${carDetails[selectedBooking.car_id].brand} ${carDetails[selectedBooking.car_id].model} (${carDetails[selectedBooking.car_id].license_plate})` : selectedBooking.car_id}</span>
+                                                            </div>
+                                                            <div className="view-modal-row">
+                                                                <span className="view-modal-label">{t("profile.rentalHistoryPage.table.startDate")}</span>
+                                                                <span className="view-modal-value">{selectedBooking.start_date}</span>
+                                                            </div>
+                                                            <div className="view-modal-row">
+                                                                <span className="view-modal-label">{t("profile.rentalHistoryPage.table.endDate")}</span>
+                                                                <span className="view-modal-value">{selectedBooking.end_date}</span>
+                                                            </div>
+                                                            <div className="view-modal-row">
+                                                                <span className="view-modal-label">{t("profile.rentalHistoryPage.table.totalPrice")}</span>
+                                                                <span className="view-modal-value highlight">€{selectedBooking.total_price}</span>
+                                                            </div>
+                                                            <div className="view-modal-row">
+                                                                <span className="view-modal-label">{t("profile.rentalHistoryPage.table.paymentStatus")}</span>
+                                                                <span className="view-modal-value">{selectedBooking.payment_status}</span>
+                                                            </div>
+                                                            <div className="view-modal-row">
+                                                                <span className="view-modal-label">{t("profile.rentalHistoryPage.table.createdAt")}</span>
+                                                                <span className="view-modal-value">{new Date(selectedBooking.created_at).toLocaleString(i18n.language)}</span>
+                                                            </div>
+                                                        </div>
+                                                    </>
                                                 ) : (
                                                     <p>{t("profile.rentalHistoryPage.viewModal.noData")}</p>
                                                 )}
@@ -671,6 +738,12 @@ const Profile = () => {
                     )}
                 </div>
             </div>
+
+            <ConfirmLogoutModal 
+                isOpen={logoutConfirmOpen}
+                onConfirm={confirmLogout}
+                onCancel={cancelLogout}
+            />
         </section>
     );
 };

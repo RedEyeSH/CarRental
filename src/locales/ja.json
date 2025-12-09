@@ -61,6 +61,7 @@
         "startDate": "開始日",
         "endDate": "終了日",
         "search": "検索",
+        "reviews": "レビュー",
         "sort": {
             "new": "新着",
             "priceAsc": "価格の昇順",
@@ -73,9 +74,17 @@
         "alert": {
             "dateRequired": "開始日と終了日を選択してください。",
             "invalidDate": "終了日は開始日より前にできません。"
+        },
+        "feedbackModal": {
+            "title": "カスタマーレビュー",
+            "noFeedbacks": "この車にはまだレビューがありません",
+            "filterByRating": "評価でフィルター",
+            "all": "すべて",
+            "noFeedbacksForRating": "この評価のレビューはありません"
         }
     },
     "profile": {
+        "backToHome": "ホームに戻る",
         "myProfile": "マイプロフィール",
         "overview": "概要",
         "rentalHistory": "レンタル履歴",
@@ -147,7 +156,9 @@
         "to": "終了",
         "totalPrice": "合計金額",
         "cancel": "キャンセル",
-        "confirmBooking": "予約を確定"
+        "confirmBooking": "予約を確定",
+        "description": "説明",
+        "noReviews": "まだレビューがありません"
     },
     "payment": {
         "checkout": "チェックアウト",
@@ -180,7 +191,7 @@
             "paymentFailed": "支払いに失敗しました。もう一度お試しください。"
         }
     },
-
+    
     "footer": {
         "tagline": "素早く信頼できるレンタカーサービス",
         "company": "会社情報",
@@ -194,5 +205,11 @@
         "contact": "お問い合わせ",
         "address": "〒123-4567 市, メイン通り123",
         "rights": "全著作権所有。"
+    },
+    "confirmLogout": {
+        "title": "ログアウトを確認",
+        "message": "ログアウトしてもよろしいですか？アカウントにアクセスするにはもう一度ログインが必要です。",
+        "cancel": "キャンセル",
+        "confirm": "ログアウト"
     }
 }

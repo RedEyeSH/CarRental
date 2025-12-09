@@ -64,6 +64,7 @@
         "startDate": "Start Date",
         "endDate": "End Date",
         "search": "Search",
+        "reviews": "reviews",
         "sort": {
             "new": "New",
             "priceAsc": "Price ascending",
@@ -76,10 +77,19 @@
         "alert": {
             "dateRequired": "Please select both start and end dates.",
             "invalidDate": "End date cannot be before start date."
+        },
+
+        "feedbackModal": {
+            "title": "Customer Reviews",
+            "noFeedbacks": "No reviews yet for this car",
+            "filterByRating": "Filter by rating",
+            "all": "All",
+            "noFeedbacksForRating": "No reviews for this rating"
         }
     },
 
     "profile": {
+        "backToHome": "Back to Home",
         "myProfile": "My Profile",
         "overview": "Overview",
         "rentalHistory": "Rental History",
@@ -162,7 +172,9 @@
         "to": "To",
         "totalPrice": "Total Price",
         "cancel": "Cancel",
-        "confirmBooking": "Confirm Booking"
+        "confirmBooking": "Confirm Booking",
+        "description": "Description",
+        "noReviews": "No reviews yet"
     },
 
     "payment": {
@@ -210,5 +222,12 @@
         "contact": "Contact",
         "address": "123 Main St, City",
         "rights": "All rights reserved."
+    },
+
+    "confirmLogout": {
+        "title": "Confirm Logout",
+        "message": "Are you sure you want to log out? You will need to sign in again to access your account.",
+        "cancel": "Cancel",
+        "confirm": "Logout"
     }
 }

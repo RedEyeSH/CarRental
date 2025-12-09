@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Modal.css";
 import { toast } from "react-toastify";
 
-const AddCarModal = ({ onClose, onCarAdded, token, onShowNotification }) => {
+const AddCarModal = ({ onClose, onCarAdded, token }) => {
     const [formData, setFormData] = useState({
         brand: "",
         model: "",
@@ -12,6 +12,7 @@ const AddCarModal = ({ onClose, onCarAdded, token, onShowNotification }) => {
         status: "READY",
         price_per_day: "",
         image: null,
+        description: "", // added description
     });
 
     const [preview, setPreview] = useState(null);
@@ -46,7 +47,12 @@ const AddCarModal = ({ onClose, onCarAdded, token, onShowNotification }) => {
                 },
             });
 
-            if (!res.ok) throw new Error("Failed to add car");
+            if (!res.ok) {
+                const text = await res.text().catch(() => null);
+                console.error('AddCarModal: failed to add car', text);
+                toast.error(text || "Failed to add car");
+                return;
+            }
 
             if (onCarAdded) {
                 const newCar = await res.json();
@@ -148,6 +154,18 @@ const AddCarModal = ({ onClose, onCarAdded, token, onShowNotification }) => {
                                 placeholder=" "
                             />
                             <label htmlFor="price_per_day">Price per Day</label>
+                        </div>
+
+                        {/* New description field */}
+                        <div className="form-group">
+                            <textarea
+                                name="description"
+                                value={formData.description}
+                                onChange={handleChange}
+                                placeholder=" "
+                                rows={4}
+                            />
+                            <label htmlFor="description">Description</label>
                         </div>
 
                         <div className="form-group">

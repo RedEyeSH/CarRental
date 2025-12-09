@@ -39,6 +39,30 @@
     gap: 20px;
 }
 
+.navbar-right select {
+    background: #0d1117;
+    color: #c9d1d9;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.navbar-right select:hover {
+    border-color: #58a6ff;
+    background: #161b22;
+}
+
+.navbar-right select:focus {
+    border-color: #58a6ff;
+    box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+}
+
+
 /* Navbar Links Placeholder */
 .navbar-links {
     display: flex;

@@ -12,6 +12,7 @@ const EditCarModal = ({ carData, onClose, onCarEdited, token }) => {
         status: "",
         price_per_day: "",
         image: null,
+        description: "", // added description
     });
 
     const [preview, setPreview] = useState(null);
@@ -29,6 +30,7 @@ const EditCarModal = ({ carData, onClose, onCarEdited, token }) => {
                 status: carData.status || "",
                 price_per_day: carData.price_per_day || "",
                 image: null,
+                description: carData.description || "", // populate description
             });
 
             // Set the original image filename if the car data has an image
@@ -85,7 +87,8 @@ const EditCarModal = ({ carData, onClose, onCarEdited, token }) => {
         Object.entries(formData).forEach(([key, value]) => {
             if (key === "status" && (value === "AVAILABLE" || value === "RENTED")) {
                 body.append(key, "READY");
-            } else if (value) {
+            } else if (value || value === 0) {
+                // include falsy number 0
                 body.append(key, value);
             }
         });
@@ -108,7 +111,12 @@ const EditCarModal = ({ carData, onClose, onCarEdited, token }) => {
                 },
             });
 
-            if (!res.ok) throw new Error("Failed to update car");
+            if (!res.ok) {
+                const text = await res.text().catch(() => null);
+                console.error('EditCarModal: failed to update car', text);
+                toast.error(text || "Failed to update car");
+                return;
+            }
 
             if (onCarEdited) {
                 const updatedCar = await res.json();
@@ -210,6 +218,18 @@ const EditCarModal = ({ carData, onClose, onCarEdited, token }) => {
                                 placeholder=" "
                             />
                             <label htmlFor="price_per_day">Price per Day</label>
+                        </div>
+
+                        {/* New description field */}
+                        <div className="form-group">
+                            <textarea
+                                name="description"
+                                value={formData.description}
+                                onChange={handleChange}
+                                placeholder=" "
+                                rows={4}
+                            />
+                            <label htmlFor="description">Description</label>
                         </div>
 
                         <div className="form-group">

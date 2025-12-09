@@ -212,6 +212,7 @@
     display: flex;
     justify-content: space-between;
     margin-top: 15px;
+    gap: 20px;
 }
 
 .modal-actions button {
@@ -274,6 +275,25 @@
     outline: none;
     transition: 0.25s;
 }
+/* Textarea styling for description fields */
+.form-group textarea {
+    background: none;
+    width: 100%;
+    padding: 12px 10px;
+    border-radius: 6px;
+    border: 1px solid #333;
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+    transition: 0.25s;
+    resize: vertical;
+    min-height: 80px;
+    box-sizing: border-box;
+}
+
+.form-group textarea:focus {
+    border-color: #fff;
+}
 
 .form-group input:focus, .form-group select:focus {
     border-color: #fff;
@@ -317,6 +337,27 @@
     transform: none;
     color: #aaa;
 }
+
+/* inline edit textarea used in translation rows */
+.inline-edit-textarea {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    color: #fff;
+    padding: 6px 8px;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 13px;
+    min-height: 56px;
+}
+
+.form-group textarea:focus + label,
+.form-group textarea:not(:placeholder-shown) + label {
+    top: -8px;
+    left: 8px;
+    font-size: 12px;
+}
+
 
 .fullscreen-overlay {
     position: fixed;
@@ -403,6 +444,7 @@
 }
 
 .booking-main-info {
+    width: 100%;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -429,125 +471,557 @@
 }
 
 .booking-label span {
-    color: #e2e8f0;
-    font-weight: 500;
+    color: #58a6ff;
+    font-weight: bold;
 }
 
-/* This one is fron BookingModal.jsx */
+/* This one is from BookingModal.jsx */
 .booking-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     z-index: 3000;
 }
 
 .booking-modal-home {
-    background-color: #161b22;
-    padding: 30px;
-    border-radius: 10px;
-    color: white;
-    width: 350px;
-    text-align: center;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 24px;
+    max-width: 480px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    color: #c9d1d9;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    position: relative;
+    animation: modal-fade-in 0.3s ease;
 }
 
 .booking-modal-home h2 {
-    margin-bottom: 15px;
+    margin: 0 0 20px 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #c9d1d9;
+    text-align: center;
 }
 
-.booking-modal-home p {
+.booking-details-card {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 16px;
     margin-bottom: 20px;
 }
 
-/* --- Enhanced Booking Modal Styling --- */
+.booking-details-header {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #30363d;
+}
+
+.booking-car-image-wrapper {
+    width: 100%;
+    height: 200px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #161b22;
+}
+
+.booking-car-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.booking-main-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.booking-main-info h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #c9d1d9;
+}
+
+.booking-details-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.booking-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: #8b949e;
+    margin: 0;
+}
+
+.booking-label strong {
+    color: #c9d1d9;
+    font-weight: 500;
+}
+
+.booking-label span {
+    color: #c9d1d9;
+    font-weight: 500;
+}
+
+.booking-description {
+    margin-top: 10px;
+    padding: 12px;
+    background: rgba(88, 166, 255, 0.1);
+    border-left: 3px solid #58a6ff;
+    border-radius: 4px;
+}
+
+.booking-description-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #58a6ff;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.booking-description-text {
+    margin: 0;
+    font-size: 13px;
+    color: #c9d1d9;
+    line-height: 1.5;
+}
+
 .booking-total {
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid #2d3748;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #30363d;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .total-label {
-    font-size: 1.1rem;
+    font-size: 16px;
     font-weight: 600;
-    color: #cbd5e1;
+    color: #c9d1d9;
 }
 
 .total-amount {
-    font-size: 1.3rem;
+    font-size: 20px;
     font-weight: 700;
-    color: #4ea0ff;
+    color: #58a6ff;
+}
+
+.booking-modal-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.booking-confirm-btn,
+.booking-cancel-btn {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid;
+    white-space: nowrap;
 }
 
 .booking-confirm-btn {
     background-color: #2563eb;
+    
+    border-color: #3fb950;
     color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 18px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.25s;
 }
 
-.booking-confirm-btn:hover {
-    background-color: #1f6feb;
-    /* background: linear-gradient(90deg, #2563eb 0%, #3182ce 100%); */
-    transform: translateY(-1px);
+.booking-confirm-btn:hover:not(:disabled) {
+    background-color: #2563eb;
+    transform: translateY(-2px);
 }
 
 .booking-cancel-btn {
     background-color: #f85149;
+    border-color: #30363d;
     color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 18px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.25s;
 }
 
 .booking-cancel-btn:hover {
-    background-color: #ff6666;
+    transform: translateY(-2px);
+}
+
+.booking-confirm-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+    .booking-modal-home {
+        padding: 20px;
+        max-width: 95vw;
+    }
+
+    .booking-car-image-wrapper {
+        height: 160px;
+    }
+
+    .booking-modal-home h2 {
+        font-size: 18px;
+        margin-bottom: 16px;
+    }
+}
+
+@media (max-width: 400px) {
+    .booking-modal-home {
+        padding: 16px;
+    }
+
+    .booking-modal-buttons {
+        flex-direction: column;
+    }
+
+    .booking-car-image-wrapper {
+        height: 140px;
+    }
+}
+
+
+/* Translations table styles added for AddCarTranslationModal */
+.translations-section {
+    text-align: left;
+    margin-bottom: 14px;
+}
+
+.translations-table-wrapper {
+    width: 100%;
+    max-height: 220px; /* makes long lists scrollable inside modal */
+    overflow: auto;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.04);
+    background: rgba(13,17,23,0.6);
+    padding: 6px;
+    box-sizing: border-box;
+    margin-top: 8px;
+}
+
+.translations-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 360px;
+    font-size: 13px;
+    color: #e6eef8;
+}
+
+.translations-table thead th {
+    position: sticky;
+    top: 0;
+    background: linear-gradient(180deg, rgba(10,14,18,0.85), rgba(16,20,24,0.85));
+    color: #cbd5e1;
+    padding: 8px 10px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    z-index: 2;
+}
+
+.translations-table tbody td {
+    padding: 8px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.02);
+    color: #dbeafe;
+}
+
+.translations-table tbody tr:nth-child(even) {
+    background: rgba(255,255,255,0.01);
+}
+
+.translations-table tbody tr:hover {
+    background: rgba(255,255,255,0.02);
+}
+
+/* Inline edit inputs and action buttons for translations table */
+.inline-edit-input {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    color: #fff;
+    padding: 6px 8px;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 13px;
+}
+
+.translation-actions {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.translation-action-btn {
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.translation-action-btn.edit {
+    background: #2563eb; /* blue */
+    color: #fff;
+}
+
+.translation-action-btn.save {
+    background: #16a34a; /* green */
+    color: #fff;
+}
+
+.translation-action-btn.cancel {
+    background: #6b7280; /* gray */
+    color: #fff;
+}
+
+.translation-action-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.translations-table th:last-child,
+.translations-table td:last-child {
+    width: 120px;
+    text-align: left;
+}
+
+/* Make sure the table fits nicely on very small screens */
+@media (max-width: 420px) {
+    .modal {
+        padding: 18px 12px;
+    }
+
+    .translations-table thead th, .translations-table tbody td {
+        padding: 6px 8px;
+        font-size: 12px;
+    }
+}
+
+/* Styles for the reusable confirm modal */
+.confirm-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 99999; /* ensure it's above other modal layers */
+    animation: confirm-fade-in 0.12s ease-out;
+}
+
+@keyframes confirm-fade-in {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.confirm-modal {
+    background: #161B22;
+    color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    padding: 20px 18px;
+    max-width: 420px;
+    width: 92%;
+    text-align: center;
+    transform-origin: center;
+}
+
+.confirm-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.confirm-actions button {
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+}
+
+.confirm-actions button[disabled] {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.confirm-actions button:first-child {
+    background: #444;
+    color: #fff;
+}
+
+.confirm-actions button:last-child {
+    background: #ff4d4d;
+    color: #fff;
+}
+
+/* --- Confirm Logout Modal Styles --- */
+.confirm-logout-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2500;
+}
+
+.confirm-logout-modal {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 32px 28px;
+    max-width: 380px;
+    width: 90%;
+    color: #c9d1d9;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+    animation: confirm-logout-slide-up 0.3s ease;
+    text-align: center;
+}
+
+@keyframes confirm-logout-slide-up {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.confirm-logout-title {
+    margin: 0 0 16px 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #c9d1d9;
+    letter-spacing: -0.3px;
+}
+
+.confirm-logout-message {
+    margin: 0 0 28px 0;
+    font-size: 14px;
+    color: #8b949e;
+    line-height: 1.6;
+}
+
+.confirm-logout-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.confirm-logout-cancel,
+.confirm-logout-confirm {
+    flex: 1;
+    padding: 11px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid;
+}
+
+.confirm-logout-cancel {
+    background: #0d1117;
+    border-color: #30363d;
+    color: #8b949e;
+}
+
+.confirm-logout-cancel:hover {
+    background: #161b22;
+    border-color: #58a6ff;
+    color: #58a6ff;
     transform: translateY(-1px);
 }
 
+.confirm-logout-cancel:active {
+    transform: translateY(0);
+}
 
+.confirm-logout-confirm {
+    background: #da3633;
+    border-color: #f85149;
+    color: #fff;
+}
+
+.confirm-logout-confirm:hover {
+    background: #f02d2d;
+    box-shadow: 0 4px 12px rgba(248, 81, 73, 0.4);
+    transform: translateY(-1px);
+}
+
+.confirm-logout-confirm:active {
+    transform: translateY(0);
+}
 
 @media (max-width: 600px) {
-    .booking-details-header {
+    .confirm-logout-modal {
+        padding: 24px 20px;
+        max-width: 95vw;
+        border-radius: 10px;
+    }
+
+    .confirm-logout-title {
+        font-size: 18px;
+        margin-bottom: 12px;
+    }
+
+    .confirm-logout-message {
+        font-size: 13px;
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+
+    .confirm-logout-buttons {
+        gap: 8px;
+    }
+
+    .confirm-logout-cancel,
+    .confirm-logout-confirm {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 400px) {
+    .confirm-logout-modal {
+        padding: 20px 16px;
+    }
+
+    .confirm-logout-title {
+        font-size: 16px;
+    }
+
+    .confirm-logout-buttons {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 0.8rem;
-    }
-    .booking-car-image {
-        width: 100px;
-        height: 70px;
-    }
-    .booking-modal {
-        padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+        gap: 10px;
     }
 }
-
-/* Responsive for mobile */
-@media (max-width: 500px) {
-    .login-modal {
-        padding: 1.2rem 0.5rem 1.5rem 0.5rem;
-        max-width: 98vw;
-    }
-    .login-modal form {
-        gap: 0.7rem;
-    }
-}
-
-
