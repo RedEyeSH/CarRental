@@ -81,7 +81,8 @@
             "filterByRating": "評価でフィルター",
             "all": "すべて",
             "noFeedbacksForRating": "この評価のレビューはありません"
-        }
+        },
+        "day": "日"
     },
     "profile": {
         "backToHome": "ホームに戻る",

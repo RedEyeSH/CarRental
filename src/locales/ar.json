@@ -90,7 +90,9 @@
             "filterByRating": "تصفية حسب التقييم",
             "all": "الكل",
             "noFeedbacksForRating": "لا توجد تقييمات لهذا التقييم"
-        }
+        },
+
+        "day": "يوم"
     },
 
     "profile": {

@@ -249,7 +249,7 @@ const Home = () => {
                                     </div>
                                     <div className="home-card-content">
                                         <h2>{car.brand} {car.model} ({car.year})</h2>
-                                        <p>€{car.price_per_day}/day</p>
+                                        <p>€{car.price_per_day}/{t("home.day")}</p>
                                         <p>{t("home.added")}: {new Date(car.created_at).toLocaleDateString()}</p>
                                         
                                         {/* Reviews Section */}

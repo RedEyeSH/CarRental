@@ -81,7 +81,8 @@
             "filterByRating": "Фильтровать по оценке",
             "all": "Все",
             "noFeedbacksForRating": "Нет отзывов для этой оценки"
-        }
+        },
+        "day": "день"
     },
     "profile": {
         "backToHome": "Вернуться на главную",

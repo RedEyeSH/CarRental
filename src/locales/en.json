@@ -85,7 +85,8 @@
             "filterByRating": "Filter by rating",
             "all": "All",
             "noFeedbacksForRating": "No reviews for this rating"
-        }
+        },
+        "day": "day"
     },
 
     "profile": {
