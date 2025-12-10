@@ -12,9 +12,9 @@ const KPICard = ({ icon, label, value, change, color }) => {
             <div className="kpi-card-label">{label}</div>
             <div className="kpi-card-value">{value.toLocaleString()}</div>
         </div>
-        <div className="kpi-card-change" style={{ color }}>
+        {/* <div className="kpi-card-change" style={{ color }}>
             <p>{change}</p>
-        </div>
+        </div> */}
     </div>
   );
 };

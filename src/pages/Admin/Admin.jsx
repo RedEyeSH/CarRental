@@ -20,6 +20,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Admin = () => {
     const [activeSection, setActiveSection] = useState("dashboard");
+    const [sidebarOpen, setSidebarOpen] = useState(true);
     const [user, setUser] = useState(() => {
         const stored = localStorage.getItem("user");
         try {
@@ -44,6 +45,10 @@ const Admin = () => {
         toast.success("Logout successful!");
     };
 
+    const toggleSidebar = () => {
+        setSidebarOpen(!sidebarOpen);
+    };
+
     if (showLogin) {
         return <LoginModal isOpen={true} onLogin={handleLogin} />;
     }
@@ -52,10 +57,10 @@ const Admin = () => {
         <section className="admin">
             <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick pauseOnFocusLoss draggable pauseOnHover />
             <div className="admin-container">
-                <div className="admin-sidebar">
+                <div className={`admin-sidebar ${sidebarOpen ? "open" : "closed"}`}>
                     <div className="admin-sidebar-header">
                         <p>Admin Page</p>
-                        <FontAwesomeIcon icon={faBars} />
+                        <FontAwesomeIcon icon={faBars} onClick={toggleSidebar} className="menu-toggle" />
                     </div>
                     <div className="admin-sidebar-profile">
                         <FontAwesomeIcon icon={faCircleUser} />
@@ -85,18 +90,6 @@ const Admin = () => {
                         </button>
                         <div className="admin-sidebar-datas">
                             <p>Data</p>
-                            {/* <Link to="/admin/rental" className="admin-sidebar-data">
-                                <div className="admin-icon-wrapper">
-                                    <FontAwesomeIcon icon={faBars} />
-                                </div>
-                                <span>Active rentals</span>
-                            </Link>
-                            <Link to="/admin/stock" className="admin-sidebar-data">
-                                <div className="admin-icon-wrapper">
-                                    <FontAwesomeIcon icon={faTruckFast} />
-                                </div>
-                                <span>Current Stock</span>
-                            </Link> */}
                             <button
                                 className={`admin-sidebar-data ${activeSection === "rental" ? "active" : ""}`}
                                 onClick={() => setActiveSection("rental")}
@@ -154,38 +147,28 @@ const Admin = () => {
                         </div>
                     </div>
                 </div>
-                <div className="admin-main">
+                <div className={`admin-main ${sidebarOpen ? "sidebar-open" : "sidebar-closed"}`}>
                     <div className="admin-navbar">
+                        <div className="admin-navbar-left">
+                            <button 
+                                className={`admin-navbar-menu-btn ${sidebarOpen ? "hidden" : "visible"}`}
+                                onClick={toggleSidebar}
+                            >
+                                <FontAwesomeIcon icon={faBars} />
+                            </button>
+                        </div>
                         <div className="admin-navbar-links">
-                            <div className="admin-navbar-link">
+                            {/* <div className="admin-navbar-link">
                                 <FontAwesomeIcon icon={faGear} />
                             </div>
                             <div className="admin-navbar-link">
                                 <FontAwesomeIcon icon={faCircleUser} />
-                            </div>
-                            <button className="admin-navbar-link" onClick={handleLogout} title="Logout">
+                            </div> */}
+                            <button className="admin-navbar-link logout-btn" onClick={handleLogout}>
                                 Logout
                             </button>
                         </div>
                     </div>
-                    {/* Maybe switch content on clicking sidebar item, primarily it's on dashboard*/}
-                    {/* <div className="admin-dashboard">
-                        <div className="admin-dashboard-header">
-                            <h2>DASHBOARD</h2>
-                            <p>Welcome to your dashboard</p>
-                        </div>
-                        <div className="admin-cards">
-                            {kpiData.map((item, index) => (
-                                <KPICard key={index} {...item} />
-                            ))}
-                        </div>
-                        <div className="admin-linechart">
-                            <p>Revenue Generated</p>
-                            <span>$5,000</span>
-                            <LineChart data={LineChartData} />
-                        </div>
-                        <div className="admin-transaction"></div>
-                    </div> */}
 
                     {activeSection === "dashboard" && (
                         <Dashboard />
