@@ -6,11 +6,14 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const BookingModal = ({ car, startDate, endDate, onClose }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const navigate = useNavigate();
 
     const [carFeedbacks, setCarFeedbacks] = useState([]);
     const [feedbacksLoading, setFeedbacksLoading] = useState(true);
+    const [localizedCar, setLocalizedCar] = useState(car);
+
+    const getBaseLang = (lng) => lng?.split("-")[0] || "en";
 
     useEffect(() => {
         document.body.style.overflow = 'hidden';
@@ -18,6 +21,22 @@ const BookingModal = ({ car, startDate, endDate, onClose }) => {
             document.body.style.overflow = 'unset';
         };
     }, []);
+
+    useEffect(() => {
+        const fetchCarLocalized = async () => {
+            try {
+                const lang = getBaseLang(i18n.language);
+                const res = await fetch(`http://localhost:3000/api/v1/cars/${car.id}?lang=${lang}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setLocalizedCar((prev) => ({ ...prev, ...data }));
+                }
+            } catch (err) {
+                console.error("Error fetching localized car:", err);
+            }
+        };
+        fetchCarLocalized();
+    }, [car.id, i18n.language]);
 
     const totalDays = useMemo(() => {
         const start = new Date(startDate);
@@ -28,8 +47,8 @@ const BookingModal = ({ car, startDate, endDate, onClose }) => {
     }, [startDate, endDate]);
 
     const totalPrice = useMemo(() => {
-        return (totalDays * parseFloat(car.price_per_day)).toFixed(2);
-    }, [totalDays, car.price_per_day]);
+        return (totalDays * parseFloat(localizedCar.price_per_day ?? car.price_per_day)).toFixed(2);
+    }, [totalDays, localizedCar.price_per_day, car.price_per_day]);
 
     // Fetch car feedbacks
     useEffect(() => {
@@ -83,7 +102,7 @@ const BookingModal = ({ car, startDate, endDate, onClose }) => {
                         </div>
                         <div className="booking-main-info">
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
-                                <h3 style={{ margin: 0 }}>{car.brand} {car.model}</h3>
+                                <h3 style={{ margin: 0 }}>{localizedCar.brand} {localizedCar.model}</h3>
                                 {!feedbacksLoading && (
                                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                                         <FontAwesomeIcon icon={faStar} style={{ color: '#ffc107', fontSize: 14 }} />
@@ -94,15 +113,15 @@ const BookingModal = ({ car, startDate, endDate, onClose }) => {
                                 )}
                             </div>
                             <p className="booking-label">
-                                <strong>{t("BookingModal.pricePerDay")}:</strong> <span>€{car.price_per_day}</span>
+                                <strong>{t("BookingModal.pricePerDay")}:</strong> <span>€{localizedCar.price_per_day ?? car.price_per_day}</span>
                             </p>
                             <p className="booking-label">
                                 <strong>{t("BookingModal.days")}:</strong> <span>{totalDays} {totalDays > 1 ? t("BookingModal.daysPlural") : t("BookingModal.days")}</span>
                             </p>
-                            {car.description && (
+                            {localizedCar.description && (
                                 <div className="booking-description">
                                     <label className="booking-description-label">{t("BookingModal.description")}:</label>
-                                    <p className="booking-description-text">{car.description}</p>
+                                    <p className="booking-description-text">{localizedCar.description}</p>
                                 </div>
                             )}
                         </div>

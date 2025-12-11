@@ -14,7 +14,7 @@ import BookingModal from "../../components/Modal/BookingModal.jsx";
 import { useTranslation } from "react-i18next";
 
 const Home = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const [cars, setCars] = useState([]);
     const [toggle, setToggle] = useState("new");
@@ -40,23 +40,21 @@ const Home = () => {
         { label: t("home.sort.rating"), icon: faStar, value: "rating" },
     ];
 
+    const getBaseLang = (lng) => lng?.split("-")[0] || "en";
+
     useEffect(() => {
         const fetchCars = async () => {
-            if (!startDate || !endDate) return;
             try {
-                const lang = localStorage.getItem("lang") || "en";
-                const res = await fetch(
-                    `http://localhost:3000/api/v1/cars/available?start_date=${encodeURIComponent(startDate)}&end_date=${encodeURIComponent(endDate)}&lang=${encodeURIComponent(lang)}`
-                );
-                if (!res.ok) throw new Error("Failed to fetch cars");
+                const lang = getBaseLang(i18n.language);
+                const res = await fetch(`http://localhost:3000/api/v1/cars/?lang=${lang}`);
                 const data = await res.json();
-                setCars(data);
+                setCars(data || []);
             } catch (err) {
-                console.error(err);
+                console.error("Error fetching cars:", err);
             }
         };
         fetchCars();
-    }, [startDate, endDate]);
+    }, [i18n.language]);
 
     // Restore search from localStorage
     useEffect(() => {
@@ -352,9 +350,6 @@ const Home = () => {
                                                         />
                                                     ))}
                                                 </div>
-                                                <span className="home-feedback-date">
-                                                    {new Date(feedback.created_at).toLocaleDateString()}
-                                                </span>
                                             </div>
                                             <p className="home-feedback-comment">{feedback.comment}</p>
                                         </div>
