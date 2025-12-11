@@ -10,7 +10,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import BookingModal from "../../components/Modal/BookingModal.jsx";
-
 import { useTranslation } from "react-i18next";
 
 const Home = () => {
@@ -27,10 +26,9 @@ const Home = () => {
     const [carFeedbacks, setCarFeedbacks] = useState({});
     const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
     const [selectedCarFeedbacks, setSelectedCarFeedbacks] = useState(null);
-    const [selectedRatingFilter, setSelectedRatingFilter] = useState(null); // Add this state
+    const [selectedRatingFilter, setSelectedRatingFilter] = useState(null);
 
     const today = new Date().toISOString().split("T")[0];
-    
     const navigate = useNavigate();
 
     const options = [
@@ -42,26 +40,53 @@ const Home = () => {
 
     const getBaseLang = (lng) => lng?.split("-")[0] || "en";
 
+    const formatDate = (value) => {
+        const d = new Date(value);
+        return Number.isNaN(d.getTime()) ? "—" : d.toLocaleDateString(i18n.language);
+    };
+
+    // Fetch available cars for the selected date range and current language
     useEffect(() => {
         const fetchCars = async () => {
+            if (!startDate || !endDate) {
+                setCars([]);
+                setSearchResults([]);
+                setSearched(false);
+                return;
+            }
             try {
                 const lang = getBaseLang(i18n.language);
-                const res = await fetch(`http://localhost:3000/api/v1/cars/?lang=${lang}`);
+                const res = await fetch(
+                    `http://localhost:3000/api/v1/cars/available?start_date=${encodeURIComponent(
+                        startDate
+                    )}&end_date=${encodeURIComponent(endDate)}&lang=${encodeURIComponent(lang)}`
+                );
+                if (!res.ok) throw new Error("Failed to fetch cars");
                 const data = await res.json();
                 setCars(data || []);
+
+                // Re-apply search filter if user already searched
+                if (searched) {
+                    const filtered = (data || []).filter((car) =>
+                        `${car.brand} ${car.model}`
+                            .toLowerCase()
+                            .includes(searchText.toLowerCase())
+                    );
+                    setSearchResults(filtered);
+                }
             } catch (err) {
                 console.error("Error fetching cars:", err);
             }
         };
         fetchCars();
-    }, [i18n.language]);
+    }, [startDate, endDate, i18n.language, searched, searchText]);
 
     // Restore search from localStorage
     useEffect(() => {
         const storedSearch = JSON.parse(localStorage.getItem("homeSearch"));
         if (storedSearch) {
-            const today = new Date().toISOString().split("T")[0];
-            if (storedSearch.startDate >= today) {
+            const todayStr = new Date().toISOString().split("T")[0];
+            if (storedSearch.startDate >= todayStr) {
                 setSearchText(storedSearch.searchText);
                 setStartDate(storedSearch.startDate);
                 setEndDate(storedSearch.endDate);
@@ -108,11 +133,13 @@ const Home = () => {
     useEffect(() => {
         const fetchCarFeedbacks = async () => {
             if (searchResults.length === 0) return;
-            
+
             try {
                 const feedbacksMap = {};
                 for (const car of searchResults) {
-                    const res = await fetch(`http://localhost:3000/api/v1/feedbacks/car/${car.id}`);
+                    const res = await fetch(
+                        `http://localhost:3000/api/v1/feedbacks/car/${car.id}`
+                    );
                     if (res.ok) {
                         const data = await res.json();
                         feedbacksMap[car.id] = data;
@@ -123,11 +150,10 @@ const Home = () => {
                 console.error("Error fetching feedbacks:", err);
             }
         };
-        
+
         fetchCarFeedbacks();
     }, [searchResults]);
 
-    // Helper function to calculate average rating
     const getAverageRating = (carId) => {
         const feedbacks = carFeedbacks[carId];
         if (!feedbacks || feedbacks.length === 0) return 0;
@@ -137,7 +163,7 @@ const Home = () => {
 
     const openFeedbackModal = (car) => {
         setSelectedCarFeedbacks({ car, feedbacks: carFeedbacks[car.id] || [] });
-        setSelectedRatingFilter(null); // Reset filter when opening
+        setSelectedRatingFilter(null);
         setFeedbackModalOpen(true);
     };
 
@@ -148,19 +174,18 @@ const Home = () => {
     };
 
     const getModalAverageRating = () => {
-        if (!selectedCarFeedbacks?.feedbacks || selectedCarFeedbacks.feedbacks.length === 0) return 0;
+        if (!selectedCarFeedbacks?.feedbacks || selectedCarFeedbacks.feedbacks.length === 0)
+            return 0;
         const sum = selectedCarFeedbacks.feedbacks.reduce((acc, fb) => acc + fb.rating, 0);
         return (sum / selectedCarFeedbacks.feedbacks.length).toFixed(1);
     };
 
-    // Filter feedbacks by selected rating
     const filteredFeedbacks = selectedCarFeedbacks?.feedbacks
-        ? selectedRatingFilter 
-            ? selectedCarFeedbacks.feedbacks.filter(fb => fb.rating === selectedRatingFilter)
+        ? selectedRatingFilter
+            ? selectedCarFeedbacks.feedbacks.filter((fb) => fb.rating === selectedRatingFilter)
             : selectedCarFeedbacks.feedbacks
         : [];
 
-    // Sort feedbacks by rating descending (5 to 1)
     const sortedFeedbacks = [...filteredFeedbacks].sort((a, b) => b.rating - a.rating);
 
     return (
@@ -202,7 +227,6 @@ const Home = () => {
                             min={startDate || today}
                             onChange={(e) => {
                                 const newEnd = e.target.value;
-                                // ensure end date is not before startDate (and not in the past)
                                 const minEnd = startDate || today;
                                 if (newEnd < minEnd) {
                                     alert("End date cannot be before start date or today.");
@@ -246,15 +270,16 @@ const Home = () => {
                                         />
                                     </div>
                                     <div className="home-card-content">
-                                        <h2>{car.brand} {car.model} ({car.year})</h2>
+                                        <h2>
+                                            {car.brand} {car.model} ({car.year})
+                                        </h2>
                                         <p>€{car.price_per_day}/{t("home.day")}</p>
-                                        <p>{t("home.added")}: {new Date(car.created_at).toLocaleDateString()}</p>
-                                        
-                                        {/* Reviews Section */}
-                                        <div 
-                                            className="home-card-reviews" 
+                                        <p>{t("home.added")}: {formatDate(car.created_at)}</p>
+
+                                        <div
+                                            className="home-card-reviews"
                                             onClick={() => openFeedbackModal(car)}
-                                            style={{ cursor: 'pointer' }}
+                                            style={{ cursor: "pointer" }}
                                         >
                                             <FontAwesomeIcon icon={faStar} />
                                             <span>
@@ -283,32 +308,31 @@ const Home = () => {
                     />
                 )}
 
-                {/* Feedbacks Modal */}
                 {feedbackModalOpen && selectedCarFeedbacks && (
                     <div className="home-feedback-modal-overlay" onClick={closeFeedbackModal}>
                         <div className="home-feedback-modal-content" onClick={(e) => e.stopPropagation()}>
-                            <button className="home-feedback-modal-close" onClick={closeFeedbackModal}>&times;</button>
+                            <button className="home-feedback-modal-close" onClick={closeFeedbackModal}>
+                                &times;
+                            </button>
                             <h3 className="home-feedback-modal-title">
                                 {t("home.feedbackModal.title")} - {selectedCarFeedbacks.car.brand} {selectedCarFeedbacks.car.model}
                             </h3>
 
-                            {/* Average Rating */}
                             <div className="home-feedback-average">
                                 <div className="home-feedback-average-value">
                                     <span className="home-feedback-average-number">{getModalAverageRating()}</span>
-                                    <FontAwesomeIcon icon={faStar} style={{ color: '#ffc107' }} />
+                                    <FontAwesomeIcon icon={faStar} style={{ color: "#ffc107" }} />
                                 </div>
                                 <span className="home-feedback-average-count">
                                     {selectedCarFeedbacks.feedbacks.length} {t("home.reviews")}
                                 </span>
                             </div>
 
-                            {/* Star Filter */}
                             <div className="home-feedback-filter">
                                 <label>{t("home.feedbackModal.filterByRating")}:</label>
                                 <div className="home-feedback-filter-stars">
                                     <button
-                                        className={`home-feedback-filter-btn ${selectedRatingFilter === null ? 'active' : ''}`}
+                                        className={`home-feedback-filter-btn ${selectedRatingFilter === null ? "active" : ""}`}
                                         onClick={() => setSelectedRatingFilter(null)}
                                     >
                                         {t("home.feedbackModal.all")}
@@ -316,7 +340,7 @@ const Home = () => {
                                     {[1, 2, 3, 4, 5].map((star) => (
                                         <button
                                             key={star}
-                                            className={`home-feedback-filter-btn ${selectedRatingFilter === star ? 'active' : ''}`}
+                                            className={`home-feedback-filter-btn ${selectedRatingFilter === star ? "active" : ""}`}
                                             onClick={() => setSelectedRatingFilter(star)}
                                         >
                                             {star}
@@ -326,10 +350,9 @@ const Home = () => {
                                 </div>
                             </div>
 
-                            {/* Feedbacks List */}
                             {sortedFeedbacks.length === 0 ? (
-                                <p style={{ textAlign: 'center', color: '#8b949e', marginTop: 16 }}>
-                                    {selectedRatingFilter 
+                                <p style={{ textAlign: "center", color: "#8b949e", marginTop: 16 }}>
+                                    {selectedRatingFilter
                                         ? t("home.feedbackModal.noFeedbacksForRating")
                                         : t("home.feedbackModal.noFeedbacks")}
                                 </p>
@@ -344,12 +367,15 @@ const Home = () => {
                                                             key={i}
                                                             icon={faStar}
                                                             style={{
-                                                                color: i < feedback.rating ? '#ffc107' : '#444c56',
-                                                                fontSize: 14
+                                                                color: i < feedback.rating ? "#ffc107" : "#444c56",
+                                                                fontSize: 14,
                                                             }}
                                                         />
                                                     ))}
                                                 </div>
+                                                {/* <span className="home-feedback-date"> */}
+                                                    {/* {formatDate(feedback.created_at)} */}
+                                                {/* </span> */}
                                             </div>
                                             <p className="home-feedback-comment">{feedback.comment}</p>
                                         </div>
@@ -359,7 +385,6 @@ const Home = () => {
                         </div>
                     </div>
                 )}
-
             </div>
         </section>
     );
